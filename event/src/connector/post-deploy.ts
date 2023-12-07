@@ -3,7 +3,7 @@ dotenv.config();
 
 import { createApiRoot } from '../client/create.client';
 import { assertError, assertString } from '../utils/assert.utils';
-import { createInventoryEntrySubscription } from './actions';
+import { createInventoryEntrySubscription, createOrderCreatedSubscription } from './actions';
 
 const CONNECT_GCP_TOPIC_NAME_KEY = 'CONNECT_GCP_TOPIC_NAME';
 const CONNECT_GCP_PROJECT_ID_KEY = 'CONNECT_GCP_PROJECT_ID';
@@ -17,6 +17,7 @@ async function postDeploy(properties: Map<string, unknown>): Promise<void> {
 
   const apiRoot = createApiRoot();
   await createInventoryEntrySubscription(apiRoot, topicName, projectId);
+  await createOrderCreatedSubscription(apiRoot, topicName, projectId);
 }
 
 async function run(): Promise<void> {
