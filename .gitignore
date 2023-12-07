@@ -6,5 +6,6 @@ coverage
 
 .DS_Store
 .vscode
+.idea
 build/
 .env
