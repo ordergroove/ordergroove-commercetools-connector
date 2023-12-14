@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 
 import CustomError from '../errors/custom.error';
 import { logger } from '../utils/logger.utils';
-import { allOrders } from '../orders/fetch.orders';
+import { uploadProducts } from '../services/upload-products';
 
 /**
  * Exposed job endpoint.
@@ -13,15 +13,19 @@ import { allOrders } from '../orders/fetch.orders';
  */
 export const post = async (_request: Request, response: Response) => {
   try {
-    // Get the orders
-    const limitedOrdersObject = await allOrders({ sort: ['lastModifiedAt'] });
-    logger.info(`There are ${limitedOrdersObject.total} orders!`);
+    let executeInitialUpload: boolean = _request.query.startUpload === undefined
+        ? false : _request.query.startUpload === 'true' ? true : false;
+
+    if (executeInitialUpload) {
+      logger.info('>> Starting the initial products load from commercetools to ordergroove <<');
+      await uploadProducts(100, 0);
+    }
 
     response.status(200).send();
   } catch (error) {
     throw new CustomError(
       500,
-      `Internal Server Error - Error retrieving all orders from the commercetools SDK`
+      `Internal Server Error - Error uploading products to ordergroove, check the deployment logs for more information`
     );
   }
 };
