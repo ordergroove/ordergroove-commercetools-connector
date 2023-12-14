@@ -33,7 +33,7 @@ export const uploadProducts = async (limitQuery: number, offsetQuery: number, ex
     }
   } catch (error) {
     logger.error('Error at uploading products', error);
-    // TODO: Definir si se trunca el proceso
+    // TODO: Define if the process must be stopped
     throw error;
   }
 }
