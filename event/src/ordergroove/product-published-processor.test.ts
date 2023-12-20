@@ -1,6 +1,6 @@
 import { jest } from '@jest/globals'
 
-import { processEventProductPublished } from './product-published-processor'
+import { processProductPublishedEvent } from './product-published-processor'
 import * as ProductPublishedProcessor from './product-published-processor'
 import * as ProductsHelper from './helpers/product-helper'
 import { retrieveOgProduct, createProducts, updateProducts } from './client/og-products-api'
@@ -45,15 +45,15 @@ jest.mock('./client/og-products-api', () => {
 })
 
 
-describe('processEventProductPublished', () => {
+describe('processProductPublishedEvent', () => {
   afterEach(() => {
     jest.resetAllMocks()
     jest.restoreAllMocks()
   })
 
   it('should call the Retrieve product API in ordergroove', async () => {
-    const processEventProductPublishedSpy = jest
-      .spyOn(ProductPublishedProcessor, 'processEventProductPublished')
+    const processProductPublishedEventSpy = jest
+      .spyOn(ProductPublishedProcessor, 'processProductPublishedEvent')
 
     const extractProductVariantsSpy = jest
       .spyOn(ProductsHelper, 'extractProductVariants')
@@ -70,9 +70,9 @@ describe('processEventProductPublished', () => {
       .mockImplementation(() => Promise.resolve(mockOgProductApiResponse))
       .mockResolvedValue(mockOgProductApiResponse)
 
-    const result = await processEventProductPublished(mockProductCtEventPayload)
+    const result = await processProductPublishedEvent(mockProductCtEventPayload)
 
-    expect(processEventProductPublished).toHaveBeenCalled()
+    expect(processProductPublishedEvent).toHaveBeenCalled()
     expect(extractProductVariantsSpy).toHaveBeenCalled()
   })
 })

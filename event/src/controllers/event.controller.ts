@@ -3,7 +3,8 @@ import { Request, Response } from 'express';
 import CustomError from '../errors/custom.error';
 import { logger } from '../utils/logger.utils';
 import { CtEventPayload } from '../types/custom.types';
-import { processEventProductPublished } from '../ordergroove/product-published-processor';
+import { processProductPublishedEvent } from '../ordergroove/product-published-processor';
+import { EventType } from '../ordergroove/utils/event-config';
 
 /**
  * Exposed event POST endpoint.
@@ -27,13 +28,17 @@ export const post = async (request: Request, response: Response) => {
       throw new CustomError(400, 'Bad request: Wrong No Pub/Sub message format');
     }
 
-    logger.info('Event message.data:', request.body.message.data);
+    logger.info('Event message.data encoded:', request.body.message.data);
 
     const payload: CtEventPayload = JSON.parse(
       Buffer.from(request.body.message.data, 'base64').toString()
     );
 
-    await processEventProductPublished(payload);
+    logger.info('Event message.data decoded:', payload);
+
+    if (payload.type === EventType.ProductPublished) {
+      await processProductPublishedEvent(payload);
+    }
 
     // Return the response for the client
     response.status(200).send();

@@ -4,7 +4,7 @@ import { extractProductVariants } from './helpers/product-helper';
 import { retrieveOgProduct, createProducts, updateProducts } from './client/og-products-api';
 import { createUUID } from './utils/data-utils';
 
-export const processEventProductPublished = async (payload : CtEventPayload) : Promise<boolean> => {
+export const processProductPublishedEvent = async (payload : CtEventPayload) : Promise<boolean> => {
   try {
     const ctProducts: OrdergrooveProduct[] = await extractProductVariants(payload);
 
