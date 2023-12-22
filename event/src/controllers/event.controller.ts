@@ -28,13 +28,13 @@ export const post = async (request: Request, response: Response) => {
       throw new CustomError(400, 'Bad request: Wrong No Pub/Sub message format');
     }
 
-    logger.info('Event message.data encoded:', request.body.message.data);
+    logger.info('Event received, request.body.message.data encoded:' + JSON.stringify(request.body.message.data));
 
     const payload: CtEventPayload = JSON.parse(
       Buffer.from(request.body.message.data, 'base64').toString()
     );
 
-    logger.info('Event message.data decoded:', payload);
+    logger.info('Event received, request.body.message.data decoded:' + JSON.stringify(payload));
 
     if (payload.type === EventType.ProductPublished) {
       await processProductPublishedEvent(payload);
