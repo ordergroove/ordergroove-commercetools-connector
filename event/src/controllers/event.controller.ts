@@ -5,6 +5,7 @@ import { logger } from '../utils/logger.utils';
 import { CtEventPayload } from '../types/custom.types';
 import { processProductPublishedEvent } from '../ordergroove/product-published-processor';
 import { EventType } from '../ordergroove/utils/event-config';
+import { processInventoryEntryEvent } from '../ordergroove/inventory-processor';
 
 /**
  * Exposed event POST endpoint.
@@ -38,6 +39,10 @@ export const post = async (request: Request, response: Response) => {
 
     if (payload.type === EventType.ProductPublished) {
       await processProductPublishedEvent(payload);
+    } else if (payload.type === EventType.InventoryEntryCreated ||
+        payload.type === EventType.InventoryEntryQuantitySet ||
+        payload.type === EventType.InventoryEntryDeleted) {
+      await processInventoryEntryEvent(payload);
     }
 
     // Return the response for the client
