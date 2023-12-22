@@ -22,7 +22,7 @@ export const processInventoryEntryEvent = async (payload: CtEventPayload): Promi
     } else {
       const ogProductResponse: OrdergrooveApiResponse = await retrieveOgProduct(sku, execution_id);
       const ogProduct: OrdergrooveProduct | undefined = ogProductResponse.product;
-      logger.info('--> processInventoryEntryEvent, ogProduct:' + JSON.stringify(ogProduct));
+      logger.info('--> processInventoryEntryEvent, ogProductResponse:' + JSON.stringify(ogProductResponse));
 
       const ctProductVariant: ProductVariant = await getProductVariantBySku(sku);
       logger.info('--> processInventoryEntryEvent, ctProductVariant:' + JSON.stringify(ctProductVariant));
