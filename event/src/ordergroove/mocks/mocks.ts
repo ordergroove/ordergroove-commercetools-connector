@@ -1,6 +1,6 @@
 import { ProductProjectionPagedQueryResponse } from '@commercetools/platform-sdk'
 
-import { OrdergrooveProduct, OrdergrooveApiResponse, CtEventPayload } from '../types/custom.types';
+import { OrdergrooveProduct, OrdergrooveApiResponse, CtEventPayload } from '../../types/custom.types';
 
 export const mockOgProduct: OrdergrooveProduct = {
   product_id: 'ABC123',
