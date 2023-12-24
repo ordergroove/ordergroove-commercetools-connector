@@ -29,8 +29,6 @@ export const post = async (request: Request, response: Response) => {
       throw new CustomError(400, 'Bad request: Wrong No Pub/Sub message format');
     }
 
-    logger.info('Event received, request.body.message.data encoded:' + JSON.stringify(request.body.message.data));
-
     const payload: CtEventPayload = JSON.parse(
       Buffer.from(request.body.message.data, 'base64').toString()
     );
