@@ -23,7 +23,7 @@ export const extractProductVariants = async (productProjectionPagedQueryResponse
       const result: ProductProjection = results[i];
       const productName = result.name[LANGUAGE_CODE];
 
-      const masterVariantSku = result.masterVariant.sku === undefined ? '' : '3'+result.masterVariant.sku;
+      const masterVariantSku = result.masterVariant.sku === undefined ? '' : result.masterVariant.sku;
 
       const masterVariantPrice = getPrice(result.masterVariant.prices);
 
@@ -45,7 +45,7 @@ export const extractProductVariants = async (productProjectionPagedQueryResponse
       const variants: Array<ProductVariant> =  Object.values(result.variants);
       for (let x = 0; x < variants.length; x++) {
         const variant = variants[x];
-        const variantSku = variant.sku === undefined ? '' : '3'+variant.sku;
+        const variantSku = variant.sku === undefined ? '' : variant.sku;
 
         const variantPrice = getPrice(variant.prices);
 
