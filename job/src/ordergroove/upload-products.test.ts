@@ -1,11 +1,11 @@
 import { jest } from '@jest/globals'
 
 import { uploadProducts } from './upload-products'
-import { getProductProjections } from './commercetools/products-api'
-import { extractProductVariants } from './utils/extract-product-variants'
-import { createProducts } from './ordergroove/products-api'
+import { getProductProjections } from './client/ct-products-api'
+import { extractProductVariants } from './helpers/product-helper'
+import { createProducts } from './client/og-products-api'
 
-jest.mock('./commercetools/products-api', () => {
+jest.mock('./client/ct-products-api', () => {
   return {
     getProductProjections: jest.fn().mockReturnValue(
       {
@@ -96,7 +96,7 @@ jest.mock('./commercetools/products-api', () => {
     ),
   }
 })
-jest.mock('./utils/extract-product-variants', () => {
+jest.mock('./helpers/product-helper', () => {
   return {
     extractProductVariants: jest.fn().mockReturnValue(
       [
@@ -122,7 +122,7 @@ jest.mock('./utils/extract-product-variants', () => {
     )
   }
 })
-jest.mock('./ordergroove/products-api', () => {
+jest.mock('./client/og-products-api', () => {
   return {
     createProducts: jest.fn()
   }

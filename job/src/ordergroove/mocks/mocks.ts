@@ -1,10 +1,19 @@
-import { jest } from '@jest/globals'
+import { OrdergrooveProduct } from '../../types/custom.types';
 import { ProductProjectionPagedQueryResponse } from '@commercetools/platform-sdk'
 
-import { extractProductVariants } from './extract-product-variants'
-import { getStandalonePriceBySkuAndCurrencyCode } from './get-standalone-price'
+export const mockOgProducts: OrdergrooveProduct[] = [
+  {
+    product_id: 'ABC123',
+    sku: 'ABC123',
+    name: 'Test product',
+    price: 100.00,
+    live: true,
+    image_url: 'https://image-url.com',
+    detail_url: ''
+  }
+];
 
-const productProjectionPagedQueryResponse: ProductProjectionPagedQueryResponse = {
+export const productProjectionPagedQueryResponse: ProductProjectionPagedQueryResponse = {
   "count": 1,
   "limit": 100,
   "offset": 0,
@@ -88,46 +97,4 @@ const productProjectionPagedQueryResponse: ProductProjectionPagedQueryResponse =
     }
   ],
   "total": 1
-}
-
-const productVariantsResult = [
-  {
-    "product_id": 'WFJS',
-    "sku": 'WFJS',
-    "name": undefined,
-    "price": 150.5,
-    "live": true,
-    "image_url": '',
-    "detail_url": ''
-  },
-  {
-    "product_id": 'WFJM',
-    "sku": 'WFJM',
-    "name": undefined,
-    "price": 150.5,
-    "live": true,
-    "image_url": '',
-    "detail_url": ''
-  }
-]
-
-const mockedProductVariantsResult = jest.fn().mockReturnValue(productVariantsResult)
-jest.mock('./data-helper')
-jest.mock('./get-standalone-price', () => {
-  return {
-    getStandalonePriceBySkuAndCurrencyCode: jest.fn().mockReturnValue(150.5),
-  }
-})
-
-describe('extractProductVariants', () => {
-  afterEach(() => {
-    jest.resetAllMocks()
-    jest.restoreAllMocks()
-  })
-
-   it('should call getStandalonePriceBySkuAndCurrencyCode() function 2 times', async () => {
-    await extractProductVariants(productProjectionPagedQueryResponse)
-
-    expect(getStandalonePriceBySkuAndCurrencyCode).toHaveBeenCalledTimes(2)
-  })
-})
+};

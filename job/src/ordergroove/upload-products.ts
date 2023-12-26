@@ -1,10 +1,11 @@
 import { logger } from '../utils/logger.utils';
-import { getProductProjections } from './commercetools/products-api';
-import { extractProductVariants } from './utils/extract-product-variants';
-import { createProducts } from './ordergroove/products-api';
+import { getProductProjections } from './client/ct-products-api';
+import { extractProductVariants } from './helpers/product-helper';
+import { createProducts } from './client/og-products-api';
 import { OrdergrooveProduct } from '../types/custom.types';
+import { createUUID } from './utils/data-utils'
 
-export const uploadProducts = async (limitQuery: number, offsetQuery: number, executeNext?: boolean, totalProductVariants?: number) => {
+export const uploadProducts = async (limitQuery: number, offsetQuery: number, executeNext?: boolean, totalProductVariants?: number): Promise<boolean> => {
   try {
     logger.info(`Get product-projections from commercetools: limit:${limitQuery} - offset:${offsetQuery}`);
     executeNext = executeNext ? executeNext : true;
@@ -12,7 +13,7 @@ export const uploadProducts = async (limitQuery: number, offsetQuery: number, ex
 
     if (executeNext) {
       const productProjectionPagedQueryResponse = await getProductProjections({ limit: limitQuery, offset: offsetQuery });
-      const { limit, count, offset } = productProjectionPagedQueryResponse;
+      const { count, offset } = productProjectionPagedQueryResponse;
       const total = productProjectionPagedQueryResponse.total === undefined ? 0 : productProjectionPagedQueryResponse.total;
 
       const allProductVariants: OrdergrooveProduct[] =
@@ -33,9 +34,9 @@ export const uploadProducts = async (limitQuery: number, offsetQuery: number, ex
     }
   } catch (error) {
     logger.error('Error at uploading products', error);
-    // TODO: Define if the process must be stopped
-    throw error;
   }
+
+  return true;
 }
 
 async function sendProductsToOrdergroove(products: Array<OrdergrooveProduct>) {
@@ -75,7 +76,7 @@ async function setPromiseAllToSendBatches(products: Array<OrdergrooveProduct>, n
   logger.info(`Setting up promise.all to send ${numberOfBatches} batches of products to ordergroove`);
   await Promise.all(
     batchesList.map(async batch => {
-      createProducts(batch);
+      createProducts(batch, createUUID());
     })
   );
 }

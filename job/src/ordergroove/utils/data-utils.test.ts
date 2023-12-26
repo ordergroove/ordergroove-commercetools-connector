@@ -1,12 +1,4 @@
-import { jest } from '@jest/globals'
-
-import { addDecimalPointToCentAmount, createUUID } from './data-helper';
-
-/*jest.mock('./data-helper', () => {
-  return {
-    createUUID: jest.fn().mockReturnValue('asdb-1234-asdad-12313-asdad')
-  }
-})*/
+import { addDecimalPointToCentAmount, createUUID } from './data-utils';
 
 describe('addDecimalPointToCentAmount', () => {
   afterEach(() => {

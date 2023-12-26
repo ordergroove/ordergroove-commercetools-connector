@@ -18,7 +18,7 @@ export const extractProductVariants = async (payload: CtEventPayload): Promise<O
     const masterVariantSku = payload.productProjection?.masterVariant.sku === undefined ?
         '' : payload.productProjection?.masterVariant.sku;
 
-    const masterVariantPrice = await getPrice(masterVariantSku, payload.productProjection?.masterVariant.prices);
+    const masterVariantPrice = getPrice(payload.productProjection?.masterVariant.prices);
 
     if (masterVariantPrice === undefined) {
       logger.info(getInvalidPriceMessage(masterVariantSku));
@@ -40,12 +40,7 @@ export const extractProductVariants = async (payload: CtEventPayload): Promise<O
       const variant = variants[x];
       const variantSku = variant.sku === undefined ? '' : variant.sku;
 
-      let variantImage = getImageUrl(variant.images);
-      if (variantImage === '') {
-        variantImage = getImageUrl(payload.productProjection?.masterVariant.images);
-      }
-
-      const variantPrice = await getPrice(variantSku, variant.prices);
+      const variantPrice = getPrice(variant.prices);
 
       if (variantPrice === undefined) {
         logger.info(getInvalidPriceMessage(variantSku));
@@ -56,7 +51,7 @@ export const extractProductVariants = async (payload: CtEventPayload): Promise<O
           name: productName,
           price: variantPrice,
           live: isProductOnStock(variant.availability),
-          image_url: variantImage,
+          image_url: getImageUrl(variant.images, payload.productProjection?.masterVariant.images),
           detail_url: ''
         };
         result.push(ogProduct);
@@ -66,14 +61,12 @@ export const extractProductVariants = async (payload: CtEventPayload): Promise<O
     logger.error('Error extracting product variants of ProductPublished event message.', error);
   }
 
-  logger.info('-->> Product variants extracted:', result);
   return result;
 }
 
-async function getPrice(sku: string, productPrices?: Price[]): Promise<number | undefined> {
+function getPrice(productPrices?: Price[]): number | undefined {
   let result = undefined;
 
-  let embeddedPrice = undefined;
   if (productPrices !== undefined) {
     productPrices.forEach(price => {
       if (price.value.currencyCode === CURRENCY_CODE) {
@@ -122,13 +115,11 @@ export const isProductOnStock = (productAvailability?: ProductVariantAvailabilit
   return result;
 }
 
-function getImageUrl(productImages?: Image[]) {
-  let result = '';
+function getImageUrl(productImages?: Image[], masterProductImages?: Image[]): string {
+  let result = productImages !== undefined && productImages.length > 0 ? productImages[0].url : '';
 
-  if (productImages !== undefined) {
-    if (productImages.length > 0) {
-      result = productImages[0].url;
-    }
+  if (result === '' && masterProductImages !== undefined && masterProductImages.length > 0) {
+    result = masterProductImages[0].url;
   }
 
   return result;

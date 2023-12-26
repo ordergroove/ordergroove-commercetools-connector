@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 
 import CustomError from '../errors/custom.error';
 import { logger } from '../utils/logger.utils';
-import { uploadProducts } from '../services/upload-products';
+import { uploadProducts } from '../ordergroove/upload-products';
 
 /**
  * Exposed job endpoint.

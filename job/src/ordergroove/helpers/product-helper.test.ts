@@ -1,5 +1,5 @@
 import { extractProductVariants } from './product-helper'
-import { mockProductCtEventPayload } from '../mocks/mocks'
+import { productProjectionPagedQueryResponse } from '../mocks/mocks'
 
 jest.mock('../utils/data-utils')
 jest.mock('./product-helper', () => {
@@ -15,7 +15,7 @@ describe('extractProductVariants', () => {
   })
 
   it('should process the products', async () => {
-    await extractProductVariants(mockProductCtEventPayload)
+    await extractProductVariants(productProjectionPagedQueryResponse)
 
     expect(extractProductVariants).toHaveBeenCalled
   })

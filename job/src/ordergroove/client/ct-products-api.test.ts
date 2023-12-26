@@ -1,6 +1,4 @@
-import { jest } from '@jest/globals'
-
-import { getProductProjections } from './products-api'
+import { getProductProjections } from './ct-products-api'
 import { QueryArgs } from '../../types/index.types'
 
 const productProjection = {
