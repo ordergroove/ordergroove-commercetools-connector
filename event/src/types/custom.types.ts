@@ -1,4 +1,8 @@
-import { CreatedBy, MessageDeliveryPayload, Order, ProductProjection, InventoryEntry, ChannelReference } from '@commercetools/platform-sdk';
+import {
+  CreatedBy, MessageDeliveryPayload, Order,
+  ProductProjection, InventoryEntry,
+  ChannelReference, LineItem, InventoryMode
+} from '@commercetools/platform-sdk';
 
 export interface CtEventPayload extends MessageDeliveryPayload {
   notificationType: 'Message';
@@ -20,6 +24,8 @@ export interface CtEventPayload extends MessageDeliveryPayload {
   order?: Order;
   productProjection?: ProductProjection;
   inventoryEntry?: InventoryEntry;
+  inventoryMode?: InventoryMode;
+  lineItems?: LineItem[];
   createdAt: string;
   lastModifiedAt: string;
   createdBy: CreatedBy;

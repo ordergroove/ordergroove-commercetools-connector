@@ -4,8 +4,9 @@ import CustomError from '../errors/custom.error';
 import { logger } from '../utils/logger.utils';
 import { CtEventPayload } from '../types/custom.types';
 import { processProductPublishedEvent } from '../ordergroove/product-published-processor';
-import { EventType } from '../ordergroove/utils/event-config';
+import { EventType, InventoryMode } from '../ordergroove/utils/event-config';
 import { processInventoryEntryEvent } from '../ordergroove/inventory-processor';
+import { processOrderCreatedEvent } from '../ordergroove/order-created-processor';
 
 /**
  * Exposed event POST endpoint.
@@ -30,17 +31,22 @@ export const post = async (request: Request, response: Response) => {
     }
 
     const payload: CtEventPayload = JSON.parse(
-      Buffer.from(request.body.message.data, 'base64').toString()
+      Buffer.from(request.body.message.data, 'base64').toString('utf8').trim()
     );
 
     logger.info('Event received, request.body.message.data decoded:' + JSON.stringify(payload));
 
-    if (payload.type === EventType.ProductPublished) {
+    const type = payload.type;
+    const inventoryMode = payload.order?.inventoryMode;
+    if (type === EventType.ProductPublished) {
       await processProductPublishedEvent(payload);
-    } else if (payload.type === EventType.InventoryEntryCreated ||
-        payload.type === EventType.InventoryEntryQuantitySet ||
-        payload.type === EventType.InventoryEntryDeleted) {
+    } else if (type === EventType.InventoryEntryCreated ||
+        type === EventType.InventoryEntryQuantitySet ||
+        type === EventType.InventoryEntryDeleted) {
       await processInventoryEntryEvent(payload);
+    } else if (type === EventType.OrderCreated &&
+        (inventoryMode === InventoryMode.ReserveOnOrder || inventoryMode === InventoryMode.TrackOnly)) {
+      await processOrderCreatedEvent(payload);
     }
 
     // Return the response for the client

@@ -226,6 +226,321 @@ export const mockInventoryEntryDeletedEventPayload: CtEventPayload = {
   lastModifiedBy: { "clientId": "1q1q1q1q1q" }
 }
 
+export const mockOrderCreatedEventPayload: CtEventPayload = {
+  "notificationType": "Message",
+  "projectKey": "lucina-connect",
+  "id": "11111",
+  "version": 1,
+  "sequenceNumber": 1,
+  "resource": {
+    "typeId": "order",
+    "id": "11111"
+  },
+  "resourceVersion": 1,
+  "type": "OrderCreated",
+  "order": {
+    "id": "11111",
+    "version": 1,
+    "lastMessageSequenceNumber": 1,
+    "createdAt": "2023-11-30T19:09:26.066Z",
+    "lastModifiedAt": "2023-11-30T19:09:26.066Z",
+    "lastModifiedBy": { "clientId": "1q1q1q1q1q" },
+    "createdBy": { "clientId": "1q1q1q1q1q" },
+    "customerId": "11111",
+    "customerEmail": "jen@example.com",
+    "totalPrice": {
+      "type": "centPrecision",
+      "currencyCode": "USD",
+      "centAmount": 6000,
+      "fractionDigits": 2
+    },
+    "taxedPrice": {
+      "totalNet": {
+        "type": "centPrecision",
+        "currencyCode": "USD",
+        "centAmount": 6000,
+        "fractionDigits": 2
+      },
+      "totalGross": {
+        "type": "centPrecision",
+        "currencyCode": "USD",
+        "centAmount": 6240,
+        "fractionDigits": 2
+      },
+      "taxPortions": [
+        {
+          "rate": 0.04,
+          "amount": {
+            "type": "centPrecision",
+            "currencyCode": "USD",
+            "centAmount": 240,
+            "fractionDigits": 2
+          },
+          "name": "State Tax: New York"
+        }
+      ],
+      "totalTax": {
+        "type": "centPrecision",
+        "currencyCode": "USD",
+        "centAmount": 240,
+        "fractionDigits": 2
+      }
+    },
+    "taxedShippingPrice": {
+      "totalNet": {
+        "type": "centPrecision",
+        "currencyCode": "USD",
+        "centAmount": 5000,
+        "fractionDigits": 2
+      },
+      "totalGross": {
+        "type": "centPrecision",
+        "currencyCode": "USD",
+        "centAmount": 5200,
+        "fractionDigits": 2
+      },
+      "taxPortions": [
+        {
+          "rate": 0.04,
+          "amount": {
+            "type": "centPrecision",
+            "currencyCode": "USD",
+            "centAmount": 200,
+            "fractionDigits": 2
+          },
+          "name": "State Tax: New York"
+        }
+      ],
+      "totalTax": {
+        "type": "centPrecision",
+        "currencyCode": "USD",
+        "centAmount": 200,
+        "fractionDigits": 2
+      }
+    },
+    "orderState": "Open",
+    "syncInfo": [],
+    "returnInfo": [],
+    "taxMode": "Platform",
+    "inventoryMode": "ReserveOnOrder",
+    "taxRoundingMode": "HalfEven",
+    "taxCalculationMode": "LineItemLevel",
+    "origin": "Merchant",
+    "shippingMode": "Single",
+    "shippingInfo": {
+      "shippingMethodName": "US Delivery",
+      "price": {
+        "type": "centPrecision",
+        "currencyCode": "USD",
+        "centAmount": 5000,
+        "fractionDigits": 2
+      },
+      "shippingRate": {
+        "price": {
+          "type": "centPrecision",
+          "currencyCode": "USD",
+          "centAmount": 5000,
+          "fractionDigits": 2
+        },
+        "freeAbove": {
+          "type": "centPrecision",
+          "currencyCode": "USD",
+          "centAmount": 100000,
+          "fractionDigits": 2
+        },
+        "tiers": []
+      },
+      "taxRate": {
+        "name": "State Tax: New York",
+        "amount": 0.04,
+        "includedInPrice": false,
+        "country": "US",
+        "state": "New York",
+        "id": "6vQNQZKs",
+        "key": "ny-state-tax",
+        "subRates": []
+      },
+      "taxCategory": {
+        "typeId": "tax-category",
+        "id": "11111"
+      },
+      "deliveries": [],
+      "shippingMethod": {
+        "typeId": "shipping-method",
+        "id": "11111"
+      },
+      "taxedPrice": {
+        "totalNet": {
+          "type": "centPrecision",
+          "currencyCode": "USD",
+          "centAmount": 5000,
+          "fractionDigits": 2
+        },
+        "totalGross": {
+          "type": "centPrecision",
+          "currencyCode": "USD",
+          "centAmount": 5200,
+          "fractionDigits": 2
+        },
+        "totalTax": {
+          "type": "centPrecision",
+          "currencyCode": "USD",
+          "centAmount": 200,
+          "fractionDigits": 2
+        }
+      },
+      "shippingMethodState": "MatchesCart"
+    },
+    "shippingAddress": {
+      "id": "3UjigDbr",
+      "firstName": "Jennifer",
+      "lastName": "Robinson",
+      "streetName": "Second Street",
+      "streetNumber": "15",
+      "postalCode": "10001",
+      "city": "New York City",
+      "state": "New York",
+      "country": "US"
+    },
+    "shipping": [],
+    "lineItems": [
+      {
+        "id": "11111",
+        "productId": "11111",
+        "productKey": "woman-slimfit-black-jeans-product",
+        "name": {
+          "en-US": "Woman Slimfit Black Jeanss"
+        },
+        "productType": {
+          "typeId": "product-type",
+          "id": "11111"
+        },
+        "variant": {
+          "id": 3,
+          "sku": "WSFBJS",
+          "key": "woman-slimfit-black-jeans-s-product-variant",
+          "prices": [
+            {
+              "id": "11111",
+              "value": {
+                "type": "centPrecision",
+                "currencyCode": "USD",
+                "centAmount": 1000,
+                "fractionDigits": 2
+              },
+              "key": "woman-slimfit-black-jeans-s-price"
+            }
+          ],
+          "images": [],
+          "attributes": [
+            {
+              "name": "woman-jeans-color-attribute",
+              "value": {
+                "key": "black",
+                "label": "Black"
+              }
+            }
+          ],
+          "assets": [],
+          "availability": {
+            "isOnStock": true,
+            "availableQuantity": 1
+          }
+        },
+        "price": {
+          "id": "11111",
+          "value": {
+            "type": "centPrecision",
+            "currencyCode": "USD",
+            "centAmount": 1000,
+            "fractionDigits": 2
+          },
+          "key": "woman-slimfit-black-jeans-s-price"
+        },
+        "quantity": 1,
+        "discountedPricePerQuantity": [],
+        "taxRate": {
+          "name": "State Tax: New York",
+          "amount": 0.04,
+          "includedInPrice": false,
+          "country": "US",
+          "state": "New York",
+          "id": "6vQNQZKs",
+          "key": "ny-state-tax",
+          "subRates": []
+        },
+        "perMethodTaxRate": [],
+        "addedAt": "2023-11-30T19:08:32.253Z",
+        "lastModifiedAt": "2023-11-30T19:08:32.253Z",
+        "state": [
+          {
+            "quantity": 1,
+            "state": {
+              "typeId": "state",
+              "id": "11111"
+            }
+          }
+        ],
+        "priceMode": "Platform",
+        "lineItemMode": "Standard",
+        "totalPrice": {
+          "type": "centPrecision",
+          "currencyCode": "USD",
+          "centAmount": 1000,
+          "fractionDigits": 2
+        },
+        "taxedPrice": {
+          "totalNet": {
+            "type": "centPrecision",
+            "currencyCode": "USD",
+            "centAmount": 1000,
+            "fractionDigits": 2
+          },
+          "totalGross": {
+            "type": "centPrecision",
+            "currencyCode": "USD",
+            "centAmount": 1040,
+            "fractionDigits": 2
+          },
+          "totalTax": {
+            "type": "centPrecision",
+            "currencyCode": "USD",
+            "centAmount": 40,
+            "fractionDigits": 2
+          }
+        },
+        "taxedPricePortions": []
+      }
+    ],
+    "customLineItems": [],
+    //"transactionFee": true,
+    "discountCodes": [],
+    //"directDiscounts": [],
+    "cart": {
+      "typeId": "cart",
+      "id": "11111"
+    },
+    "billingAddress": {
+      "id": "3UjigDbr",
+      "firstName": "Jennifer",
+      "lastName": "Robinson",
+      "streetName": "Second Street",
+      "streetNumber": "15",
+      "postalCode": "10001",
+      "city": "New York City",
+      "state": "New York",
+      "country": "US"
+    },
+    "itemShippingAddresses": [],
+    "refusedGifts": []
+  },
+  "createdAt": "2023-11-30T19:09:26.096Z",
+  "lastModifiedAt": "2023-11-30T19:09:26.096Z",
+  "createdBy": { "clientId": "1q1q1q1q1q" },
+  "lastModifiedBy": { "clientId": "1q1q1q1q1q" }
+}
+
+
 export const mockProductVariantWithStock: ProductVariant = {
   "id": 1,
   "sku": "WFJM",
