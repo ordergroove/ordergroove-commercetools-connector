@@ -2,7 +2,7 @@ import { jest } from '@jest/globals'
 
 import { uploadProducts } from './upload-products'
 import { getProductProjections } from './client/ct-products-api'
-import { extractProductVariants } from './helpers/product-helper'
+import { convertProductProjectionToOrdergrooveProducts } from './helpers/product-helper'
 import { createProducts } from './client/og-products-api'
 
 jest.mock('./client/ct-products-api', () => {
@@ -98,7 +98,7 @@ jest.mock('./client/ct-products-api', () => {
 })
 jest.mock('./helpers/product-helper', () => {
   return {
-    extractProductVariants: jest.fn().mockReturnValue(
+    convertProductProjectionToOrdergrooveProducts: jest.fn().mockReturnValue(
       [
         {
           "product_id": 'WFJS',
@@ -134,11 +134,11 @@ describe('uploadProducts', () => {
     jest.restoreAllMocks()
   })
 
-  it('should call getProductProjections(), extractProductVariants() and createProducts() functions', async () => {
+  it('should call getProductProjections(), convertProductProjectionToOrdergrooveProducts() and createProducts() functions', async () => {
     await uploadProducts(100, 0)
 
     expect(getProductProjections).toHaveBeenCalledTimes(1)
-    expect(extractProductVariants).toHaveBeenCalledTimes(1)
+    expect(convertProductProjectionToOrdergrooveProducts).toHaveBeenCalledTimes(1)
     expect(createProducts).toHaveBeenCalledTimes(1)
   })
 })

@@ -1,12 +1,12 @@
 import { logger } from '../utils/logger.utils';
 import { CtEventPayload, OrdergrooveProduct, OrdergrooveApiResponse } from '../types/custom.types';
-import { extractProductVariants } from './helpers/product-helper';
+import { convertProductPublishedPayloadToOrdergrooveProducts } from './helpers/product-helper';
 import { retrieveOgProduct, createProducts, updateProducts } from './client/og-products-api';
 import { createUUID } from './utils/data-utils';
 
 export const processProductPublishedEvent = async (payload : CtEventPayload) : Promise<boolean> => {
   try {
-    const ctProducts: OrdergrooveProduct[] = await extractProductVariants(payload);
+    const ctProducts: OrdergrooveProduct[] = await convertProductPublishedPayloadToOrdergrooveProducts(payload);
 
     for (let i = 0; i < ctProducts.length; i++) {
       const ctProduct: OrdergrooveProduct = ctProducts[i];

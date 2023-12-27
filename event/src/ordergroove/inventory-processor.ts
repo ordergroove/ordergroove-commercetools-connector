@@ -21,21 +21,25 @@ export const processInventoryEntryEvent = async (payload: CtEventPayload): Promi
       const ogProduct: OrdergrooveProduct | undefined = ogProductResponse.product;
       logger.info('--> processInventoryEntryEvent, ogProductResponse:' + JSON.stringify(ogProductResponse));
 
-      const ctProductVariant: ProductVariant = await getProductVariantBySku(sku);
-      logger.info('--> processInventoryEntryEvent, ctProductVariant:' + JSON.stringify(ctProductVariant));
-      const isCtProductOnStock = isProductOnStock(ctProductVariant.availability);
-
-      if (ogProduct !== undefined && ogProduct.live !== isCtProductOnStock) {
-        ogProduct.live = isCtProductOnStock;
-        const updProducts = new Array();
-        updProducts.push(ogProduct);
-        const ogUpdateResponse: OrdergrooveApiResponse = await updateProducts(updProducts, execution_id);
-
-        if (!ogUpdateResponse.success && ogUpdateResponse.status === 500) {
-          await updateProducts(updProducts, execution_id);
-        }
+      if (ogProduct === undefined) {
+        logger.info(`[${execution_id}] An error occurred processing the ${payload.type} event, the product with sku ${sku} does not exist in ordergroove.`);
       } else {
-        logger.info(`[${execution_id}] The inventory of the product with sku ${sku} does not need an update in ordergroove.`);
+        const ctProductVariant: ProductVariant = await getProductVariantBySku(sku);
+        logger.info('--> processInventoryEntryEvent, ctProductVariant:' + JSON.stringify(ctProductVariant));
+        const isCtProductOnStock = isProductOnStock(ctProductVariant.availability);
+
+        if (ogProduct.live !== isCtProductOnStock) {
+          ogProduct.live = isCtProductOnStock;
+          const updProducts = new Array();
+          updProducts.push(ogProduct);
+          const ogUpdateResponse: OrdergrooveApiResponse = await updateProducts(updProducts, execution_id);
+
+          if (!ogUpdateResponse.success && ogUpdateResponse.status === 500) {
+            await updateProducts(updProducts, execution_id);
+          }
+        } else {
+          logger.info(`[${execution_id}] The inventory of the product with sku ${sku} does not need an update in ordergroove.`);
+        }
       }
     }
   } catch (error) {

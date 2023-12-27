@@ -4,7 +4,7 @@ import { createApiRoot } from '../../client/create.client';
 import { GetFunction } from '../../types/index.types';
 
 export const getProductProjections: GetFunction<ProductProjectionPagedQueryResponse> = async (queryArgs) => {
-  const { body } = await createApiRoot().productProjections().get({ queryArgs }).execute();
+  const { body } = await createApiRoot().productProjections().search().get({ queryArgs }).execute();
 
   return body;
 };

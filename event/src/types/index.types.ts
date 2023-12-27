@@ -21,6 +21,7 @@ export type QueryArgs = {
   offset?: number;
   withTotal?: boolean;
   where?: string | string[];
+  filter?: string | string[];
   [key: string]: QueryParam;
 };
 

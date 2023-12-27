@@ -1,21 +1,21 @@
-import {
-  ProductProjection,
-  ProductVariant,
-  ProductProjectionPagedQueryResponse,
-  ProductVariantAvailability,
-  Image,
-  Price
-} from '@commercetools/platform-sdk';
+import { ProductProjection, ProductVariant, ProductProjectionPagedQueryResponse, ProductVariantAvailability, Image, ScopedPrice } from '@commercetools/platform-sdk';
 
 import { logger } from '../../utils/logger.utils';
 import { addDecimalPointToCentAmount } from '../utils/data-utils';
 import { OrdergrooveProduct } from '../../types/custom.types';
 
 const LANGUAGE_CODE = process.env.CTP_LANGUAGE_CODE as string;
-const CURRENCY_CODE = process.env.CTP_CURRENCY_CODE as string;
+const INVENTORY_SUPPLY_CHANNEL_ID = process.env.CTP_INVENTORY_SUPPLY_CHANNEL_ID ?? '';
 
-export const extractProductVariants = async (productProjectionPagedQueryResponse: ProductProjectionPagedQueryResponse): Promise<OrdergrooveProduct[]> => {
+/**
+ * Converts a ProductProjectionPagedQueryResponse in a list of products for ordergroove.
+ * Applies business rules to pick the right price and inventory.
+ * @param productProjectionPagedQueryResponse 
+ * @returns List of OrdergrooveProduct
+ */
+export const convertProductProjectionToOrdergrooveProducts = async (productProjectionPagedQueryResponse: ProductProjectionPagedQueryResponse): Promise<OrdergrooveProduct[]> => {
   let variantsResult = new Array<OrdergrooveProduct>;
+
   try {
     const results: Array<ProductProjection> =  Object.values(productProjectionPagedQueryResponse.results);
 
@@ -25,7 +25,7 @@ export const extractProductVariants = async (productProjectionPagedQueryResponse
 
       const masterVariantSku = result.masterVariant.sku === undefined ? '' : result.masterVariant.sku;
 
-      const masterVariantPrice = getPrice(result.masterVariant.prices);
+      const masterVariantPrice = getScopedPrice(result.masterVariant.scopedPrice);
 
       if (masterVariantPrice === undefined) {
         logger.info(getInvalidPriceMessage(masterVariantSku));
@@ -47,7 +47,7 @@ export const extractProductVariants = async (productProjectionPagedQueryResponse
         const variant = variants[x];
         const variantSku = variant.sku === undefined ? '' : variant.sku;
 
-        const variantPrice = getPrice(variant.prices);
+        const variantPrice = getScopedPrice(variant.scopedPrice);
 
         if (variantPrice === undefined) {
           logger.info(getInvalidPriceMessage(variantSku));
@@ -65,31 +65,26 @@ export const extractProductVariants = async (productProjectionPagedQueryResponse
         }
       }
     }
-    logger.info(`Extracted ${variantsResult.length} product variants from commercetools.`);
+    logger.info(`Extracted ${variantsResult.length} valid product variants from commercetools.`);
   } catch (error) {
-    logger.error('Error extracting the product variants from ProductProjectionPagedQueryResponse:', error);
+    logger.error('Error during the process convertProductProjectionToOrdergrooveProducts().', error);
   }
 
   return variantsResult;
 }
 
-function getPrice(productPrices?: Price[]): number | undefined {
+function getScopedPrice(scopedPrice?: ScopedPrice): number | undefined {
   let result = undefined;
 
-  if (productPrices !== undefined) {
-    productPrices.forEach(price => {
-      if (price.value.currencyCode === CURRENCY_CODE) {
-        result = addDecimalPointToCentAmount(price.value.centAmount, price.value.fractionDigits);
-        return;
-      }
-    });
+  if (scopedPrice !== undefined) {
+    result = addDecimalPointToCentAmount(scopedPrice.currentValue.centAmount, scopedPrice.currentValue.fractionDigits);
   }
 
   return result;
 }
 
 function getInvalidPriceMessage(sku: string) {
-  return `The product with SKU ${sku} does not have a price for the currency code ${CURRENCY_CODE}, so it will not be created in ordergroove.`
+  return `The product with SKU ${sku} does not have an embedded price for the given configuration in the connector, so it will not be created in ordergroove.`
 }
 
 function isProductOnStock(productAvailability?: ProductVariantAvailability): boolean {

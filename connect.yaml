@@ -12,6 +12,12 @@ deployAs:
           description: commercetools Composable Commerce language code
         - key: CTP_CURRENCY_CODE
           description: commercetools Composable Commerce currency code
+        - key: CTP_COUNTRY_CODE
+          description: commercetools Composable Commerce country code
+        - key: CTP_DISTRIBUTION_CHANNEL_ID
+          description: commercetools Composable Commerce product distribution channel ID
+        - key: CTP_INVENTORY_SUPPLY_CHANNEL_ID
+          description: commercetools Composable Commerce inventory supply channel ID
       securedConfiguration:
         - key: CTP_PROJECT_KEY
           description: commercetools Composable Commerce project key
@@ -37,6 +43,12 @@ deployAs:
           description: commercetools Composable Commerce language code
         - key: CTP_CURRENCY_CODE
           description: commercetools Composable Commerce currency code
+        - key: CTP_COUNTRY_CODE
+          description: commercetools Composable Commerce country code
+        - key: CTP_DISTRIBUTION_CHANNEL_ID
+          description: commercetools Composable Commerce product distribution channel ID
+        - key: CTP_INVENTORY_SUPPLY_CHANNEL_ID
+          description: commercetools Composable Commerce inventory supply channel ID
       securedConfiguration:
         - key: CTP_PROJECT_KEY
           description: commercetools Composable Commerce project key

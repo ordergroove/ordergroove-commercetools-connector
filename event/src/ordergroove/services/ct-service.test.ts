@@ -1,11 +1,11 @@
 import * as CtService from './ct-service'
-import { getProductVariantBySku } from './ct-service'
+import { getProductVariantBySku, getProductProjectionBySkuWithScopedPrice } from './ct-service'
 import * as CtProductsApi from '../client/ct-products-api'
 import { mockProductProjectionPagedQueryResponse } from '../mocks/mocks'
 
 jest.mock('../client/ct-products-api', () => {
   return {
-    getProductProjections: jest.fn().mockReturnValue(
+    productProjectionsSearch: jest.fn().mockReturnValue(
       {
         "count": 1,
         "limit": 100,
@@ -110,18 +110,33 @@ describe('getProductVariantBySku', () => {
     jest.restoreAllMocks()
   })
 
-  it('should call the commercetools product projections API and get a product', async () => {
+  it('should call the commercetools product projections API and get a product filtered by sku with scoped price', async () => {
+    const getProductProjectionBySkuWithScopedPriceSpy = jest
+      .spyOn(CtService, 'getProductProjectionBySkuWithScopedPrice')
+
+    const productProjectionsSearchSpy = jest
+      .spyOn(CtProductsApi, 'productProjectionsSearch')
+      .mockImplementation(() => Promise.resolve(mockProductProjectionPagedQueryResponse))
+      .mockResolvedValue(mockProductProjectionPagedQueryResponse)
+
+    const result = await getProductProjectionBySkuWithScopedPrice('WFJM')
+
+    expect(getProductProjectionBySkuWithScopedPriceSpy).toHaveBeenCalled()
+    expect(productProjectionsSearchSpy).toHaveBeenCalled()
+  })
+
+  it('should call the commercetools product projections API and get a product filtered by sku', async () => {
     const getProductVariantBySkuSpy = jest
       .spyOn(CtService, 'getProductVariantBySku')
 
-    const getProductProjectionsSpy = jest
-      .spyOn(CtProductsApi, 'getProductProjections')
+    const productProjectionsSearchSpy = jest
+      .spyOn(CtProductsApi, 'productProjectionsSearch')
       .mockImplementation(() => Promise.resolve(mockProductProjectionPagedQueryResponse))
       .mockResolvedValue(mockProductProjectionPagedQueryResponse)
 
     const result = await getProductVariantBySku('WFJM')
 
-    expect(getProductVariantBySku).toHaveBeenCalled()
-    expect(getProductProjectionsSpy).toHaveBeenCalled()
+    expect(getProductVariantBySkuSpy).toHaveBeenCalled()
+    expect(productProjectionsSearchSpy).toHaveBeenCalled()
   })
 })

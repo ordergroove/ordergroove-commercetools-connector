@@ -1,22 +1,22 @@
-import { extractProductVariants } from './product-helper'
+import { convertProductPublishedPayloadToOrdergrooveProducts } from './product-helper'
 import { mockProductCtEventPayload } from '../mocks/mocks'
 
 jest.mock('../utils/data-utils')
 jest.mock('./product-helper', () => {
   return {
-    extractProductVariants: jest.fn()
+    convertProductPublishedPayloadToOrdergrooveProducts: jest.fn()
   }
 })
 
-describe('extractProductVariants', () => {
+describe('convertProductPublishedPayloadToOrdergrooveProducts', () => {
   afterEach(() => {
     jest.resetAllMocks()
     jest.restoreAllMocks()
   })
 
   it('should process the products', async () => {
-    await extractProductVariants(mockProductCtEventPayload)
+    await convertProductPublishedPayloadToOrdergrooveProducts(mockProductCtEventPayload)
 
-    expect(extractProductVariants).toHaveBeenCalled
+    expect(convertProductPublishedPayloadToOrdergrooveProducts).toHaveBeenCalled
   })
 })

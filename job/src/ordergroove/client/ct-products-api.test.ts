@@ -95,10 +95,12 @@ jest.mock('../../client/create.client', () => {
   return {
     createApiRoot: jest.fn().mockImplementation(() => ({
       productProjections: jest.fn().mockReturnValue({
-        get: jest.fn().mockReturnValue({
-          execute: mockedExecute
-        }),
-        post: mockedPost
+        search: jest.fn().mockReturnValue({
+          get: jest.fn().mockReturnValue({
+            execute: mockedExecute
+          }),
+          post: mockedPost
+        })
       })
     }))
   }

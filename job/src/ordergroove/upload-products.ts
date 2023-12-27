@@ -1,23 +1,30 @@
 import { logger } from '../utils/logger.utils';
 import { getProductProjections } from './client/ct-products-api';
-import { extractProductVariants } from './helpers/product-helper';
+import { convertProductProjectionToOrdergrooveProducts } from './helpers/product-helper';
 import { createProducts } from './client/og-products-api';
 import { OrdergrooveProduct } from '../types/custom.types';
 import { createUUID } from './utils/data-utils'
+import { QueryArgs } from '../types/index.types';
+
+const CURRENCY_CODE = process.env.CTP_CURRENCY_CODE as string;
+const COUNTRY_CODE = process.env.CTP_COUNTRY_CODE ?? '';
+const DISTRIBUTION_CHANNEL_ID = process.env.CTP_DISTRIBUTION_CHANNEL_ID ?? '';
 
 export const uploadProducts = async (limitQuery: number, offsetQuery: number, executeNext?: boolean, totalProductVariants?: number): Promise<boolean> => {
   try {
-    logger.info(`Get product-projections from commercetools: limit:${limitQuery} - offset:${offsetQuery}`);
+    const queryArgs: QueryArgs = getQueryArgs(limitQuery, offsetQuery);
+    logger.info(`Get product-projections from commercetools, queryArgs: ${JSON.stringify(queryArgs)}`);
+
     executeNext = executeNext ? executeNext : true;
     totalProductVariants = totalProductVariants ? totalProductVariants : 0;
 
     if (executeNext) {
-      const productProjectionPagedQueryResponse = await getProductProjections({ limit: limitQuery, offset: offsetQuery });
+      const productProjectionPagedQueryResponse = await getProductProjections(queryArgs);
       const { count, offset } = productProjectionPagedQueryResponse;
       const total = productProjectionPagedQueryResponse.total === undefined ? 0 : productProjectionPagedQueryResponse.total;
 
       const allProductVariants: OrdergrooveProduct[] =
-          await extractProductVariants(productProjectionPagedQueryResponse);
+        await convertProductProjectionToOrdergrooveProducts(productProjectionPagedQueryResponse);
 
       totalProductVariants = totalProductVariants + allProductVariants.length;
 
@@ -29,7 +36,7 @@ export const uploadProducts = async (limitQuery: number, offsetQuery: number, ex
         offsetQuery = offsetQuery + 100;
         await uploadProducts(limitQuery, offsetQuery, true, totalProductVariants);
       } else {
-        logger.info(`>> The products upload process from commercetools to ordergroove has finished with a total of ${totalProductVariants} product variants processed <<`);
+        logger.info(`>> The products upload process from commercetools to ordergroove has finished with a total of ${totalProductVariants} valid product variants processed <<`);
       }
     }
   } catch (error) {
@@ -37,6 +44,23 @@ export const uploadProducts = async (limitQuery: number, offsetQuery: number, ex
   }
 
   return true;
+}
+
+function getQueryArgs(limitQuery: number, offsetQuery: number): QueryArgs {
+  let queryArgs: QueryArgs = {};
+  queryArgs.limit = limitQuery;
+  queryArgs.offset = offsetQuery;
+  queryArgs.priceCurrency = CURRENCY_CODE;
+
+  if (COUNTRY_CODE !== '') {
+    queryArgs.priceCountry = COUNTRY_CODE;
+  }
+
+  if (DISTRIBUTION_CHANNEL_ID !== '') {
+    queryArgs.priceChannel = DISTRIBUTION_CHANNEL_ID;
+  }
+
+  return queryArgs;
 }
 
 async function sendProductsToOrdergroove(products: Array<OrdergrooveProduct>) {

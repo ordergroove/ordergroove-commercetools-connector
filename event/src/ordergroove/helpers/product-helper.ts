@@ -1,86 +1,89 @@
-import { ProductVariant, Price, Image, ProductVariantAvailability } from '@commercetools/platform-sdk';
+import { ProductVariant, ScopedPrice, Image, ProductVariantAvailability, ProductProjectionPagedQueryResponse } from '@commercetools/platform-sdk';
 
 import { logger } from '../../utils/logger.utils';
 import { CtEventPayload, OrdergrooveProduct } from '../../types/custom.types';
 import { addDecimalPointToCentAmount } from '../utils/data-utils';
+import { getProductProjectionBySkuWithScopedPrice } from '../services/ct-service';
 
-// TODO get this data from config.utils (gives error in tests)
 const LANGUAGE_CODE = process.env.CTP_LANGUAGE_CODE as string;
-const CURRENCY_CODE = process.env.CTP_CURRENCY_CODE as string;
+const INVENTORY_SUPPLY_CHANNEL_ID = process.env.CTP_INVENTORY_SUPPLY_CHANNEL_ID ?? '';
 
-export const extractProductVariants = async (payload: CtEventPayload): Promise<OrdergrooveProduct[]> => {
-  let result = new Array<OrdergrooveProduct>;
+/**
+ * Process the 'ProductPublished' event from commercetools and builds a list of products for ordergroove.
+ * Applies business rules to pick the right price and inventory.
+ * @param payload commercetools event payload
+ * @returns List of OrdergrooveProduct
+ */
+export const convertProductPublishedPayloadToOrdergrooveProducts = async (payload: CtEventPayload): Promise<OrdergrooveProduct[]> => {
+  let ordergrooveProducts = new Array<OrdergrooveProduct>;
 
   try {
-    const productName = payload.productProjection?.name[LANGUAGE_CODE] === undefined ?
-        '' : payload.productProjection?.name[LANGUAGE_CODE];
-
     const masterVariantSku = payload.productProjection?.masterVariant.sku === undefined ?
-        '' : payload.productProjection?.masterVariant.sku;
+      '' : payload.productProjection?.masterVariant.sku;
 
-    const masterVariantPrice = getPrice(payload.productProjection?.masterVariant.prices);
+    const productProjection: ProductProjectionPagedQueryResponse = await getProductProjectionBySkuWithScopedPrice(masterVariantSku);
 
-    if (masterVariantPrice === undefined) {
-      logger.info(getInvalidPriceMessage(masterVariantSku));
-    } else {
-      let ogProduct: OrdergrooveProduct = {
-        product_id: masterVariantSku,
-        sku: masterVariantSku,
-        name: productName,
-        price: masterVariantPrice,
-        live: isProductOnStock(payload.productProjection?.masterVariant.availability),
-        image_url: getImageUrl(payload.productProjection?.masterVariant.images),
-        detail_url: ''
-      };
-      result.push(ogProduct);
-    }
+    for (let result of productProjection.results) {
+      const productName: string = result.name[LANGUAGE_CODE];
+      
+      const masterVariantPrice = getScopedPrice(result.masterVariant.scopedPrice);
 
-    const variants: ProductVariant[] = payload.productProjection?.variants === undefined ? new Array() : payload.productProjection?.variants;
-    for (let x = 0; x < variants.length; x++) {
-      const variant = variants[x];
-      const variantSku = variant.sku === undefined ? '' : variant.sku;
-
-      const variantPrice = getPrice(variant.prices);
-
-      if (variantPrice === undefined) {
-        logger.info(getInvalidPriceMessage(variantSku));
+      if (masterVariantPrice === undefined) {
+        logger.info(getInvalidPriceMessage(masterVariantSku));
       } else {
         let ogProduct: OrdergrooveProduct = {
-          product_id: variantSku,
-          sku: variantSku,
+          product_id: masterVariantSku,
+          sku: masterVariantSku,
           name: productName,
-          price: variantPrice,
-          live: isProductOnStock(variant.availability),
-          image_url: getImageUrl(variant.images, payload.productProjection?.masterVariant.images),
+          price: masterVariantPrice,
+          live: isProductOnStock(result.masterVariant.availability),
+          image_url: getImageUrl(result.masterVariant.images),
           detail_url: ''
         };
-        result.push(ogProduct);
+        ordergrooveProducts.push(ogProduct);
       }
+
+      for (let variant of result.variants) {
+        const variantSku = variant.sku === undefined ? '' : variant.sku;
+
+        const variantPrice = getScopedPrice(variant.scopedPrice);
+
+        if (variantPrice === undefined) {
+          logger.info(getInvalidPriceMessage(variantSku));
+        } else {
+          let ogProduct: OrdergrooveProduct = {
+            product_id: variantSku,
+            sku: variantSku,
+            name: productName,
+            price: variantPrice,
+            live: isProductOnStock(variant.availability),
+            image_url: getImageUrl(variant.images, result.masterVariant.images),
+            detail_url: ''
+          };
+          ordergrooveProducts.push(ogProduct);
+        }
+      }
+
     }
   } catch (error) {
-    logger.error('Error extracting product variants of ProductPublished event message.', error);
+    logger.error('Error during the process convertProductPublishedPayloadToOrdergrooveProducts().', error);
   }
 
-  return result;
+  return ordergrooveProducts;
 }
 
-function getPrice(productPrices?: Price[]): number | undefined {
+function getScopedPrice(scopedPrice?: ScopedPrice): number | undefined {
   let result = undefined;
 
-  if (productPrices !== undefined) {
-    productPrices.forEach(price => {
-      if (price.value.currencyCode === CURRENCY_CODE) {
-        result = addDecimalPointToCentAmount(price.value.centAmount, price.value.fractionDigits);
-        return;
-      }
-    });
+  if (scopedPrice !== undefined) {
+    result = addDecimalPointToCentAmount(scopedPrice.currentValue.centAmount, scopedPrice.currentValue.fractionDigits);
   }
 
   return result;
 }
 
 function getInvalidPriceMessage(sku: string) {
-  return `The product with SKU ${sku} does not have an embedded price configured for the given settings; therefore, it will not be created in ordergroove.`
+  return `The product with SKU ${sku} does not have an embedded price for the given configuration in the connector, so it will not be updated in ordergroove.`
 }
 
 export const isProductOnStock = (productAvailability?: ProductVariantAvailability): boolean => {
