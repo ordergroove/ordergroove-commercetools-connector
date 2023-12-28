@@ -1,4 +1,4 @@
-import { getProductProjections } from './ct-products-api'
+import { productProjectionsSearch } from './ct-products-api'
 import { QueryArgs } from '../../types/index.types'
 
 const productProjection = {
@@ -106,7 +106,7 @@ jest.mock('../../client/create.client', () => {
   }
 })
 
-describe('getProductProjections', () => {
+describe('productProjectionsSearch', () => {
   afterEach(() => {
     jest.resetAllMocks()
     jest.restoreAllMocks()
@@ -115,7 +115,7 @@ describe('getProductProjections', () => {
   it('should call the Commercetools API with the correct parameters', async () => {
     const queryArgs = { limit: 100 } as unknown as QueryArgs
 
-    await getProductProjections(queryArgs)
+    await productProjectionsSearch(queryArgs)
 
     expect(mockedExecute).toHaveBeenCalledTimes(1)
     expect(mockedExecute).toHaveReturned()

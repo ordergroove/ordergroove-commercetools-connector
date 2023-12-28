@@ -1,13 +1,13 @@
 import { jest } from '@jest/globals'
 
 import { uploadProducts } from './upload-products'
-import { getProductProjections } from './client/ct-products-api'
+import { productProjectionsSearch } from './client/ct-products-api'
 import { convertProductProjectionToOrdergrooveProducts } from './helpers/product-helper'
 import { createProducts } from './client/og-products-api'
 
 jest.mock('./client/ct-products-api', () => {
   return {
-    getProductProjections: jest.fn().mockReturnValue(
+    productProjectionsSearch: jest.fn().mockReturnValue(
       {
         "count": 1,
         "limit": 100,
@@ -134,10 +134,10 @@ describe('uploadProducts', () => {
     jest.restoreAllMocks()
   })
 
-  it('should call getProductProjections(), convertProductProjectionToOrdergrooveProducts() and createProducts() functions', async () => {
+  it('should call productProjectionsSearch(), convertProductProjectionToOrdergrooveProducts() and createProducts() functions', async () => {
     await uploadProducts(100, 0)
 
-    expect(getProductProjections).toHaveBeenCalledTimes(1)
+    expect(productProjectionsSearch).toHaveBeenCalledTimes(1)
     expect(convertProductProjectionToOrdergrooveProducts).toHaveBeenCalledTimes(1)
     expect(createProducts).toHaveBeenCalledTimes(1)
   })

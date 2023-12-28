@@ -1,5 +1,5 @@
 import { logger } from '../utils/logger.utils';
-import { getProductProjections } from './client/ct-products-api';
+import { productProjectionsSearch } from './client/ct-products-api';
 import { convertProductProjectionToOrdergrooveProducts } from './helpers/product-helper';
 import { createProducts } from './client/og-products-api';
 import { OrdergrooveProduct } from '../types/custom.types';
@@ -19,7 +19,7 @@ export const uploadProducts = async (limitQuery: number, offsetQuery: number, ex
     totalProductVariants = totalProductVariants ? totalProductVariants : 0;
 
     if (executeNext) {
-      const productProjectionPagedQueryResponse = await getProductProjections(queryArgs);
+      const productProjectionPagedQueryResponse = await productProjectionsSearch(queryArgs);
       const { count, offset } = productProjectionPagedQueryResponse;
       const total = productProjectionPagedQueryResponse.total === undefined ? 0 : productProjectionPagedQueryResponse.total;
 
