@@ -87,35 +87,40 @@ function getInvalidPriceMessage(sku: string) {
 }
 
 export const isProductOnStock = (productAvailability?: ProductVariantAvailability): boolean => {
-  let result = false;
-
   if (productAvailability === undefined) {
-    result = true;
+    return true;
   } else {
     const channels = productAvailability.channels;
 
-    let atLeastOneChannelHasStock = false;
-    if (channels !== undefined) {
+    if (channels === undefined) {
+      return productAvailability.isOnStock === undefined ? true : productAvailability.isOnStock;
+    } else {
+      if (INVENTORY_SUPPLY_CHANNEL_ID !== '') {
+        if (channels[INVENTORY_SUPPLY_CHANNEL_ID] !== undefined) {
+          const thisChannelHasStock = channels[INVENTORY_SUPPLY_CHANNEL_ID].isOnStock;
+          return thisChannelHasStock === undefined ? true : thisChannelHasStock;
+        }
+      }
+
       let valuesArray = Object.values(channels);
 
+      let atLeastOneChannelHasStock: boolean = false;
       valuesArray.forEach(value => {
         if (value.isOnStock === true) {
           atLeastOneChannelHasStock = true;
           return;
         }
       });
-    }
 
-    const masterVariantIsOnStockForAnyChannel = productAvailability.isOnStock;
+      const isOnStockForAnyChannel = productAvailability.isOnStock;
 
-    if (masterVariantIsOnStockForAnyChannel !== undefined) {
-      result = masterVariantIsOnStockForAnyChannel || atLeastOneChannelHasStock;
-    } else {
-      result = atLeastOneChannelHasStock;
+      if (isOnStockForAnyChannel !== undefined) {
+        return isOnStockForAnyChannel || atLeastOneChannelHasStock;
+      } else {
+        return atLeastOneChannelHasStock;
+      }
     }
   }
-
-  return result;
 }
 
 function getImageUrl(productImages?: Image[], masterProductImages?: Image[]): string {
