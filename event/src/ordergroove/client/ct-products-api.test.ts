@@ -69,5 +69,5 @@ describe('getProductProjections', () => {
     expect(mockedExecute).toHaveBeenCalledTimes(1)
     expect(mockedExecute).toHaveReturned()
     expect(mockedExecute).toHaveReturnedWith({ "body": mockProductProjectionPagedQueryResponse })
-  })
+  }, 15000) // Expand the testing time because of the waiting before getting information from ct
 })

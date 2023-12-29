@@ -3,16 +3,12 @@ dotenv.config();
 
 import { createApiRoot } from '../client/create.client';
 import { assertError, assertString } from '../utils/assert.utils';
-import {
-  createInventoryEntrySubscription,
-  createOrderCreatedSubscription,
-  createProductPublishedSubscription
-} from './actions';
+import { createOrdergrooveConnectorSubscription } from './actions';
 
 const CONNECT_GCP_TOPIC_NAME_KEY = 'CONNECT_GCP_TOPIC_NAME';
 const CONNECT_GCP_PROJECT_ID_KEY = 'CONNECT_GCP_PROJECT_ID';
 
-async function postDeploy(properties: Map<string, unknown>): Promise<void> {
+export async function postDeploy(properties: Map<string, unknown>): Promise<void> {
   const topicName = properties.get(CONNECT_GCP_TOPIC_NAME_KEY);
   const projectId = properties.get(CONNECT_GCP_PROJECT_ID_KEY);
 
@@ -20,18 +16,16 @@ async function postDeploy(properties: Map<string, unknown>): Promise<void> {
   assertString(projectId, CONNECT_GCP_PROJECT_ID_KEY);
 
   const apiRoot = createApiRoot();
-  await createInventoryEntrySubscription(apiRoot, topicName, projectId);
-  await createOrderCreatedSubscription(apiRoot, topicName, projectId);
-  await createProductPublishedSubscription(apiRoot, topicName, projectId);
+  await createOrdergrooveConnectorSubscription(apiRoot, topicName, projectId);
 }
 
-async function run(): Promise<void> {
+export async function run(): Promise<void> {
   try {
     const properties = new Map(Object.entries(process.env));
     await postDeploy(properties);
   } catch (error) {
     assertError(error);
-    process.stderr.write(`Post-deploy failed: ${error.message}\n`);
+    process.stderr.write(`Post-deploy failed: ${error.message}`);
     process.exitCode = 1;
   }
 }
