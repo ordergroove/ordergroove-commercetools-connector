@@ -1,17 +1,22 @@
 import { logger } from '../../utils/logger.utils';
-import { OrdergrooveProduct } from '../../types/custom.types';
-import { createUUID } from '../utils/data-utils';
+import { OrdergrooveProduct, OrdergrooveApiResponse } from '../../types/custom.types';
+import { readConfiguration } from '../../utils/config.utils';
 
 const url = "https://staging.restapi.ordergroove.com/products-batch/create/?force_all_fields=false";
 const headers = {
-  'x-api-key': process.env.OG_API_KEY as string,
+  'x-api-key': readConfiguration().ordergrooveApiKey,
   'Content-Type': 'application/json',
   'Accept': 'application/json'
 };
 const maxRetries = 2;
 
 // Makes a second try if the first request fails
-export const createProducts = async (products: Array<OrdergrooveProduct>, executionId: string, attemptCount?: number ) => {
+export const createProducts = async (products: Array<OrdergrooveProduct>, executionId: string, attemptCount?: number): Promise<OrdergrooveApiResponse> => {
+  let result: OrdergrooveApiResponse = {
+    success: false,
+    status: 0
+  };
+
   try {
     attemptCount = attemptCount === undefined ? 0 : attemptCount;
 
@@ -25,7 +30,10 @@ export const createProducts = async (products: Array<OrdergrooveProduct>, execut
         headers
       })
         .then((response) => {
+          result.status = response.status;
+
           if (response.ok) {
+            result.success = true;
             return response.json();
           }
 
@@ -43,4 +51,6 @@ export const createProducts = async (products: Array<OrdergrooveProduct>, execut
   } catch (error) {
     logger.error(`[${executionId}] Error ocurred during the process of creating products in ordergroove.`, error);
   }
+
+  return result;
 }

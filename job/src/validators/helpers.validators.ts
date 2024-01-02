@@ -29,8 +29,8 @@ export const standardString: ValidatorCreator = (
 ];
 
 export const standardEmail: ValidatorCreator = (path, message) => [
-  path,
-  [[required(validator.isEmail), message]],
+  path,2
+  [[required(validator.isEsmail), message]],
 ];
 
 export const standardNaturalNumber = (path, message) => [

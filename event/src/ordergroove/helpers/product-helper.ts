@@ -1,12 +1,10 @@
-import { ProductVariant, ScopedPrice, Image, ProductVariantAvailability, ProductProjectionPagedQueryResponse } from '@commercetools/platform-sdk';
+import { ScopedPrice, Image, ProductVariantAvailability, ProductProjectionPagedQueryResponse } from '@commercetools/platform-sdk';
 
 import { logger } from '../../utils/logger.utils';
 import { CtEventPayload, OrdergrooveProduct } from '../../types/custom.types';
 import { addDecimalPointToCentAmount } from '../utils/data-utils';
 import { getProductProjectionBySkuWithScopedPrice } from '../services/ct-service';
-
-const LANGUAGE_CODE = process.env.CTP_LANGUAGE_CODE as string;
-const INVENTORY_SUPPLY_CHANNEL_ID = process.env.CTP_INVENTORY_SUPPLY_CHANNEL_ID ?? '';
+import { readConfiguration } from '../../utils/config.utils';
 
 /**
  * Process the 'ProductPublished' event from commercetools and builds a list of products for ordergroove.
@@ -24,7 +22,12 @@ export const convertProductPublishedPayloadToOrdergrooveProducts = async (payloa
     const productProjection: ProductProjectionPagedQueryResponse = await getProductProjectionBySkuWithScopedPrice(masterVariantSku);
 
     for (let result of productProjection.results) {
-      const productName: string = result.name[LANGUAGE_CODE];
+      const productName: string = result.name[readConfiguration().languageCode];
+
+      if (productName === undefined) {
+        logger.info(`The product with ID ${result.id} does not have a name for the language code specified (${readConfiguration().languageCode}), so it will not be updated/created in ordergroove.`)
+        break;
+      }
       
       const masterVariantPrice = getScopedPrice(result.masterVariant.scopedPrice);
 
@@ -83,7 +86,7 @@ function getScopedPrice(scopedPrice?: ScopedPrice): number | undefined {
 }
 
 function getInvalidPriceMessage(sku: string) {
-  return `The product with SKU ${sku} does not have an embedded price for the given configuration in the connector, so it will not be updated in ordergroove.`
+  return `The product with SKU ${sku} does not have an embedded price for the given configuration in the connector, so it will not be updated/created in ordergroove.`
 }
 
 export const isProductOnStock = (productAvailability?: ProductVariantAvailability): boolean => {
@@ -95,9 +98,9 @@ export const isProductOnStock = (productAvailability?: ProductVariantAvailabilit
     if (channels === undefined) {
       return productAvailability.isOnStock === undefined ? true : productAvailability.isOnStock;
     } else {
-      if (INVENTORY_SUPPLY_CHANNEL_ID !== '') {
-        if (channels[INVENTORY_SUPPLY_CHANNEL_ID] !== undefined) {
-          const thisChannelHasStock = channels[INVENTORY_SUPPLY_CHANNEL_ID].isOnStock;
+      if (readConfiguration().inventorySupplyChannelId !== '') {
+        if (channels[readConfiguration().inventorySupplyChannelId] !== undefined) {
+          const thisChannelHasStock = channels[readConfiguration().inventorySupplyChannelId].isOnStock;
           return thisChannelHasStock === undefined ? true : thisChannelHasStock;
         }
       }

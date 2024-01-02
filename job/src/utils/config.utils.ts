@@ -17,6 +17,9 @@ export const readConfiguration = () => {
     region: process.env.CTP_REGION as string,
     languageCode: process.env.CTP_LANGUAGE_CODE as string,
     currencyCode: process.env.CTP_CURRENCY_CODE as string,
+    countryCode: process.env.CTP_COUNTRY_CODE as string ?? '',
+    distributionChannelId: process.env.CTP_DISTRIBUTION_CHANNEL_ID as string ?? '',
+    inventorySupplyChannelId: process.env.CTP_INVENTORY_SUPPLY_CHANNEL_ID as string ?? '',
     ordergrooveApiKey: process.env.OG_API_KEY as string,
   };
 

@@ -5,10 +5,7 @@ import { createProducts } from './client/og-products-api';
 import { OrdergrooveProduct } from '../types/custom.types';
 import { createUUID } from './utils/data-utils'
 import { QueryArgs } from '../types/index.types';
-
-const CURRENCY_CODE = process.env.CTP_CURRENCY_CODE as string;
-const COUNTRY_CODE = process.env.CTP_COUNTRY_CODE ?? '';
-const DISTRIBUTION_CHANNEL_ID = process.env.CTP_DISTRIBUTION_CHANNEL_ID ?? '';
+import { readConfiguration } from '../utils/config.utils';
 
 export const uploadProducts = async (limitQuery: number, offsetQuery: number, executeNext?: boolean, totalProductVariants?: number): Promise<boolean> => {
   try {
@@ -50,14 +47,14 @@ function getQueryArgs(limitQuery: number, offsetQuery: number): QueryArgs {
   let queryArgs: QueryArgs = {};
   queryArgs.limit = limitQuery;
   queryArgs.offset = offsetQuery;
-  queryArgs.priceCurrency = CURRENCY_CODE;
+  queryArgs.priceCurrency = readConfiguration().currencyCode;
 
-  if (COUNTRY_CODE !== '') {
-    queryArgs.priceCountry = COUNTRY_CODE;
+  if (readConfiguration().countryCode !== '') {
+    queryArgs.priceCountry = readConfiguration().countryCode;
   }
 
-  if (DISTRIBUTION_CHANNEL_ID !== '') {
-    queryArgs.priceChannel = DISTRIBUTION_CHANNEL_ID;
+  if (readConfiguration().distributionChannelId !== '') {
+    queryArgs.priceChannel = readConfiguration().distributionChannelId;
   }
 
   return queryArgs;

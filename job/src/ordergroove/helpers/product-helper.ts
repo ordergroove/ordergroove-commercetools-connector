@@ -3,9 +3,7 @@ import { ProductProjection, ProductVariant, ProductProjectionPagedQueryResponse,
 import { logger } from '../../utils/logger.utils';
 import { addDecimalPointToCentAmount } from '../utils/data-utils';
 import { OrdergrooveProduct } from '../../types/custom.types';
-
-const LANGUAGE_CODE = process.env.CTP_LANGUAGE_CODE as string;
-const INVENTORY_SUPPLY_CHANNEL_ID = process.env.CTP_INVENTORY_SUPPLY_CHANNEL_ID ?? '';
+import { readConfiguration } from '../../utils/config.utils';
 
 /**
  * Converts a ProductProjectionPagedQueryResponse in a list of products for ordergroove.
@@ -19,12 +17,15 @@ export const convertProductProjectionToOrdergrooveProducts = async (productProje
   try {
     const results: Array<ProductProjection> =  Object.values(productProjectionPagedQueryResponse.results);
 
-    for (let i = 0; i < results.length; i++) {
-      const result: ProductProjection = results[i];
-      const productName = result.name[LANGUAGE_CODE];
+    for (let result of results) {
+      const productName = result.name[readConfiguration().languageCode];
+
+      if (productName === undefined) {
+        logger.info(`The product with ID ${result.id} does not have a name for the language code specified (${readConfiguration().languageCode}), so it will not be updated/created in ordergroove.`)
+        break;
+      }
 
       const masterVariantSku = result.masterVariant.sku === undefined ? '' : result.masterVariant.sku;
-
       const masterVariantPrice = getScopedPrice(result.masterVariant.scopedPrice);
 
       if (masterVariantPrice === undefined) {
@@ -43,8 +44,7 @@ export const convertProductProjectionToOrdergrooveProducts = async (productProje
       }
 
       const variants: Array<ProductVariant> =  Object.values(result.variants);
-      for (let x = 0; x < variants.length; x++) {
-        const variant = variants[x];
+      for (let variant of result.variants) {
         const variantSku = variant.sku === undefined ? '' : variant.sku;
 
         const variantPrice = getScopedPrice(variant.scopedPrice);
@@ -96,9 +96,9 @@ export const isProductOnStock = (productAvailability?: ProductVariantAvailabilit
     if (channels === undefined) {
       return productAvailability.isOnStock === undefined ? true : productAvailability.isOnStock;
     } else {
-      if (INVENTORY_SUPPLY_CHANNEL_ID !== '') {
-        if (channels[INVENTORY_SUPPLY_CHANNEL_ID] !== undefined) {
-          const thisChannelHasStock = channels[INVENTORY_SUPPLY_CHANNEL_ID].isOnStock;
+      if (readConfiguration().inventorySupplyChannelId !== '') {
+        if (channels[readConfiguration().inventorySupplyChannelId] !== undefined) {
+          const thisChannelHasStock = channels[readConfiguration().inventorySupplyChannelId].isOnStock;
           return thisChannelHasStock === undefined ? true : thisChannelHasStock;
         }
       }

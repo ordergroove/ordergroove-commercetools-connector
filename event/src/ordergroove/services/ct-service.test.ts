@@ -1,108 +1,26 @@
 import * as CtService from './ct-service'
-import { getProductVariantBySku, getProductProjectionBySkuWithScopedPrice } from './ct-service'
 import * as CtProductsApi from '../client/ct-products-api'
+import * as ConfigUtils from '../../utils/config.utils'
+import { getProductVariantBySku, getProductProjectionBySkuWithScopedPrice } from './ct-service'
 import { mockProductProjectionPagedQueryResponse } from '../mocks/mocks'
 
-jest.mock('../client/ct-products-api', () => {
-  return {
-    productProjectionsSearch: jest.fn().mockReturnValue(
-      {
-        "count": 1,
-        "limit": 100,
-        "offset": 0,
-        "results": [
-          {
-            "categories": [
-              {
-                "id": "11111",
-                "typeId": "category"
-              }
-            ],
-            "categoryOrderHints": {},
-            "createdAt": "2023-12-07T23:38:56.776Z",
-            "description": {
-              "en-US": "Woman formal jeans"
-            },
-            "hasStagedChanges": false,
-            "id": "22222",
-            "key": "woman-formal-jeans",
-            "lastModifiedAt": "2023-12-07T23:39:03.450Z",
-            "masterVariant": {
-              "assets": [],
-              "attributes": [
-                {
-                  "name": "woman-jeans-color-attribute",
-                  "value": {
-                    "key": "black",
-                    "label": "Black"
-                  }
-                }
-              ],
-              "id": 1,
-              "images": [],
-              "key": "woman-formal-jeans-s",
-              "prices": [],
-              "sku": "WFJS",
-              "availability": {
-                "isOnStock": true,
-                "availableQuantity": 100
-              }
-
-            },
-            "metaDescription": {
-              "en-US": ""
-            },
-            "metaTitle": {
-              "en-US": ""
-            },
-            "name": {
-              "en-US": "Woman formal jeans"
-            },
-            "priceMode": "Embedded",
-            "productType": {
-              "id": "33333",
-              "typeId": "product-type"
-            },
-            "published": true,
-            "searchKeywords": {},
-            "slug": {
-              "en-US": "woman-formal-jeans"
-            },
-            "taxCategory": {
-              "id": "44444",
-              "typeId": "tax-category"
-            },
-            "variants": [
-              {
-                "assets": [],
-                "attributes": [
-                  {
-                    "name": "woman-jeans-color-attribute",
-                    "value": {
-                      "key": "black",
-                      "label": "Black"
-                    }
-                  }
-                ],
-                "availability": {
-                  "isOnStock": true,
-                  "availableQuantity": 100
-                },
-                "id": 2,
-                "images": [],
-                "key": "woman-formal-jeans-m",
-                "prices": [],
-                "sku": "WFJM"
-              }
-            ],
-            "version": 2
-          }
-        ],
-        "total": 1
-      }
-    )
-  }
-})
+jest.mock('../../utils/config.utils', () => ({
+  readConfiguration: jest.fn().mockReturnValue({
+    region: 'test-region',
+    projectKey: 'test-project',
+    clientId: 'test-client-id',
+    clientSecret: 'test-client-secret',
+    scope: undefined,
+    languageCode: 'en-US',
+    currencyCode: 'USD',
+    countryCode: 'US',
+    distributionChannelId: '12345',
+    inventorySupplyChannelId: '12345',
+    ordergrooveApiKey: 'ordergrooveApiKey'
+  }),
+}))
+jest.mock('@commercetools/platform-sdk')
+jest.mock('../client/ct-products-api')
 
 describe('getProductVariantBySku', () => {
   afterEach(() => {
@@ -110,22 +28,7 @@ describe('getProductVariantBySku', () => {
     jest.restoreAllMocks()
   })
 
-  it('should call the commercetools product projections API and get a product filtered by sku with scoped price', async () => {
-    const getProductProjectionBySkuWithScopedPriceSpy = jest
-      .spyOn(CtService, 'getProductProjectionBySkuWithScopedPrice')
-
-    const productProjectionsSearchSpy = jest
-      .spyOn(CtProductsApi, 'productProjectionsSearch')
-      .mockImplementation(() => Promise.resolve(mockProductProjectionPagedQueryResponse))
-      .mockResolvedValue(mockProductProjectionPagedQueryResponse)
-
-    const result = await getProductProjectionBySkuWithScopedPrice('WFJM')
-
-    expect(getProductProjectionBySkuWithScopedPriceSpy).toHaveBeenCalled()
-    expect(productProjectionsSearchSpy).toHaveBeenCalled()
-  })
-
-  it('should call the commercetools product projections API and get a product filtered by sku', async () => {
+  it('should call the commercetools product projections API and get a product (variant) filtered by sku', async () => {
     const getProductVariantBySkuSpy = jest
       .spyOn(CtService, 'getProductVariantBySku')
 
@@ -138,5 +41,95 @@ describe('getProductVariantBySku', () => {
 
     expect(getProductVariantBySkuSpy).toHaveBeenCalled()
     expect(productProjectionsSearchSpy).toHaveBeenCalled()
+    expect(result.sku).toBe('WFJM')
+  })
+
+  it('should call the commercetools product projections API and get a product (master) filtered by sku', async () => {
+    const getProductVariantBySkuSpy = jest
+      .spyOn(CtService, 'getProductVariantBySku')
+
+    const productProjectionsSearchSpy = jest
+      .spyOn(CtProductsApi, 'productProjectionsSearch')
+      .mockImplementation(() => Promise.resolve(mockProductProjectionPagedQueryResponse))
+      .mockResolvedValue(mockProductProjectionPagedQueryResponse)
+
+    const result = await getProductVariantBySku('WFJS')
+
+    expect(getProductVariantBySkuSpy).toHaveBeenCalled()
+    expect(productProjectionsSearchSpy).toHaveBeenCalled()
+    expect(result.sku).toBe('WFJS')
+  })
+
+  it('should call the commercetools product projections API and throw an error when the product variant is undefined', async () => {
+    jest.spyOn(CtProductsApi, 'productProjectionsSearch')
+      .mockImplementation(() => Promise.resolve(mockProductProjectionPagedQueryResponse))
+      .mockResolvedValue(mockProductProjectionPagedQueryResponse)
+
+    expect(async () => {
+      await getProductVariantBySku('AAAA');
+    }).rejects.toThrow();
+  })
+})
+
+describe('getProductProjectionBySkuWithScopedPrice', () => {
+  afterEach(() => {
+    jest.resetAllMocks()
+    jest.restoreAllMocks()
+  })
+
+  it('should call the commercetools product projections API and get a product filtered by sku with scoped price: currencyCode', async () => {
+    jest.spyOn(ConfigUtils, 'readConfiguration').mockReturnValue(
+      {
+        region: 'test-region',
+        projectKey: 'test-project',
+        clientId: 'test-client-id',
+        clientSecret: 'test-client-secret',
+        scope: 'test-scope',
+        languageCode: 'en-US',
+        currencyCode: 'USD',
+        countryCode: '',
+        distributionChannelId: '',
+        inventorySupplyChannelId: '',
+        ordergrooveApiKey: 'ordergrooveApiKey'
+      }
+    )
+
+    const getProductProjectionBySkuWithScopedPriceSpy = jest
+      .spyOn(CtService, 'getProductProjectionBySkuWithScopedPrice')
+
+    const productProjectionsSearchSpy = jest
+      .spyOn(CtProductsApi, 'productProjectionsSearch')
+      .mockImplementation(() => Promise.resolve(mockProductProjectionPagedQueryResponse))
+      .mockResolvedValue(mockProductProjectionPagedQueryResponse)
+
+    await getProductProjectionBySkuWithScopedPrice('WFJM')
+
+    expect(getProductProjectionBySkuWithScopedPriceSpy).toHaveBeenCalled()
+    expect(productProjectionsSearchSpy).toHaveBeenCalled()
+  })
+
+  it('should handle an error from ProductProjectionsSearch', async () => {
+    jest.spyOn(ConfigUtils, 'readConfiguration').mockReturnValue(
+      {
+        region: 'test-region',
+        projectKey: 'test-project',
+        clientId: 'test-client-id',
+        clientSecret: 'test-client-secret',
+        scope: 'test-scope',
+        languageCode: 'en-US',
+        currencyCode: 'USD',
+        countryCode: 'US',
+        distributionChannelId: '12345',
+        inventorySupplyChannelId: '',
+        ordergrooveApiKey: 'ordergrooveApiKey'
+      }
+    )
+
+    jest.spyOn(CtProductsApi, 'productProjectionsSearch')
+      .mockRejectedValue(() => Promise.resolve(mockProductProjectionPagedQueryResponse))
+
+    expect(async () => {
+      await getProductProjectionBySkuWithScopedPrice('WFJM');
+    }).rejects.toThrow();
   })
 })

@@ -9,12 +9,12 @@ const mockEnv = {
   CTP_PROJECT_KEY: 'mockProjectKey',
   CTP_SCOPE: 'mockScope',
   CTP_REGION: 'mockRegion',
-  CTP_LANGUAGE_CODE: 'en-US',
-  CTP_CURRENCY_CODE: 'USD',
-  CTP_COUNTRY_CODE: 'US',
-  CTP_DISTRIBUTION_CHANNEL_ID: '12345',
-  CTP_INVENTORY_SUPPLY_CHANNEL_ID: '12345',
-  OG_API_KEY: 'mock-og-api-key'
+  CTP_LANGUAGE_CODE: 'mockLanguageCode',
+  CTP_CURRENCY_CODE: 'mockCurrencyCode',
+  CTP_COUNTRY_CODE: 'mockCountryCode',
+  CTP_DISTRIBUTION_CHANNEL_ID: 'mockDistributionChannelId',
+  CTP_INVENTORY_SUPPLY_CHANNEL_ID: 'mockInventorySupplyChannelId',
+  OG_API_KEY: 'mockOrdergrooveApiKey'
 };
 
 const mockEnv2 = {
@@ -37,12 +37,12 @@ describe('readConfiguration', () => {
       projectKey: 'mockProjectKey',
       scope: 'mockScope',
       region: 'mockRegion',
-      languageCode: 'en-US',
-      currencyCode: 'USD',
-      countryCode: 'US',
-      distributionChannelId: '12345',
-      inventorySupplyChannelId: '12345',
-      ordergrooveApiKey: 'mock-og-api-key'
+      languageCode: 'mockLanguageCode',
+      currencyCode: 'mockCurrencyCode',
+      countryCode: 'mockCountryCode',
+      distributionChannelId: 'mockDistributionChannelId',
+      inventorySupplyChannelId: 'mockInventorySupplyChannelId',
+      ordergrooveApiKey: 'mockOrdergrooveApiKey'
     };
 
     // Mock the validation function to return an empty array (no errors)
@@ -50,7 +50,7 @@ describe('readConfiguration', () => {
 
     const config = readConfiguration();
     expect(config).toEqual(expectedConfig);
-  });
+  })
 
   it('should throw a CustomError when env variables are invalid', () => {
     process.env = mockEnv

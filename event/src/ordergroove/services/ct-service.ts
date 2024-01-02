@@ -2,10 +2,7 @@ import { ProductVariant, ProductProjectionPagedQueryResponse, ProductProjection 
 
 import { productProjectionsSearch } from '../client/ct-products-api';
 import { QueryArgs } from '../../types/index.types';
-
-const CURRENCY_CODE = process.env.CTP_CURRENCY_CODE as string;
-const COUNTRY_CODE = process.env.CTP_COUNTRY_CODE ?? '';
-const DISTRIBUTION_CHANNEL_ID = process.env.CTP_DISTRIBUTION_CHANNEL_ID ?? '';
+import { readConfiguration } from '../../utils/config.utils';
 
 /**
  * Executes a Produc Projection Search by sku.
@@ -50,14 +47,14 @@ export const getProductProjectionBySkuWithScopedPrice = async (sku: string): Pro
 
 function getQueryArgsForScopedPrice(): QueryArgs {
   let queryArgs: QueryArgs = {};
-  queryArgs.priceCurrency = CURRENCY_CODE;
+  queryArgs.priceCurrency = readConfiguration().currencyCode;
 
-  if (COUNTRY_CODE !== '') {
-    queryArgs.priceCountry = COUNTRY_CODE;
+  if (readConfiguration().countryCode !== '') {
+    queryArgs.priceCountry = readConfiguration().countryCode;
   }
 
-  if (DISTRIBUTION_CHANNEL_ID !== '') {
-    queryArgs.priceChannel = DISTRIBUTION_CHANNEL_ID;
+  if (readConfiguration().distributionChannelId !== '') {
+    queryArgs.priceChannel = readConfiguration().distributionChannelId;
   }
 
   return queryArgs;

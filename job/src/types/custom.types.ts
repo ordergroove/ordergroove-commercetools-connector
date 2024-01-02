@@ -7,3 +7,9 @@ export interface OrdergrooveProduct {
   image_url: string;
   detail_url: string;
 }
+
+export interface OrdergrooveApiResponse {
+  success: boolean;
+  status: number;
+  product?: OrdergrooveProduct;
+}

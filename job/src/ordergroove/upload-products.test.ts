@@ -1,132 +1,30 @@
 import { jest } from '@jest/globals'
 
+import * as CtProductsApi from './client/ct-products-api'
+import * as OgProductsApi from './client/og-products-api'
+import * as ProductHelper from './helpers/product-helper'
 import { uploadProducts } from './upload-products'
-import { productProjectionsSearch } from './client/ct-products-api'
-import { convertProductProjectionToOrdergrooveProducts } from './helpers/product-helper'
-import { createProducts } from './client/og-products-api'
+import { mockProductProjectionPagedQueryResponse, mockOgProducts } from './mocks/mocks'
+import { OrdergrooveApiResponse } from '../types/custom.types';
 
-jest.mock('./client/ct-products-api', () => {
-  return {
-    productProjectionsSearch: jest.fn().mockReturnValue(
-      {
-        "count": 1,
-        "limit": 100,
-        "offset": 0,
-        "results": [
-          {
-            "categories": [
-              {
-                "id": "fc072771-b478-4587-ab56-f3b227507cc1",
-                "typeId": "category"
-              }
-            ],
-            "categoryOrderHints": {},
-            "createdAt": "2023-12-07T23:38:56.776Z",
-            "description": {
-              "en-US": "Woman formal jeans"
-            },
-            "hasStagedChanges": false,
-            "id": "942a49cb-9ec9-4d72-8a89-672f8d9ad8df",
-            "key": "woman-formal-jeans",
-            "lastModifiedAt": "2023-12-07T23:39:03.450Z",
-            "masterVariant": {
-              "assets": [],
-              "attributes": [
-                {
-                  "name": "woman-jeans-color-attribute",
-                  "value": {
-                    "key": "black",
-                    "label": "Black"
-                  }
-                }
-              ],
-              "id": 1,
-              "images": [],
-              "key": "woman-formal-jeans-s",
-              "prices": [],
-              "sku": "WFJS"
-            },
-            "metaDescription": {
-              "en-US": ""
-            },
-            "metaTitle": {
-              "en-US": ""
-            },
-            "name": {
-              "en-US": "Woman formal jeans"
-            },
-            "priceMode": "Embedded",
-            "productType": {
-              "id": "36754d8a-5e40-46fc-872a-58bd9795d8b4",
-              "typeId": "product-type"
-            },
-            "published": true,
-            "searchKeywords": {},
-            "slug": {
-              "en-US": "woman-formal-jeans"
-            },
-            "taxCategory": {
-              "id": "cdb0601d-2a50-4db8-a719-4a337b7da385",
-              "typeId": "tax-category"
-            },
-            "variants": [
-              {
-                "assets": [],
-                "attributes": [
-                  {
-                    "name": "woman-jeans-color-attribute",
-                    "value": {
-                      "key": "black",
-                      "label": "Black"
-                    }
-                  }
-                ],
-                "id": 2,
-                "images": [],
-                "key": "woman-formal-jeans-m",
-                "prices": [],
-                "sku": "WFJM"
-              }
-            ],
-            "version": 2
-          }
-        ],
-        "total": 1
-      }
-    ),
-  }
-})
-jest.mock('./helpers/product-helper', () => {
-  return {
-    convertProductProjectionToOrdergrooveProducts: jest.fn().mockReturnValue(
-      [
-        {
-          "product_id": 'WFJS',
-          "sku": 'WFJS',
-          "name": 'Product WFJS',
-          "price": 150.5,
-          "live": true,
-          "image_url": '',
-          "detail_url": ''
-        },
-        {
-          "product_id": 'WFJM',
-          "sku": 'WFJM',
-          "name": 'Product WFJM',
-          "price": 150.5,
-          "live": true,
-          "image_url": '',
-          "detail_url": ''
-        }
-      ]
-    )
-  }
-})
-jest.mock('./client/og-products-api', () => {
-  return {
-    createProducts: jest.fn()
-  }
-})
+jest.mock('./client/ct-products-api')
+jest.mock('./helpers/product-helper')
+jest.mock('./client/og-products-api')
+jest.mock('../utils/config.utils', () => ({
+  readConfiguration: jest.fn().mockReturnValue({
+    region: 'test-region',
+    projectKey: 'test-project',
+    clientId: 'test-client-id',
+    clientSecret: 'test-client-secret',
+    scope: 'scope',
+    languageCode: 'en-US',
+    currencyCode: 'USD',
+    countryCode: 'US',
+    distributionChannelId: '12345',
+    inventorySupplyChannelId: '12345',
+    ordergrooveApiKey: 'ordergrooveApiKey'
+  }),
+}))
 
 describe('uploadProducts', () => {
   afterEach(() => {
@@ -135,10 +33,41 @@ describe('uploadProducts', () => {
   })
 
   it('should call productProjectionsSearch(), convertProductProjectionToOrdergrooveProducts() and createProducts() functions', async () => {
-    await uploadProducts(100, 0)
+    const ordergrooveApiResponse: OrdergrooveApiResponse = {
+      success: true,
+      status: 200
+    }
 
-    expect(productProjectionsSearch).toHaveBeenCalledTimes(1)
-    expect(convertProductProjectionToOrdergrooveProducts).toHaveBeenCalledTimes(1)
-    expect(createProducts).toHaveBeenCalledTimes(1)
+    const productProjectionsSearchSpy = jest
+      .spyOn(CtProductsApi, 'productProjectionsSearch')
+      .mockImplementation(() => Promise.resolve(mockProductProjectionPagedQueryResponse))
+      .mockResolvedValue(mockProductProjectionPagedQueryResponse)
+
+    const convertProductProjectionToOrdergrooveProductsSpy = jest
+      .spyOn(ProductHelper, 'convertProductProjectionToOrdergrooveProducts')
+      .mockImplementation(() => Promise.resolve(mockOgProducts))
+      .mockResolvedValue(mockOgProducts)
+
+    const createProductsSpy = jest
+      .spyOn(OgProductsApi, 'createProducts')
+      .mockImplementation(() => Promise.resolve(ordergrooveApiResponse))
+      .mockResolvedValue(ordergrooveApiResponse)
+
+    const result = await uploadProducts(1, 0)
+
+    expect(productProjectionsSearchSpy).toHaveBeenCalled()
+    expect(convertProductProjectionToOrdergrooveProductsSpy).toHaveBeenCalled()
+    expect(createProductsSpy).toHaveBeenCalledTimes(1)
+    expect(result).toBe(true)
+  })
+
+  it('should handle an error from productProjectionsSearch()', async () => {
+    jest.spyOn(CtProductsApi, 'productProjectionsSearch')
+      .mockImplementation(() => { throw new Error('connection error') });
+
+    const result = await uploadProducts(1, 0)
+
+    expect(CtProductsApi.productProjectionsSearch).toThrow('connection error');
+    expect(result).toBe(true)
   })
 })

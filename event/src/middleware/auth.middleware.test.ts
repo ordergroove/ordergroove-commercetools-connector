@@ -1,4 +1,5 @@
 import { authMiddlewareOptions } from './auth.middleware'
+import * as ConfigUtils from '../utils/config.utils';
 
 const mockConfiguration = {
   region: 'test-region',
@@ -6,6 +7,12 @@ const mockConfiguration = {
   clientId: 'test-client-id',
   clientSecret: 'test-client-secret',
   scope: undefined,
+  languageCode: 'en-US',
+  currencyCode: 'USD',
+  countryCode: 'mockCountryCode',
+  distributionChannelId: 'mockDistributionChannelId',
+  inventorySupplyChannelId: 'mockInventorySupplyChannelId',
+  ordergrooveApiKey: 'ordergrooveApiKey'
 }
 
 jest.mock('../utils/config.utils', () => ({
@@ -15,6 +22,12 @@ jest.mock('../utils/config.utils', () => ({
     clientId: 'test-client-id',
     clientSecret: 'test-client-secret',
     scope: undefined,
+    languageCode: 'en-US',
+    currencyCode: 'USD',
+    countryCode: 'US',
+    distributionChannelId: '',
+    inventorySupplyChannelId: '',
+    ordergrooveApiKey: 'ordergrooveApiKey'
   }),
 }))
 

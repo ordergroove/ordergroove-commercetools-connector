@@ -1,38 +1,21 @@
 import { createProducts } from './og-products-api'
-import * as OgProductsApi from './og-products-api'
-import { mockOgProducts } from '../mocks/mocks'
+import { mockOgProducts, mockOgApiResponseSuccess } from '../mocks/mocks'
 
-jest.mock('./og-products-api', () => {
-  return {
-    retrieveOgProduct: jest.fn().mockReturnValue(
-      {
-        success: true,
-        status: 200,
-        product: {
-          product_id: 'ABC123',
-          sku: 'ABC123',
-          name: 'Test Product',
-          price: 100,
-          live: true,
-          image_url: 'https://image-url.com',
-          detail_url: ''
-        }
-      }
-    ),
-    createProducts: jest.fn().mockReturnValue(
-      {
-        success: true,
-        status: 200
-      }
-    ),
-    updateProducts: jest.fn().mockReturnValue(
-      {
-        success: true,
-        status: 200
-      }
-    ),
-  }
-})
+jest.mock('../../utils/config.utils', () => ({
+  readConfiguration: jest.fn().mockReturnValue({
+    region: 'test-region',
+    projectKey: 'test-project',
+    clientId: 'test-client-id',
+    clientSecret: 'test-client-secret',
+    scope: 'scope',
+    languageCode: 'en-US',
+    currencyCode: 'USD',
+    countryCode: 'US',
+    distributionChannelId: '12345',
+    inventorySupplyChannelId: '12345',
+    ordergrooveApiKey: 'ordergrooveApiKey'
+  }),
+}))
 
 describe('createProducts', () => {
   afterEach(() => {
@@ -40,14 +23,65 @@ describe('createProducts', () => {
     jest.restoreAllMocks()
   })
 
-  it('should call the Create product API in ordergroove', async () => {
-    const createProductsSpy = jest
-      .spyOn(OgProductsApi, 'createProducts')
-      .mockImplementation(jest.fn())
+  it('should create a product in ordergroove successfully', async () => {
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        body: {
+          "results": [
+            {
+              "product_id": "ABC123",
+              "status": 200
+            }
+          ]
+        },
+        status: 200,
+        ok: true,
+        json: () => Promise.resolve({
+          "results": [
+            {
+              "product_id": "ABC123",
+              "status": 200
+            }
+          ]
+        })
+      }),
+    ) as jest.Mock;
 
-    await createProducts(mockOgProducts, '12345')
+    const result = await createProducts(mockOgProducts, '12345')
 
-    expect(createProductsSpy).toHaveBeenCalled()
+    expect(global.fetch).toHaveBeenCalled()
+    expect(result.success).toBe(true)
+    expect(result.status).toBe(200)
+  })
+
+  it('should make a second attempt if the first request fails', async () => {
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        body: { },
+        status: 500,
+        ok: false
+      }),
+    ) as jest.Mock;
+
+    jest.useFakeTimers();
+    const result = await createProducts(mockOgProducts, '12345')
+    jest.runAllTimers();
+
+    expect(global.fetch).toHaveBeenCalledTimes(2)
+    expect(result.success).toBe(false)
+    expect(result.status).toBe(500)
+  })
+
+  it('should handle an error from fetch function', async () => {
+
+    jest.spyOn(global, 'fetch')
+      .mockImplementation(() => { throw new Error('connection error') });
+
+    const result = await createProducts(mockOgProducts, '12345')
+
+    expect(global.fetch).toThrow('connection error');
+    expect(result.success).toBe(false)
+    expect(result.status).toBe(0)
   })
 })
 

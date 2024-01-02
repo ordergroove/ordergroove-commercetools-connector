@@ -35,7 +35,7 @@ describe('post function', () => {
     }
   })
 
-  it('should handle ProductPublished type correctly', async () => {
+  it('should handle ProductPublished event type correctly', async () => {
     const fakeData = {
       type: 'ProductPublished',
       productProjection: {
@@ -60,7 +60,7 @@ describe('post function', () => {
     expect(processProductPublishedEventSpy).toHaveBeenCalled()
   })
 
-  it('should handle InventoryEntryQuantitySet type correctly', async () => {
+  it('should handle InventoryEntryQuantitySet event type correctly', async () => {
     const fakeData = {
       type: 'InventoryEntryQuantitySet',
       productProjection: {
@@ -85,7 +85,7 @@ describe('post function', () => {
     expect(processInventoryEntryEventSpy).toHaveBeenCalled()
   })
 
-  it('should handle InventoryEntryCreated type correctly', async () => {
+  it('should handle InventoryEntryCreated event type correctly', async () => {
     const fakeData = {
       type: 'InventoryEntryCreated',
       productProjection: {
@@ -110,7 +110,7 @@ describe('post function', () => {
     expect(processInventoryEntryEventSpy).toHaveBeenCalled()
   })
 
-  it('should handle InventoryEntryDeleted type correctly', async () => {
+  it('should handle InventoryEntryDeleted event type correctly', async () => {
     const fakeData = {
       type: 'InventoryEntryDeleted',
       productProjection: {
@@ -198,6 +198,22 @@ describe('post function', () => {
     expect(processInventoryEntryEventSpy).toHaveBeenCalledTimes(0)
     expect(processProductPublishedEventSpy).toHaveBeenCalledTimes(0)
     expect(mockResponse.status).toHaveBeenCalledWith(200);
+    expect(mockResponse.send).toHaveBeenCalled();
+  })
+
+  it('should check the request body and throw an error if is not defined', async () => {
+    await post(mockRequest as Request, mockResponse as Response);
+
+    expect(mockResponse.status).toHaveBeenCalledWith(400);
+    expect(mockResponse.send).toHaveBeenCalled();
+  })
+
+  it('should check the request body.message and throw an error if is not defined', async () => {
+    mockRequest.body = { };
+
+    await post(mockRequest as Request, mockResponse as Response);
+
+    expect(mockResponse.status).toHaveBeenCalledWith(400);
     expect(mockResponse.send).toHaveBeenCalled();
   })
 })
