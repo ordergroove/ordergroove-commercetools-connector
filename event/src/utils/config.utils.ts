@@ -20,6 +20,7 @@ export const readConfiguration = () => {
     countryCode: process.env.CTP_COUNTRY_CODE as string ?? '',
     distributionChannelId: process.env.CTP_DISTRIBUTION_CHANNEL_ID as string ?? '',
     inventorySupplyChannelId: process.env.CTP_INVENTORY_SUPPLY_CHANNEL_ID as string ?? '',
+    ordergrooveApiUrl: process.env.OG_API_URL as string,
     ordergrooveApiKey: process.env.OG_API_KEY as string,
   };
 

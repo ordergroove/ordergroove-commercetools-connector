@@ -23,6 +23,7 @@ jest.mock('../utils/config.utils', () => ({
     countryCode: 'US',
     distributionChannelId: '12345',
     inventorySupplyChannelId: '12345',
+    ordergrooveApiUrl: 'https://api',
     ordergrooveApiKey: 'ordergrooveApiKey'
   }),
 }))
@@ -115,6 +116,7 @@ describe('processOrderCreatedEvent', () => {
         countryCode: 'US',
         distributionChannelId: '12345',
         inventorySupplyChannelId: '12345',
+        ordergrooveApiUrl: 'https://api',
         ordergrooveApiKey: 'ordergrooveApiKey'
       }
     )
@@ -183,6 +185,7 @@ describe('processOrderCreatedEvent', () => {
         countryCode: 'US',
         distributionChannelId: '12345',
         inventorySupplyChannelId: '12345',
+        ordergrooveApiUrl: 'https://api',
         ordergrooveApiKey: 'ordergrooveApiKey'
       }
     )

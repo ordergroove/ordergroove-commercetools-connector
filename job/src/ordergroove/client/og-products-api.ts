@@ -2,7 +2,6 @@ import { logger } from '../../utils/logger.utils';
 import { OrdergrooveProduct, OrdergrooveApiResponse } from '../../types/custom.types';
 import { readConfiguration } from '../../utils/config.utils';
 
-const url = "https://staging.restapi.ordergroove.com/products-batch/create/?force_all_fields=false";
 const headers = {
   'x-api-key': readConfiguration().ordergrooveApiKey,
   'Content-Type': 'application/json',
@@ -24,7 +23,7 @@ export const createProducts = async (products: Array<OrdergrooveProduct>, execut
 
       logger.info(`[${executionId}] Starting the process of creating products in ordergroove: ${JSON.stringify(products)}`);
 
-      await fetch(url, {
+      await fetch(`${readConfiguration().ordergrooveApiUrl}/products-batch/create/?force_all_fields=false`, {
         method: 'POST',
         body: JSON.stringify(products),
         headers

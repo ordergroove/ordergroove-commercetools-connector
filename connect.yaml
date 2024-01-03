@@ -18,6 +18,8 @@ deployAs:
           description: commercetools Composable Commerce product distribution channel ID
         - key: CTP_INVENTORY_SUPPLY_CHANNEL_ID
           description: commercetools Composable Commerce inventory supply channel ID
+        - key: OG_API_URL
+          description: Ordergroove API URL
       securedConfiguration:
         - key: CTP_PROJECT_KEY
           description: commercetools Composable Commerce project key
@@ -49,6 +51,8 @@ deployAs:
           description: commercetools Composable Commerce product distribution channel ID
         - key: CTP_INVENTORY_SUPPLY_CHANNEL_ID
           description: commercetools Composable Commerce inventory supply channel ID
+        - key: OG_API_URL
+          description: Ordergroove API URL
       securedConfiguration:
         - key: CTP_PROJECT_KEY
           description: commercetools Composable Commerce project key

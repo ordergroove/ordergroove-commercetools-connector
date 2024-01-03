@@ -22,6 +22,7 @@ jest.mock('../../utils/config.utils', () => {
       region: 'europe-west1.gcp',
       languageCode: 'en-US',
       currencyCode: 'USD',
+      ordergrooveApiUrl: 'https://api',
       ordergrooveApiKey: '1234567890qwertyuiop'
     }),
   }

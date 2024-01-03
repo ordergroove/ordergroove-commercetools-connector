@@ -16,6 +16,7 @@ jest.mock('../../utils/config.utils', () => ({
     countryCode: 'US',
     distributionChannelId: '12345',
     inventorySupplyChannelId: '12345',
+    ordergrooveApiUrl: 'https://api',
     ordergrooveApiKey: 'ordergrooveApiKey'
   }),
 }))
@@ -90,6 +91,7 @@ describe('getProductProjectionBySkuWithScopedPrice', () => {
         countryCode: '',
         distributionChannelId: '',
         inventorySupplyChannelId: '',
+        ordergrooveApiUrl: 'https://api',
         ordergrooveApiKey: 'ordergrooveApiKey'
       }
     )
@@ -121,6 +123,7 @@ describe('getProductProjectionBySkuWithScopedPrice', () => {
         countryCode: 'US',
         distributionChannelId: '12345',
         inventorySupplyChannelId: '',
+        ordergrooveApiUrl: 'https://api',
         ordergrooveApiKey: 'ordergrooveApiKey'
       }
     )

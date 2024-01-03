@@ -12,6 +12,7 @@ const mockConfiguration = {
   countryCode: 'mockCountryCode',
   distributionChannelId: 'mockDistributionChannelId',
   inventorySupplyChannelId: 'mockInventorySupplyChannelId',
+  ordergrooveApiUrl: 'https://api',
   ordergrooveApiKey: 'ordergrooveApiKey'
 }
 
@@ -27,6 +28,7 @@ jest.mock('../utils/config.utils', () => ({
     countryCode: 'US',
     distributionChannelId: '',
     inventorySupplyChannelId: '',
+    ordergrooveApiUrl: 'https://api',
     ordergrooveApiKey: 'ordergrooveApiKey'
   }),
 }))

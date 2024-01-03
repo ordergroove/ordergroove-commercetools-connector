@@ -1,5 +1,6 @@
+import * as ConfigUtils from '../../utils/config.utils'
 import { createProducts } from './og-products-api'
-import { mockOgProducts, mockOgApiResponseSuccess } from '../mocks/mocks'
+import { mockOgProducts } from '../mocks/mocks'
 
 jest.mock('../../utils/config.utils', () => ({
   readConfiguration: jest.fn().mockReturnValue({
@@ -13,6 +14,7 @@ jest.mock('../../utils/config.utils', () => ({
     countryCode: 'US',
     distributionChannelId: '12345',
     inventorySupplyChannelId: '12345',
+    ordergrooveApiUrl: process.env.OG_API_URL as string,
     ordergrooveApiKey: 'ordergrooveApiKey'
   }),
 }))
@@ -24,6 +26,22 @@ describe('createProducts', () => {
   })
 
   it('should create a product in ordergroove successfully', async () => {
+    jest.spyOn(ConfigUtils, 'readConfiguration').mockReturnValue(
+      {
+        region: 'test-region',
+        projectKey: 'test-project',
+        clientId: 'test-client-id',
+        clientSecret: 'test-client-secret',
+        scope: 'test-scope',
+        languageCode: 'en-US',
+        currencyCode: 'USD',
+        countryCode: 'US',
+        distributionChannelId: '12345',
+        inventorySupplyChannelId: '',
+        ordergrooveApiUrl: process.env.OG_API_URL as string,
+        ordergrooveApiKey: 'ordergrooveApiKey'
+      }
+    )
     global.fetch = jest.fn(() =>
       Promise.resolve({
         body: {
@@ -55,6 +73,22 @@ describe('createProducts', () => {
   })
 
   it('should make a second attempt if the first request fails', async () => {
+    jest.spyOn(ConfigUtils, 'readConfiguration').mockReturnValue(
+      {
+        region: 'test-region',
+        projectKey: 'test-project',
+        clientId: 'test-client-id',
+        clientSecret: 'test-client-secret',
+        scope: 'test-scope',
+        languageCode: 'en-US',
+        currencyCode: 'USD',
+        countryCode: 'US',
+        distributionChannelId: '12345',
+        inventorySupplyChannelId: '',
+        ordergrooveApiUrl: process.env.OG_API_URL as string,
+        ordergrooveApiKey: 'ordergrooveApiKey'
+      }
+    )
     global.fetch = jest.fn(() =>
       Promise.resolve({
         body: { },
@@ -73,13 +107,28 @@ describe('createProducts', () => {
   })
 
   it('should handle an error from fetch function', async () => {
-
+    jest.spyOn(ConfigUtils, 'readConfiguration').mockReturnValue(
+      {
+        region: 'test-region',
+        projectKey: 'test-project',
+        clientId: 'test-client-id',
+        clientSecret: 'test-client-secret',
+        scope: 'test-scope',
+        languageCode: 'en-US',
+        currencyCode: 'USD',
+        countryCode: 'US',
+        distributionChannelId: '12345',
+        inventorySupplyChannelId: '',
+        ordergrooveApiUrl: process.env.OG_API_URL as string,
+        ordergrooveApiKey: 'ordergrooveApiKey'
+      }
+    )
     jest.spyOn(global, 'fetch')
       .mockImplementation(() => { throw new Error('connection error') });
 
     const result = await createProducts(mockOgProducts, '12345')
 
-    expect(global.fetch).toThrow('connection error');
+    expect(global.fetch).toThrow('connection error')
     expect(result.success).toBe(false)
     expect(result.status).toBe(0)
   })

@@ -14,6 +14,7 @@ const mockEnv = {
   CTP_COUNTRY_CODE: 'US',
   CTP_DISTRIBUTION_CHANNEL_ID: '12345',
   CTP_INVENTORY_SUPPLY_CHANNEL_ID: '12345',
+  OG_API_URL: 'https://api',
   OG_API_KEY: 'mock-og-api-key'
 };
 
@@ -25,6 +26,7 @@ const mockEnv2 = {
   CTP_REGION: 'mockRegion',
   CTP_LANGUAGE_CODE: 'en-US',
   CTP_CURRENCY_CODE: 'USD',
+  OG_API_URL: 'https://api',
   OG_API_KEY: 'mock-og-api-key'
 };
 
@@ -42,6 +44,7 @@ describe('readConfiguration', () => {
       countryCode: 'US',
       distributionChannelId: '12345',
       inventorySupplyChannelId: '12345',
+      ordergrooveApiUrl: 'https://api',
       ordergrooveApiKey: 'mock-og-api-key'
     };
 
@@ -77,6 +80,7 @@ describe('readConfiguration', () => {
       countryCode: '',
       distributionChannelId: '',
       inventorySupplyChannelId: '',
+      ordergrooveApiUrl: 'https://api',
       ordergrooveApiKey: 'mock-og-api-key'
     };
 
