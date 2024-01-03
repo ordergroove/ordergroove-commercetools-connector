@@ -32,7 +32,7 @@ export const post = async (request: Request, response: Response) => {
 
     const payload: CtEventPayload = JSON.parse(
       Buffer.from(request.body.message.data, 'base64').toString('utf8').trim()
-    );
+    ).data;
 
     logger.info('Event received, request.body.message.data decoded:' + JSON.stringify(payload));
 

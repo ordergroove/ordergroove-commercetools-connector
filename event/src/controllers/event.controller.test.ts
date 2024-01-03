@@ -37,14 +37,16 @@ describe('post function', () => {
 
   it('should handle ProductPublished event type correctly', async () => {
     const fakeData = {
-      type: 'ProductPublished',
-      productProjection: {
-        key: 'some-key',
-        name: { 'en-US': 'Some Product Name' },
-        description: { 'en-US': 'Some Product Description' },
-        variants: [],
-        masterVariant: { sku: 'some-sku' },
-      },
+      data: {
+        type: 'ProductPublished',
+        productProjection: {
+          key: 'some-key',
+          name: { 'en-US': 'Some Product Name' },
+          description: { 'en-US': 'Some Product Description' },
+          variants: [],
+          masterVariant: { sku: 'some-sku' },
+        }
+      }
     }
 
     let buff = Buffer.from(JSON.stringify(fakeData));
@@ -62,14 +64,16 @@ describe('post function', () => {
 
   it('should handle InventoryEntryQuantitySet event type correctly', async () => {
     const fakeData = {
-      type: 'InventoryEntryQuantitySet',
-      productProjection: {
-        key: 'some-key',
-        name: { 'en-US': 'Some Product Name' },
-        description: { 'en-US': 'Some Product Description' },
-        variants: [],
-        masterVariant: { sku: 'some-sku' },
-      },
+      data: {
+        type: 'InventoryEntryQuantitySet',
+        productProjection: {
+          key: 'some-key',
+          name: { 'en-US': 'Some Product Name' },
+          description: { 'en-US': 'Some Product Description' },
+          variants: [],
+          masterVariant: { sku: 'some-sku' },
+        }
+      }
     }
 
     let buff = Buffer.from(JSON.stringify(fakeData));
@@ -87,14 +91,16 @@ describe('post function', () => {
 
   it('should handle InventoryEntryCreated event type correctly', async () => {
     const fakeData = {
-      type: 'InventoryEntryCreated',
-      productProjection: {
-        key: 'some-key',
-        name: { 'en-US': 'Some Product Name' },
-        description: { 'en-US': 'Some Product Description' },
-        variants: [],
-        masterVariant: { sku: 'some-sku' },
-      },
+      data: {
+        type: 'InventoryEntryCreated',
+        productProjection: {
+          key: 'some-key',
+          name: { 'en-US': 'Some Product Name' },
+          description: { 'en-US': 'Some Product Description' },
+          variants: [],
+          masterVariant: { sku: 'some-sku' },
+        }
+      }
     }
 
     let buff = Buffer.from(JSON.stringify(fakeData));
@@ -112,14 +118,16 @@ describe('post function', () => {
 
   it('should handle InventoryEntryDeleted event type correctly', async () => {
     const fakeData = {
-      type: 'InventoryEntryDeleted',
-      productProjection: {
-        key: 'some-key',
-        name: { 'en-US': 'Some Product Name' },
-        description: { 'en-US': 'Some Product Description' },
-        variants: [],
-        masterVariant: { sku: 'some-sku' },
-      },
+      data: {
+        type: 'InventoryEntryDeleted',
+        productProjection: {
+          key: 'some-key',
+          name: { 'en-US': 'Some Product Name' },
+          description: { 'en-US': 'Some Product Description' },
+          variants: [],
+          masterVariant: { sku: 'some-sku' },
+        }
+      }
     }
 
     let buff = Buffer.from(JSON.stringify(fakeData));
@@ -137,9 +145,11 @@ describe('post function', () => {
 
   it('should handle OrderCreated with inventory mode equals to ReserveOnOrder type correctly', async () => {
     const fakeData = {
-      type: 'OrderCreated',
-      order: {
-        inventoryMode: "ReserveOnOrder"
+      data: {
+        type: 'OrderCreated',
+        order: {
+          inventoryMode: "ReserveOnOrder"
+        }
       }
     }
 
@@ -158,9 +168,11 @@ describe('post function', () => {
 
   it('should handle OrderCreated with inventory mode equals to TrackOnly type correctly', async () => {
     const fakeData = {
-      type: 'OrderCreated',
-      order: {
-        inventoryMode: "TrackOnly"
+      data: {
+        type: 'OrderCreated',
+        order: {
+          inventoryMode: "TrackOnly"
+        }
       }
     }
 
@@ -179,7 +191,9 @@ describe('post function', () => {
 
   it('should handle unknown type correctly', async () => {
     const fakeData = {
-      type: 'UnknownType',
+      data: {
+        type: 'UnknownType'
+      }
     };
 
     let buff = Buffer.from(JSON.stringify(fakeData));
