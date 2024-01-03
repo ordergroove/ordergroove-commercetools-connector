@@ -1,4 +1,7 @@
-import { ScopedPrice, Image, ProductVariantAvailability, ProductProjectionPagedQueryResponse } from '@commercetools/platform-sdk';
+import {
+  ScopedPrice, Image, ProductVariantAvailability,
+  ProductProjectionPagedQueryResponse, LocalizedString
+} from '@commercetools/platform-sdk';
 
 import { logger } from '../../utils/logger.utils';
 import { CtEventPayload, OrdergrooveProduct } from '../../types/custom.types';
@@ -41,7 +44,7 @@ export const convertProductPublishedPayloadToOrdergrooveProducts = async (payloa
           price: masterVariantPrice,
           live: isProductOnStock(result.masterVariant.availability),
           image_url: getImageUrl(result.masterVariant.images),
-          detail_url: ''
+          detail_url: getSlug(result.slug)
         };
         ordergrooveProducts.push(ogProduct);
       }
@@ -61,7 +64,7 @@ export const convertProductPublishedPayloadToOrdergrooveProducts = async (payloa
             price: variantPrice,
             live: isProductOnStock(variant.availability),
             image_url: getImageUrl(variant.images, result.masterVariant.images),
-            detail_url: ''
+            detail_url: getSlug(result.slug)
           };
           ordergrooveProducts.push(ogProduct);
         }
@@ -134,4 +137,8 @@ function getImageUrl(productImages?: Image[], masterProductImages?: Image[]): st
   }
 
   return result;
+}
+
+function getSlug(slug: LocalizedString): string {
+  return slug[readConfiguration().languageCode] === undefined ? '' : slug[readConfiguration().languageCode];
 }

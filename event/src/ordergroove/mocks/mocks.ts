@@ -126,7 +126,7 @@ export const mockProductProjectionPagedQueryResponse: ProductProjectionPagedQuer
       "published": true,
       "searchKeywords": {},
       "slug": {
-        "en-US": "woman-formal-jeans"
+        "en": "woman-formal-jeans"
       },
       "taxCategory": {
         "id": "cdb0601d-2a50-4db8-a719-4a337b7da385",
