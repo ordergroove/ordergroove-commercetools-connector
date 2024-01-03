@@ -1,4 +1,7 @@
-import { ProductProjection, ProductVariant, ProductProjectionPagedQueryResponse, ProductVariantAvailability, Image, ScopedPrice } from '@commercetools/platform-sdk';
+import {
+  ProductProjection, ProductVariant, ProductProjectionPagedQueryResponse,
+  ProductVariantAvailability, Image, ScopedPrice, LocalizedString
+} from '@commercetools/platform-sdk';
 
 import { logger } from '../../utils/logger.utils';
 import { addDecimalPointToCentAmount } from '../utils/data-utils';
@@ -38,7 +41,7 @@ export const convertProductProjectionToOrdergrooveProducts = async (productProje
           price: masterVariantPrice,
           live: isProductOnStock(result.masterVariant.availability),
           image_url: getImageUrl(result.masterVariant.images),
-          detail_url: ''
+          detail_url: getSlug(result.slug)
         };
         variantsResult.push(ogProduct);
       }
@@ -59,7 +62,7 @@ export const convertProductProjectionToOrdergrooveProducts = async (productProje
             price: variantPrice,
             live: isProductOnStock(variant.availability),
             image_url: getImageUrl(variant.images, result.masterVariant.images),
-            detail_url: ''
+            detail_url: getSlug(result.slug)
           };
           variantsResult.push(ogProduct);
         }
@@ -132,4 +135,8 @@ function getImageUrl(productImages?: Image[], masterProductImages?: Image[]): st
   }
 
   return result;
+}
+
+function getSlug(slug: LocalizedString): string {
+  return slug[readConfiguration().languageCode] === undefined ? '' : slug[readConfiguration().languageCode];
 }
