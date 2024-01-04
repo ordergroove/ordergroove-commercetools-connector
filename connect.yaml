@@ -20,6 +20,8 @@ deployAs:
           description: commercetools Composable Commerce inventory supply channel ID
         - key: OG_API_URL
           description: Ordergroove API URL
+        - key: PR_PREFIX
+          description: Just for testing
       securedConfiguration:
         - key: CTP_PROJECT_KEY
           description: commercetools Composable Commerce project key
