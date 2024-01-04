@@ -11,7 +11,8 @@ import {
   mockProductProjectionPagedQueryResponseWithoutScopedPrice,
   mockProductProjectionPagedQueryResponseVariantWithoutImage,
   mockProductProjectionPagedQueryResponseStockInChannel,
-  mockProductProjectionPagedQueryResponseStockForAny
+  mockProductProjectionPagedQueryResponseStockForAny,
+  mockProductProjectionPagedQueryResponseWithoutValidSlug
 } from '../mocks/mocks'
 
 jest.mock('@commercetools/platform-sdk')
@@ -40,7 +41,8 @@ jest.mock('../../utils/config.utils', () => ({
     distributionChannelId: '12345',
     inventorySupplyChannelId: '12345',
     ordergrooveApiUrl: 'https://api',
-    ordergrooveApiKey: 'ordergrooveApiKey'
+    ordergrooveApiKey: 'ordergrooveApiKey',
+    productStoreUrl: 'https://product/detail/[SLUG]'
   }),
 }))
 
@@ -81,7 +83,8 @@ describe('convertProductPublishedPayloadToOrdergrooveProducts', () => {
         distributionChannelId: '12345',
         inventorySupplyChannelId: '12345',
         ordergrooveApiUrl: 'https://api',
-        ordergrooveApiKey: 'ordergrooveApiKey'
+        ordergrooveApiKey: 'ordergrooveApiKey',
+        productStoreUrl: 'https://product/detail/[SLUG]'
       }
     )
 
@@ -115,7 +118,8 @@ describe('convertProductPublishedPayloadToOrdergrooveProducts', () => {
         distributionChannelId: '12345',
         inventorySupplyChannelId: '12345',
         ordergrooveApiUrl: 'https://api',
-        ordergrooveApiKey: 'ordergrooveApiKey'
+        ordergrooveApiKey: 'ordergrooveApiKey',
+        productStoreUrl: 'https://product/detail/[SLUG]'
       }
     )
 
@@ -149,7 +153,8 @@ describe('convertProductPublishedPayloadToOrdergrooveProducts', () => {
         distributionChannelId: '12345',
         inventorySupplyChannelId: '12345',
         ordergrooveApiUrl: 'https://api',
-        ordergrooveApiKey: 'ordergrooveApiKey'
+        ordergrooveApiKey: 'ordergrooveApiKey',
+        productStoreUrl: 'https://product/detail/[SLUG]'
       }
     )
 
@@ -179,7 +184,8 @@ describe('convertProductPublishedPayloadToOrdergrooveProducts', () => {
         distributionChannelId: '12345',
         inventorySupplyChannelId: '12345',
         ordergrooveApiUrl: 'https://api',
-        ordergrooveApiKey: 'ordergrooveApiKey'
+        ordergrooveApiKey: 'ordergrooveApiKey',
+        productStoreUrl: 'https://product/detail/[SLUG]'
       }
     )
 
@@ -220,7 +226,8 @@ describe('convertProductPublishedPayloadToOrdergrooveProducts', () => {
         distributionChannelId: '12345',
         inventorySupplyChannelId: '',
         ordergrooveApiUrl: 'https://api',
-        ordergrooveApiKey: 'ordergrooveApiKey'
+        ordergrooveApiKey: 'ordergrooveApiKey',
+        productStoreUrl: 'https://product/detail/[SLUG]'
       }
     )
 
@@ -254,7 +261,8 @@ describe('convertProductPublishedPayloadToOrdergrooveProducts', () => {
         distributionChannelId: '12345',
         inventorySupplyChannelId: '',
         ordergrooveApiUrl: 'https://api',
-        ordergrooveApiKey: 'ordergrooveApiKey'
+        ordergrooveApiKey: 'ordergrooveApiKey',
+        productStoreUrl: 'https://product/detail/[SLUG]'
       }
     )
 
@@ -272,5 +280,75 @@ describe('convertProductPublishedPayloadToOrdergrooveProducts', () => {
     expect(getProductProjectionBySkuWithScopedPriceSpy).toHaveBeenCalled()
     expect(addDecimalPointToCentAmountSpy).toHaveBeenCalled()
     expect(result.length).toBeGreaterThanOrEqual(2)
-  })  
+  })
+  
+  it('should left the detail_url attribute empty if the productStoreUrl var is not provided', async () => {
+    jest.spyOn(ConfigUtils, 'readConfiguration').mockReturnValue(
+      {
+        region: 'test-region',
+        projectKey: 'test-project',
+        clientId: 'test-client-id',
+        clientSecret: 'test-client-secret',
+        scope: 'test-scope',
+        languageCode: 'en-US',
+        currencyCode: 'USD',
+        countryCode: 'US',
+        distributionChannelId: '12345',
+        inventorySupplyChannelId: '',
+        ordergrooveApiUrl: 'https://api',
+        ordergrooveApiKey: 'ordergrooveApiKey',
+        productStoreUrl: ''
+      }
+    )
+
+    const getProductProjectionBySkuWithScopedPriceSpy = jest
+      .spyOn(CtService, 'getProductProjectionBySkuWithScopedPrice')
+      .mockImplementation(() => Promise.resolve(mockProductProjectionPagedQueryResponse))
+      .mockResolvedValue(mockProductProjectionPagedQueryResponse)
+
+    const addDecimalPointToCentAmountSpy = jest
+      .spyOn(DataUtils, 'addDecimalPointToCentAmount')
+      .mockReturnValue(15.00)
+
+    const result: OrdergrooveProduct[] = await convertProductPublishedPayloadToOrdergrooveProducts(mockProductCtEventPayload)
+
+    expect(getProductProjectionBySkuWithScopedPriceSpy).toHaveBeenCalled()
+    expect(addDecimalPointToCentAmountSpy).toHaveBeenCalled()
+    expect(result.length).toBeGreaterThanOrEqual(2)
+  })
+
+  it('should left the detail_url attribute empty if the product does not have a slug', async () => {
+    jest.spyOn(ConfigUtils, 'readConfiguration').mockReturnValue(
+      {
+        region: 'test-region',
+        projectKey: 'test-project',
+        clientId: 'test-client-id',
+        clientSecret: 'test-client-secret',
+        scope: 'test-scope',
+        languageCode: 'en-US',
+        currencyCode: 'USD',
+        countryCode: 'US',
+        distributionChannelId: '12345',
+        inventorySupplyChannelId: '',
+        ordergrooveApiUrl: 'https://api',
+        ordergrooveApiKey: 'ordergrooveApiKey',
+        productStoreUrl: 'https://product/detail/[SLUG]'
+      }
+    )
+
+    const getProductProjectionBySkuWithScopedPriceSpy = jest
+      .spyOn(CtService, 'getProductProjectionBySkuWithScopedPrice')
+      .mockImplementation(() => Promise.resolve(mockProductProjectionPagedQueryResponseWithoutValidSlug))
+      .mockResolvedValue(mockProductProjectionPagedQueryResponseWithoutValidSlug)
+
+    const addDecimalPointToCentAmountSpy = jest
+      .spyOn(DataUtils, 'addDecimalPointToCentAmount')
+      .mockReturnValue(15.00)
+
+    const result: OrdergrooveProduct[] = await convertProductPublishedPayloadToOrdergrooveProducts(mockProductCtEventPayload)
+
+    expect(getProductProjectionBySkuWithScopedPriceSpy).toHaveBeenCalled()
+    expect(addDecimalPointToCentAmountSpy).toHaveBeenCalled()
+    expect(result.length).toBeGreaterThanOrEqual(2)
+  })
 })

@@ -13,7 +13,8 @@ const mockConfiguration = {
   distributionChannelId: 'mockDistributionChannelId',
   inventorySupplyChannelId: 'mockInventorySupplyChannelId',
   ordergrooveApiUrl: 'https://api',
-  ordergrooveApiKey: 'ordergrooveApiKey'
+  ordergrooveApiKey: 'ordergrooveApiKey',
+  productStoreUrl: 'https://product/detail/[SLUG]'
 }
 
 jest.mock('../utils/config.utils', () => ({
@@ -29,7 +30,8 @@ jest.mock('../utils/config.utils', () => ({
     distributionChannelId: '',
     inventorySupplyChannelId: '',
     ordergrooveApiUrl: 'https://api',
-    ordergrooveApiKey: 'ordergrooveApiKey'
+    ordergrooveApiKey: 'ordergrooveApiKey',
+    productStoreUrl: 'https://product/detail/[SLUG]'
   }),
 }))
 

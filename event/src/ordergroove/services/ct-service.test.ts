@@ -17,7 +17,8 @@ jest.mock('../../utils/config.utils', () => ({
     distributionChannelId: '12345',
     inventorySupplyChannelId: '12345',
     ordergrooveApiUrl: 'https://api',
-    ordergrooveApiKey: 'ordergrooveApiKey'
+    ordergrooveApiKey: 'ordergrooveApiKey',
+    productStoreUrl: 'https://product/detail/[SLUG]'
   }),
 }))
 jest.mock('@commercetools/platform-sdk')
@@ -92,7 +93,8 @@ describe('getProductProjectionBySkuWithScopedPrice', () => {
         distributionChannelId: '',
         inventorySupplyChannelId: '',
         ordergrooveApiUrl: 'https://api',
-        ordergrooveApiKey: 'ordergrooveApiKey'
+        ordergrooveApiKey: 'ordergrooveApiKey',
+        productStoreUrl: 'https://product/detail/[SLUG]'
       }
     )
 
@@ -124,7 +126,8 @@ describe('getProductProjectionBySkuWithScopedPrice', () => {
         distributionChannelId: '12345',
         inventorySupplyChannelId: '',
         ordergrooveApiUrl: 'https://api',
-        ordergrooveApiKey: 'ordergrooveApiKey'
+        ordergrooveApiKey: 'ordergrooveApiKey',
+        productStoreUrl: 'https://product/detail/[SLUG]'
       }
     )
 

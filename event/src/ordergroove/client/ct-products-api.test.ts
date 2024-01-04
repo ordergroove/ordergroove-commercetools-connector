@@ -23,7 +23,8 @@ jest.mock('../../utils/config.utils', () => {
       languageCode: 'en-US',
       currencyCode: 'USD',
       ordergrooveApiUrl: 'https://api',
-      ordergrooveApiKey: '1234567890qwertyuiop'
+      ordergrooveApiKey: '1234567890qwertyuiop',
+      productStoreUrl: 'https://product/detail/[SLUG]'
     }),
   }
 })

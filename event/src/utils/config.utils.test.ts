@@ -15,7 +15,8 @@ const mockEnv = {
   CTP_DISTRIBUTION_CHANNEL_ID: '12345',
   CTP_INVENTORY_SUPPLY_CHANNEL_ID: '12345',
   OG_API_URL: 'https://api',
-  OG_API_KEY: 'mock-og-api-key'
+  OG_API_KEY: 'mock-og-api-key',
+  PRODUCT_STORE_URL: 'https://product/detail/[SLUG]'
 };
 
 const mockEnv2 = {
@@ -27,7 +28,8 @@ const mockEnv2 = {
   CTP_LANGUAGE_CODE: 'en-US',
   CTP_CURRENCY_CODE: 'USD',
   OG_API_URL: 'https://api',
-  OG_API_KEY: 'mock-og-api-key'
+  OG_API_KEY: 'mock-og-api-key',
+  PRODUCT_STORE_URL: 'https://product/detail/[SLUG]'
 };
 
 describe('readConfiguration', () => {
@@ -45,7 +47,8 @@ describe('readConfiguration', () => {
       distributionChannelId: '12345',
       inventorySupplyChannelId: '12345',
       ordergrooveApiUrl: 'https://api',
-      ordergrooveApiKey: 'mock-og-api-key'
+      ordergrooveApiKey: 'mock-og-api-key',
+      productStoreUrl: 'https://product/detail/[SLUG]'
     };
 
     // Mock the validation function to return an empty array (no errors)
@@ -81,7 +84,8 @@ describe('readConfiguration', () => {
       distributionChannelId: '',
       inventorySupplyChannelId: '',
       ordergrooveApiUrl: 'https://api',
-      ordergrooveApiKey: 'mock-og-api-key'
+      ordergrooveApiKey: 'mock-og-api-key',
+      productStoreUrl: 'https://product/detail/[SLUG]'
     };
 
     // Mock the validation function to return an empty array (no errors)

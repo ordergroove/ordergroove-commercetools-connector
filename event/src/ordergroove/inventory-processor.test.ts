@@ -25,7 +25,8 @@ jest.mock('../utils/config.utils', () => ({
     distributionChannelId: '12345',
     inventorySupplyChannelId: '12345',
     ordergrooveApiUrl: 'https://api',
-    ordergrooveApiKey: 'ordergrooveApiKey'
+    ordergrooveApiKey: 'ordergrooveApiKey',
+    productStoreUrl: 'https://product/detail/[SLUG]'
   }),
 }))
 jest.mock('./client/og-products-api', () => {
@@ -118,7 +119,8 @@ describe('processInventoryEntryEvent', () => {
         distributionChannelId: '12345',
         inventorySupplyChannelId: '12345',
         ordergrooveApiUrl: 'https://api',
-        ordergrooveApiKey: 'ordergrooveApiKey'
+        ordergrooveApiKey: 'ordergrooveApiKey',
+        productStoreUrl: 'https://product/detail/[SLUG]'
       }
     )
 
@@ -190,7 +192,8 @@ describe('processInventoryEntryEvent', () => {
         distributionChannelId: '12345',
         inventorySupplyChannelId: '12345',
         ordergrooveApiUrl: 'https://api',
-        ordergrooveApiKey: 'ordergrooveApiKey'
+        ordergrooveApiKey: 'ordergrooveApiKey',
+        productStoreUrl: 'https://product/detail/[SLUG]'
       }
     )
 
