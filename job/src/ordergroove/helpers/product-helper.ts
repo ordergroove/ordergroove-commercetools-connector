@@ -70,7 +70,6 @@ export const convertProductProjectionToOrdergrooveProducts = async (productProje
         }
       }
     }
-    logger.info(`Extracted ${variantsResult.length} valid product variants from commercetools.`);
   } catch (error) {
     logger.error('Error during the process convertProductProjectionToOrdergrooveProducts().', error);
   }

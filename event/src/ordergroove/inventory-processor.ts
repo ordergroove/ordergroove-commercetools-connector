@@ -19,13 +19,11 @@ export const processInventoryEntryEvent = async (payload: CtEventPayload): Promi
     } else {
       const ogProductResponse: OrdergrooveApiResponse = await retrieveOgProduct(sku, execution_id);
       const ogProduct: OrdergrooveProduct | undefined = ogProductResponse.product;
-      logger.info('--> processInventoryEntryEvent, ogProductResponse:' + JSON.stringify(ogProductResponse));
 
       if (ogProduct === undefined) {
         logger.info(`[${execution_id}] An error occurred processing the ${payload.type} event, the product with sku ${sku} does not exist in ordergroove.`);
       } else {
         const ctProductVariant: ProductVariant = await getProductVariantBySku(sku);
-        logger.info('--> processInventoryEntryEvent, ctProductVariant:' + JSON.stringify(ctProductVariant));
         const isCtProductOnStock = isProductOnStock(ctProductVariant.availability);
 
         if (ogProduct.live !== isCtProductOnStock) {
