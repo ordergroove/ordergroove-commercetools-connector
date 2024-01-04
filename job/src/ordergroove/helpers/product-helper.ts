@@ -142,7 +142,7 @@ function getImageUrl(productImages?: Image[], masterProductImages?: Image[]): st
 function getDetailUrl(slug: LocalizedString): string {
   let result = '';
 
-  const productUrl = readConfiguration().productStoreUrl === undefined ? '' : readConfiguration().productStoreUrl;
+  const productUrl = readConfiguration().productStoreUrl;
 
   if (productUrl !== '') {
     const localizedSlug = slug[readConfiguration().languageCode] === undefined ? '' : slug[readConfiguration().languageCode];
