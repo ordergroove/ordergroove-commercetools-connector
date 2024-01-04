@@ -43,7 +43,7 @@ export const convertProductProjectionToOrdergrooveProducts = async (productProje
           price: masterVariantPrice,
           live: isProductOnStock(result.masterVariant.availability),
           image_url: getImageUrl(result.masterVariant.images),
-          detail_url: getSlug(result.slug)
+          detail_url: getDetailUrl(result.slug)
         };
         variantsResult.push(ogProduct);
       }
@@ -64,7 +64,7 @@ export const convertProductProjectionToOrdergrooveProducts = async (productProje
             price: variantPrice,
             live: isProductOnStock(variant.availability),
             image_url: getImageUrl(variant.images, result.masterVariant.images),
-            detail_url: getSlug(result.slug)
+            detail_url: getDetailUrl(result.slug)
           };
           variantsResult.push(ogProduct);
         }
@@ -139,6 +139,17 @@ function getImageUrl(productImages?: Image[], masterProductImages?: Image[]): st
   return result;
 }
 
-function getSlug(slug: LocalizedString): string {
-  return slug[readConfiguration().languageCode] === undefined ? '' : slug[readConfiguration().languageCode];
+function getDetailUrl(slug: LocalizedString): string {
+  let result = '';
+
+  const productUrl = readConfiguration().productStoreUrl === undefined ? '' : readConfiguration().productStoreUrl;
+
+  if (productUrl !== '') {
+    const localizedSlug = slug[readConfiguration().languageCode] === undefined ? '' : slug[readConfiguration().languageCode];
+    if (localizedSlug !== '') {
+      result = productUrl.replace('[SLUG]', localizedSlug);
+    }
+  }
+
+  return result;
 }

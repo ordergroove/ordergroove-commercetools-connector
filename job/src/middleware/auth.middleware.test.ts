@@ -13,7 +13,8 @@ const mockConfiguration = {
   distributionChannelId: 'mockDistributionChannelId',
   inventorySupplyChannelId: 'mockInventorySupplyChannelId',
   ordergrooveApiUrl: process.env.OG_API_URL as string,
-  ordergrooveApiKey: 'ordergrooveApiKey'
+  ordergrooveApiKey: 'ordergrooveApiKey',
+  productStoreUrl: 'https://product/detail/[SLUG]'
 }
 
 jest.mock('../utils/config.utils', () => ({
@@ -29,7 +30,8 @@ jest.mock('../utils/config.utils', () => ({
     distributionChannelId: '',
     inventorySupplyChannelId: '',
     ordergrooveApiUrl: process.env.OG_API_URL as string,
-    ordergrooveApiKey: 'ordergrooveApiKey'
+    ordergrooveApiKey: 'ordergrooveApiKey',
+    productStoreUrl: 'https://product/detail/[SLUG]'
   }),
 }))
 
@@ -55,7 +57,8 @@ describe('createAuthMiddlewareOptions configuration', () => {
         distributionChannelId: '',
         inventorySupplyChannelId: '',
         ordergrooveApiUrl: process.env.OG_API_URL as string,
-        ordergrooveApiKey: 'ordergrooveApiKey'
+        ordergrooveApiKey: 'ordergrooveApiKey',
+        productStoreUrl: 'https://product/detail/[SLUG]'
       }
     )
 
@@ -88,7 +91,8 @@ describe('createAuthMiddlewareOptions configuration', () => {
         distributionChannelId: '',
         inventorySupplyChannelId: '',
         ordergrooveApiUrl: process.env.OG_API_URL as string,
-        ordergrooveApiKey: 'ordergrooveApiKey'
+        ordergrooveApiKey: 'ordergrooveApiKey',
+        productStoreUrl: 'https://product/detail/[SLUG]'
       }
     )
 

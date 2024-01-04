@@ -23,7 +23,8 @@ jest.mock('../utils/config.utils', () => ({
     distributionChannelId: '12345',
     inventorySupplyChannelId: '12345',
     ordergrooveApiUrl: process.env.OG_API_URL as string,
-    ordergrooveApiKey: 'ordergrooveApiKey'
+    ordergrooveApiKey: 'ordergrooveApiKey',
+    productStoreUrl: 'https://product/detail/[SLUG]'
   }),
 }))
 

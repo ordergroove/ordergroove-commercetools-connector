@@ -20,6 +20,8 @@ deployAs:
           description: commercetools Composable Commerce inventory supply channel ID
         - key: OG_API_URL
           description: Ordergroove API URL
+        - key: PRODUCT_STORE_URL
+          description: Url of the product in the store, with dynamic slug
         - key: PR_PREFIX
           description: Just for testing
       securedConfiguration:

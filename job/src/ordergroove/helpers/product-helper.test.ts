@@ -9,32 +9,18 @@ import {
   mockProductProjectionPagedQueryResponseWithoutScopedPrice,
   mockProductProjectionPagedQueryResponseVariantWithoutImage,
   mockProductProjectionPagedQueryResponseStockInChannel,
-  mockProductProjectionPagedQueryResponseStockForAny
+  mockProductProjectionPagedQueryResponseStockForAny,
+  mockProductProjectionPagedQueryResponseWithoutValidSlug
 } from '../mocks/mocks'
 
 jest.mock('@commercetools/platform-sdk')
 jest.mock('../utils/data-utils')
+jest.mock('../../utils/config.utils')
 jest.mock('../../utils/logger.utils', () => ({
   logger: {
     info: jest.fn().mockReturnValue(''),
     error: jest.fn().mockReturnValue(''),
   },
-}))
-jest.mock('../../utils/config.utils', () => ({
-  readConfiguration: jest.fn().mockReturnValue({
-    region: 'test-region',
-    projectKey: 'test-project',
-    clientId: 'test-client-id',
-    clientSecret: 'test-client-secret',
-    scope: 'scope',
-    languageCode: 'en-US',
-    currencyCode: 'USD',
-    countryCode: 'US',
-    distributionChannelId: '12345',
-    inventorySupplyChannelId: '12345',
-    ordergrooveApiUrl: process.env.OG_API_URL as string,
-    ordergrooveApiKey: 'ordergrooveApiKey'
-  }),
 }))
 
 describe('convertProductProjectionToOrdergrooveProducts', () => {
@@ -57,7 +43,8 @@ describe('convertProductProjectionToOrdergrooveProducts', () => {
         distributionChannelId: '12345',
         inventorySupplyChannelId: '12345',
         ordergrooveApiUrl: process.env.OG_API_URL as string,
-        ordergrooveApiKey: 'ordergrooveApiKey'
+        ordergrooveApiKey: 'ordergrooveApiKey',
+        productStoreUrl: 'https://product/detail/[SLUG]'
       }
     )
 
@@ -85,7 +72,8 @@ describe('convertProductProjectionToOrdergrooveProducts', () => {
         distributionChannelId: '12345',
         inventorySupplyChannelId: '12345',
         ordergrooveApiUrl: process.env.OG_API_URL as string,
-        ordergrooveApiKey: 'ordergrooveApiKey'
+        ordergrooveApiKey: 'ordergrooveApiKey',
+        productStoreUrl: 'https://product/detail/[SLUG]'
       }
     )
 
@@ -114,7 +102,8 @@ describe('convertProductProjectionToOrdergrooveProducts', () => {
         distributionChannelId: '12345',
         inventorySupplyChannelId: '12345',
         ordergrooveApiUrl: process.env.OG_API_URL as string,
-        ordergrooveApiKey: 'ordergrooveApiKey'
+        ordergrooveApiKey: 'ordergrooveApiKey',
+        productStoreUrl: 'https://product/detail/[SLUG]'
       }
     )
 
@@ -143,7 +132,8 @@ describe('convertProductProjectionToOrdergrooveProducts', () => {
         distributionChannelId: '12345',
         inventorySupplyChannelId: '12345',
         ordergrooveApiUrl: process.env.OG_API_URL as string,
-        ordergrooveApiKey: 'ordergrooveApiKey'
+        ordergrooveApiKey: 'ordergrooveApiKey',
+        productStoreUrl: 'https://product/detail/[SLUG]'
       }
     )
 
@@ -168,7 +158,8 @@ describe('convertProductProjectionToOrdergrooveProducts', () => {
         distributionChannelId: '12345',
         inventorySupplyChannelId: '12345',
         ordergrooveApiUrl: process.env.OG_API_URL as string,
-        ordergrooveApiKey: 'ordergrooveApiKey'
+        ordergrooveApiKey: 'ordergrooveApiKey',
+        productStoreUrl: 'https://product/detail/[SLUG]'
       }
     )
 
@@ -193,7 +184,8 @@ describe('convertProductProjectionToOrdergrooveProducts', () => {
         distributionChannelId: '12345',
         inventorySupplyChannelId: '',
         ordergrooveApiUrl: process.env.OG_API_URL as string,
-        ordergrooveApiKey: 'ordergrooveApiKey'
+        ordergrooveApiKey: 'ordergrooveApiKey',
+        productStoreUrl: 'https://product/detail/[SLUG]'
       }
     )
 
@@ -222,7 +214,8 @@ describe('convertProductProjectionToOrdergrooveProducts', () => {
         distributionChannelId: '12345',
         inventorySupplyChannelId: '',
         ordergrooveApiUrl: process.env.OG_API_URL as string,
-        ordergrooveApiKey: 'ordergrooveApiKey'
+        ordergrooveApiKey: 'ordergrooveApiKey',
+        productStoreUrl: 'https://product/detail/[SLUG]'
       }
     )
 
@@ -232,6 +225,66 @@ describe('convertProductProjectionToOrdergrooveProducts', () => {
 
     const result: OrdergrooveProduct[] =
       await convertProductProjectionToOrdergrooveProducts(mockProductProjectionPagedQueryResponseStockForAny)
+
+    expect(addDecimalPointToCentAmountSpy).toHaveBeenCalled()
+    expect(result.length).toBeGreaterThanOrEqual(2)
+  })
+
+  it('should left the detail_url attribute empty if the productStoreUrl var is not provided', async () => {
+    jest.spyOn(ConfigUtils, 'readConfiguration').mockReturnValue(
+      {
+        region: 'test-region',
+        projectKey: 'test-project',
+        clientId: 'test-client-id',
+        clientSecret: 'test-client-secret',
+        scope: 'test-scope',
+        languageCode: 'en-US',
+        currencyCode: 'USD',
+        countryCode: 'US',
+        distributionChannelId: '12345',
+        inventorySupplyChannelId: '',
+        ordergrooveApiUrl: process.env.OG_API_URL as string,
+        ordergrooveApiKey: 'ordergrooveApiKey',
+        productStoreUrl: ''
+      }
+    )
+
+    const addDecimalPointToCentAmountSpy = jest
+      .spyOn(DataUtils, 'addDecimalPointToCentAmount')
+      .mockReturnValue(15.00)
+
+    const result: OrdergrooveProduct[] =
+      await convertProductProjectionToOrdergrooveProducts(mockProductProjectionPagedQueryResponseStockForAny)
+
+    expect(addDecimalPointToCentAmountSpy).toHaveBeenCalled()
+    expect(result.length).toBeGreaterThanOrEqual(2)
+  })
+
+  it('should left the detail_url attribute empty if product does not have a slug', async () => {
+    jest.spyOn(ConfigUtils, 'readConfiguration').mockReturnValue(
+      {
+        region: 'test-region',
+        projectKey: 'test-project',
+        clientId: 'test-client-id',
+        clientSecret: 'test-client-secret',
+        scope: 'test-scope',
+        languageCode: 'en-US',
+        currencyCode: 'USD',
+        countryCode: 'US',
+        distributionChannelId: '12345',
+        inventorySupplyChannelId: '',
+        ordergrooveApiUrl: process.env.OG_API_URL as string,
+        ordergrooveApiKey: 'ordergrooveApiKey',
+        productStoreUrl: 'https://product/detail/[SLUG]'
+      }
+    )
+
+    const addDecimalPointToCentAmountSpy = jest
+      .spyOn(DataUtils, 'addDecimalPointToCentAmount')
+      .mockReturnValue(15.00)
+
+    const result: OrdergrooveProduct[] =
+      await convertProductProjectionToOrdergrooveProducts(mockProductProjectionPagedQueryResponseWithoutValidSlug)
 
     expect(addDecimalPointToCentAmountSpy).toHaveBeenCalled()
     expect(result.length).toBeGreaterThanOrEqual(2)
