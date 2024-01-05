@@ -58,7 +58,13 @@ Setup the required environment variables when you [create the deployment](https:
 - `OG_API_KEY`
   - (*Required*) Ordergroove API key.
 
-Once the connector is deployed, you should be able to invoke the job to import all the products from commerctools into Ordergroove. **TODO: SPECIFY PROCESS**
+Once the connector is deployed, you should be able to invoke the job to import all the products from commercetools into Ordergroove:
+ - Get the job application ID (JOB-APP-ID): Request your commercetools deployments, identify the connector in the response, and within the "applications" attribute, locate the job application, then copy its ID.
+ - Construct the URL to invoke the job using the following template:
+   https://job-{JOB-APP-ID}.{region}.commercetools.app/job?startUpload=true
+     - Query Param startUpload: This must be set to 'true' to initiate the product load to Ordergroove.
+ - Invoke the URL with a POST request, set the Authorization header with a valid commercetools token.
+ - Follow the process outlined in the deployment logs.
 
 On the other hand, the connector will create a subscription to listen for the following events ([messages](https://docs.commercetools.com/api/projects/messages)):
 
