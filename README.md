@@ -1,6 +1,6 @@
 # Ordergroove commercetools connector
 
-<img height="110" src="https://github.com/gluo-dev/ordergroove-commercetools-connector/blob/main/_logos.svg" />
+<img height="200" src="https://github.com/gluo-dev/ordergroove-commercetools-connector/blob/main/_logos.svg" />
 
 The Ordergroove commercetools connector was created by [Gluo](https://gluo.mx/), and provides the following features:
 
