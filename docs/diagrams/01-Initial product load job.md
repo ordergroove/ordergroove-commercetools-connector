@@ -16,4 +16,4 @@ After receiving the response from commercetools, the application initiates a pro
 
 All valid product variants from the response are added to a list, which is then segmented into batches of 100 products, already formatted for ordergroove. These batches are then concurrently dispatched in groups of 10 to ordergroove, in case the initial request attempt fails, a second attempt is made one second later.
 
-<img src="https://github.com/gluo-dev/ordergroove-commercetools-connector/blob/main/docs/diagrams/Diagram%20-%20Initial%20product%20load.jpg" />
+<img src="https://github.com/gluo-dev/ordergroove-commercetools-connector/blob/main/docs/diagrams/diagram-initial-product-load-job.jpg" />
