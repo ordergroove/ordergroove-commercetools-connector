@@ -12,7 +12,7 @@ The Ordergroove commercetools connector was created by [Gluo](https://gluo.mx/),
 
 This connector syncs commercetools products with Ordergroove. The following diagram shows a high-level overview of the different scenarios featured on the connector.
 
-<img height="300" src="https://github.com/gluo-dev/ordergroove-commercetools-connector/blob/main/docs/diagrams/diagram-high-level-overview.png" />
+<img height="100%" src="https://github.com/gluo-dev/ordergroove-commercetools-connector/blob/main/docs/diagrams/diagram-high-level-overview.png" />
 
 Upon deployment of this connector, your commercetools _products_ can be imported into Ordergroove.
  - [Initial product load process detail](https://github.com/gluo-dev/ordergroove-commercetools-connector/blob/main/docs/diagrams/01-Initial%20product%20load%20job.md)
