@@ -13,10 +13,14 @@ The Ordergroove commercetools connector was created by [Gluo](https://gluo.mx/),
 This connector syncs commercetools products with Ordergroove.
 
 Upon deployment of this connector, your commercetools _products_ can be imported into Ordergroove.
+ - [Initial product load process detail](https://github.com/gluo-dev/ordergroove-commercetools-connector/blob/main/docs/diagrams/01-Initial%20product%20load%20job.md)
 
 For every product (or variant) modification, the information will be synchronized with Ordergroove.
+ - [Product published process detail](https://github.com/gluo-dev/ordergroove-commercetools-connector/blob/main/docs/diagrams/04-Product%20Published%20event.md)
 
 When the product stock changes or an order is created on commercetools, this information will be synchronized with Ordergroove.
+ - [Inventory entry process detail](https://github.com/gluo-dev/ordergroove-commercetools-connector/blob/main/docs/diagrams/02-Inventory%20Entry%20event.md)
+  - [Order created process detail](https://github.com/gluo-dev/ordergroove-commercetools-connector/blob/main/docs/diagrams/03-Order%20Created%20event.md)
 
 ## Pre-requisites
 
@@ -27,10 +31,13 @@ When the product stock changes or an order is created on commercetools, this inf
 
 ## Installing the connector
 
-To install the connector in your commercetools project, you'll need to deploy it. Refer to the [commercetools connect deployment documentation](https://docs.commercetools.com/connect/concepts#deployments).
+First, [create a ConnectorStaged](https://github.com/gluo-dev/ordergroove-commercetools-connector/blob/main/docs/00-create-connector-staged.md) in commercetools.
 
-Setup the required environment variables when you [create the deployment](https://docs.commercetools.com/connect/getting-started#create-a-deployment):
+After the ConnectorStaged is created successfully, request to [preview the connector](https://github.com/gluo-dev/ordergroove-commercetools-connector/blob/main/docs/01-preview-connector-staged.md).
 
+[Get the connector status](https://github.com/gluo-dev/ordergroove-commercetools-connector/blob/main/docs/02-get-connector-staged-by-key.md), it typically takes around 10 minutes for the connector to update the 'isPreviewable' attribute to true. Once this attribute is set to true, you can proceed to create a Deployment.
+
+Setup the required environment variables when you [create the deployment](https://github.com/gluo-dev/ordergroove-commercetools-connector/blob/main/docs/03-create-deployment.md):
 - `CTP_PROJECT_KEY`
   - (*Required*) ct project key
 - `CTP_CLIENT_ID`
@@ -58,6 +65,8 @@ Setup the required environment variables when you [create the deployment](https:
 - `OG_API_KEY`
   - (*Required*) Ordergroove API key.
 
+For more information about deployments, refer to the [commercetools connect deployment documentation](https://docs.commercetools.com/connect/concepts#deployments).
+
 Once the connector is deployed, you should be able to invoke the job to import all the products from commercetools into Ordergroove:
  - Get the job application ID (JOB-APP-ID): Request your commercetools deployments, identify the connector in the response, and within the "applications" attribute, locate the job application, then copy its ID.
  - Construct the URL to invoke the job using the following template:
@@ -65,6 +74,8 @@ Once the connector is deployed, you should be able to invoke the job to import a
      - Query Param startUpload: This must be set to 'true' to initiate the product load to Ordergroove.
  - Invoke the URL with a POST request, set the Authorization header with a valid commercetools token.
  - Follow the process outlined in the deployment logs.
+
+[Get the deployment logs](https://github.com/gluo-dev/ordergroove-commercetools-connector/blob/main/docs/04-get-deployment-by-key.md)
 
 On the other hand, the connector will create a subscription to listen for the following events ([messages](https://docs.commercetools.com/api/projects/messages)):
 
@@ -78,7 +89,7 @@ On the other hand, the connector will create a subscription to listen for the fo
 
 ## Uninstalling the connector
 
-To uninstall the connector, you must [send the appropriate HTTP request and delete it](https://docs.commercetools.com/connect/deployments#delete-deployment).
+To uninstall the connector, you must [send the appropriate HTTP request and delete it](https://github.com/gluo-dev/ordergroove-commercetools-connector/blob/main/docs/extras/delete-deployment-by-key.md).
 
 This will trigger the [`preUndeploy` script](https://docs.commercetools.com/connect/convert-existing-integration#preundeploy), which will delete the Import cron jobs and messages subscriptions described on the "Installing the connector" section.
 
