@@ -1,6 +1,6 @@
 import { jest } from '@jest/globals'
 
-import { productProjectionsSearch } from './ct-products-api'
+import { getProductProjections } from './ct-products-api'
 import { QueryArgs } from '../../types/index.types'
 import { mockProductProjectionPagedQueryResponse } from '../mocks/mocks'
 import * as CreateClient from '../../client/create.client'
@@ -43,12 +43,10 @@ jest.mock('../../client/create.client', () => {
   return {
     createApiRoot: jest.fn().mockImplementation(() => ({
       productProjections: jest.fn().mockReturnValue({
-        search: jest.fn().mockReturnValue({
-          get: jest.fn().mockReturnValue({
-            execute: mockedExecute
-          }),
-          post: mockedPost
-        })
+        get: jest.fn().mockReturnValue({
+          execute: mockedExecute
+        }),
+        post: mockedPost
       })
     }))
   }
@@ -66,7 +64,7 @@ describe('getProductProjections', () => {
 
     const queryArgs = { limit: 100 } as unknown as QueryArgs
 
-    await productProjectionsSearch(queryArgs)
+    await getProductProjections(queryArgs)
 
     expect(mockedExecute).toHaveBeenCalledTimes(1)
     expect(mockedExecute).toHaveReturned()

@@ -1,12 +1,12 @@
 import {
-  ScopedPrice, Image, ProductVariantAvailability,
+  Price, Image, ProductVariantAvailability,
   ProductProjectionPagedQueryResponse, LocalizedString
 } from '@commercetools/platform-sdk';
 
 import { logger } from '../../utils/logger.utils';
 import { CtEventPayload, OrdergrooveProduct } from '../../types/custom.types';
 import { addDecimalPointToCentAmount } from '../utils/data-utils';
-import { getProductProjectionBySkuWithScopedPrice } from '../services/ct-service';
+import { getProductProjectionBySkuWithPriceSelection } from '../services/ct-service';
 import { readConfiguration } from '../../utils/config.utils';
 
 /**
@@ -22,7 +22,7 @@ export const convertProductPublishedPayloadToOrdergrooveProducts = async (payloa
     const masterVariantSku = payload.productProjection?.masterVariant.sku === undefined ?
       '' : payload.productProjection?.masterVariant.sku;
 
-    const productProjection: ProductProjectionPagedQueryResponse = await getProductProjectionBySkuWithScopedPrice(masterVariantSku);
+    const productProjection: ProductProjectionPagedQueryResponse = await getProductProjectionBySkuWithPriceSelection(masterVariantSku);
 
     for (let result of productProjection.results) {
       const productName: string = result.name[readConfiguration().languageCode];
@@ -32,7 +32,7 @@ export const convertProductPublishedPayloadToOrdergrooveProducts = async (payloa
         break;
       }
       
-      const masterVariantPrice = getScopedPrice(result.masterVariant.scopedPrice);
+      const masterVariantPrice = getPrice(result.masterVariant.price);
 
       if (masterVariantPrice === undefined) {
         logger.info(getInvalidPriceMessage(masterVariantSku));
@@ -52,7 +52,7 @@ export const convertProductPublishedPayloadToOrdergrooveProducts = async (payloa
       for (let variant of result.variants) {
         const variantSku = variant.sku === undefined ? '' : variant.sku;
 
-        const variantPrice = getScopedPrice(variant.scopedPrice);
+        const variantPrice = getPrice(variant.price);
 
         if (variantPrice === undefined) {
           logger.info(getInvalidPriceMessage(variantSku));
@@ -78,11 +78,11 @@ export const convertProductPublishedPayloadToOrdergrooveProducts = async (payloa
   return ordergrooveProducts;
 }
 
-function getScopedPrice(scopedPrice?: ScopedPrice): number | undefined {
+function getPrice(price?: Price): number | undefined {
   let result = undefined;
 
-  if (scopedPrice !== undefined) {
-    result = addDecimalPointToCentAmount(scopedPrice.currentValue.centAmount, scopedPrice.currentValue.fractionDigits);
+  if (price !== undefined) {
+    result = addDecimalPointToCentAmount(price.value.centAmount, price.value.fractionDigits);
   }
 
   return result;

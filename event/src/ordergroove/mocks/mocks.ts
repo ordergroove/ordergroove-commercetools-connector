@@ -58,25 +58,19 @@ export const mockProductProjectionPagedQueryResponse: ProductProjectionPagedQuer
       "key": "woman-formal-jeans",
       "lastModifiedAt": "2023-12-07T23:39:03.450Z",
       "masterVariant": {
-        "scopedPrice": {
-          "currentValue": {
-            "type": "centPrecision",
-            "currencyCode": "USD",
-            "centAmount": 1500,
-            "fractionDigits": 2
-          },
-          "channel": {
-            "typeId": "channel",
-            "id": "12345"
-          },
-          "country": "US",
+        "price": {
+          "id": "11111",
           "value": {
             "type": "centPrecision",
             "currencyCode": "USD",
-            "centAmount": 1500,
+            "centAmount": 34589,
             "fractionDigits": 2
           },
-          "id": "11111"
+          "country": "US",
+          "channel": {
+            "typeId": "channel",
+            "id": "12345"
+          }
         },
         "availability": {
           "isOnStock": true,
@@ -134,25 +128,19 @@ export const mockProductProjectionPagedQueryResponse: ProductProjectionPagedQuer
       },
       "variants": [
         {
-          "scopedPrice": {
-            "currentValue": {
-              "type": "centPrecision",
-              "currencyCode": "USD",
-              "centAmount": 1500,
-              "fractionDigits": 2
-            },
-            "channel": {
-              "typeId": "channel",
-              "id": "12345"
-            },
-            "country": "US",
+          "price": {
+            "id": "11111",
             "value": {
               "type": "centPrecision",
               "currencyCode": "USD",
-              "centAmount": 1500,
+              "centAmount": 34589,
               "fractionDigits": 2
             },
-            "id": "11111"
+            "country": "US",
+            "channel": {
+              "typeId": "channel",
+              "id": "12345"
+            }
           },
           "assets": [],
           "attributes": [
@@ -210,25 +198,19 @@ export const mockProductProjectionPagedQueryResponseWithInvalidLanguageCode: Pro
       "key": "woman-formal-jeans",
       "lastModifiedAt": "2023-12-07T23:39:03.450Z",
       "masterVariant": {
-        "scopedPrice": {
-          "currentValue": {
-            "type": "centPrecision",
-            "currencyCode": "USD",
-            "centAmount": 1500,
-            "fractionDigits": 2
-          },
-          "channel": {
-            "typeId": "channel",
-            "id": "12345"
-          },
-          "country": "US",
+        "price": {
+          "id": "11111",
           "value": {
             "type": "centPrecision",
             "currencyCode": "USD",
-            "centAmount": 1500,
+            "centAmount": 34589,
             "fractionDigits": 2
           },
-          "id": "11111"
+          "country": "US",
+          "channel": {
+            "typeId": "channel",
+            "id": "12345"
+          }
         },
         "assets": [],
         "attributes": [
@@ -282,25 +264,19 @@ export const mockProductProjectionPagedQueryResponseWithInvalidLanguageCode: Pro
       },
       "variants": [
         {
-          "scopedPrice": {
-            "currentValue": {
-              "type": "centPrecision",
-              "currencyCode": "USD",
-              "centAmount": 1500,
-              "fractionDigits": 2
-            },
-            "channel": {
-              "typeId": "channel",
-              "id": "12345"
-            },
-            "country": "US",
+          "price": {
+            "id": "11111",
             "value": {
               "type": "centPrecision",
               "currencyCode": "USD",
-              "centAmount": 1500,
+              "centAmount": 34589,
               "fractionDigits": 2
             },
-            "id": "11111"
+            "country": "US",
+            "channel": {
+              "typeId": "channel",
+              "id": "12345"
+            }
           },
           "assets": [],
           "attributes": [
@@ -336,7 +312,7 @@ export const mockProductProjectionPagedQueryResponseWithInvalidLanguageCode: Pro
   "total": 1
 }
 
-export const mockProductProjectionPagedQueryResponseWithoutScopedPrice: ProductProjectionPagedQueryResponse = {
+export const mockProductProjectionPagedQueryResponseWithoutPrice: ProductProjectionPagedQueryResponse = {
   "count": 1,
   "limit": 100,
   "offset": 0,
@@ -466,25 +442,19 @@ export const mockProductProjectionPagedQueryResponseVariantWithoutImage: Product
       "key": "woman-formal-jeans",
       "lastModifiedAt": "2023-12-07T23:39:03.450Z",
       "masterVariant": {
-        "scopedPrice": {
-          "currentValue": {
-            "type": "centPrecision",
-            "currencyCode": "USD",
-            "centAmount": 1500,
-            "fractionDigits": 2
-          },
-          "channel": {
-            "typeId": "channel",
-            "id": "12345"
-          },
-          "country": "US",
+        "price": {
+          "id": "11111",
           "value": {
             "type": "centPrecision",
             "currencyCode": "USD",
-            "centAmount": 1500,
+            "centAmount": 34589,
             "fractionDigits": 2
           },
-          "id": "11111"
+          "country": "US",
+          "channel": {
+            "typeId": "channel",
+            "id": "12345"
+          }
         },
         "assets": [],
         "attributes": [
@@ -546,25 +516,19 @@ export const mockProductProjectionPagedQueryResponseVariantWithoutImage: Product
       },
       "variants": [
         {
-          "scopedPrice": {
-            "currentValue": {
-              "type": "centPrecision",
-              "currencyCode": "USD",
-              "centAmount": 1500,
-              "fractionDigits": 2
-            },
-            "channel": {
-              "typeId": "channel",
-              "id": "12345"
-            },
-            "country": "US",
+          "price": {
+            "id": "11111",
             "value": {
               "type": "centPrecision",
               "currencyCode": "USD",
-              "centAmount": 1500,
+              "centAmount": 34589,
               "fractionDigits": 2
             },
-            "id": "11111"
+            "country": "US",
+            "channel": {
+              "typeId": "channel",
+              "id": "12345"
+            }
           },
           "assets": [],
           "attributes": [
@@ -622,25 +586,19 @@ export const mockProductProjectionPagedQueryResponseStockInChannel: ProductProje
       "key": "woman-formal-jeans",
       "lastModifiedAt": "2023-12-07T23:39:03.450Z",
       "masterVariant": {
-        "scopedPrice": {
-          "currentValue": {
-            "type": "centPrecision",
-            "currencyCode": "USD",
-            "centAmount": 1500,
-            "fractionDigits": 2
-          },
-          "channel": {
-            "typeId": "channel",
-            "id": "12345"
-          },
-          "country": "US",
+        "price": {
+          "id": "11111",
           "value": {
             "type": "centPrecision",
             "currencyCode": "USD",
-            "centAmount": 1500,
+            "centAmount": 34589,
             "fractionDigits": 2
           },
-          "id": "11111"
+          "country": "US",
+          "channel": {
+            "typeId": "channel",
+            "id": "12345"
+          }
         },
         "availability": {
           "channels": {
@@ -704,25 +662,19 @@ export const mockProductProjectionPagedQueryResponseStockInChannel: ProductProje
       },
       "variants": [
         {
-          "scopedPrice": {
-            "currentValue": {
-              "type": "centPrecision",
-              "currencyCode": "USD",
-              "centAmount": 1500,
-              "fractionDigits": 2
-            },
-            "channel": {
-              "typeId": "channel",
-              "id": "12345"
-            },
-            "country": "US",
+          "price": {
+            "id": "11111",
             "value": {
               "type": "centPrecision",
               "currencyCode": "USD",
-              "centAmount": 1500,
+              "centAmount": 34589,
               "fractionDigits": 2
             },
-            "id": "11111"
+            "country": "US",
+            "channel": {
+              "typeId": "channel",
+              "id": "12345"
+            }
           },
           "assets": [],
           "attributes": [
@@ -780,25 +732,19 @@ export const mockProductProjectionPagedQueryResponseStockForAny: ProductProjecti
       "key": "woman-formal-jeans",
       "lastModifiedAt": "2023-12-07T23:39:03.450Z",
       "masterVariant": {
-        "scopedPrice": {
-          "currentValue": {
-            "type": "centPrecision",
-            "currencyCode": "USD",
-            "centAmount": 1500,
-            "fractionDigits": 2
-          },
-          "channel": {
-            "typeId": "channel",
-            "id": "12345"
-          },
-          "country": "US",
+        "price": {
+          "id": "11111",
           "value": {
             "type": "centPrecision",
             "currencyCode": "USD",
-            "centAmount": 1500,
+            "centAmount": 34589,
             "fractionDigits": 2
           },
-          "id": "11111"
+          "country": "US",
+          "channel": {
+            "typeId": "channel",
+            "id": "12345"
+          }
         },
         "availability": {
           "isOnStock": true,
@@ -864,25 +810,19 @@ export const mockProductProjectionPagedQueryResponseStockForAny: ProductProjecti
       },
       "variants": [
         {
-          "scopedPrice": {
-            "currentValue": {
-              "type": "centPrecision",
-              "currencyCode": "USD",
-              "centAmount": 1500,
-              "fractionDigits": 2
-            },
-            "channel": {
-              "typeId": "channel",
-              "id": "12345"
-            },
-            "country": "US",
+          "price": {
+            "id": "11111",
             "value": {
               "type": "centPrecision",
               "currencyCode": "USD",
-              "centAmount": 1500,
+              "centAmount": 34589,
               "fractionDigits": 2
             },
-            "id": "11111"
+            "country": "US",
+            "channel": {
+              "typeId": "channel",
+              "id": "12345"
+            }
           },
           "assets": [],
           "attributes": [
@@ -940,25 +880,19 @@ export const mockProductProjectionPagedQueryResponseWithoutValidSlug: ProductPro
       "key": "woman-formal-jeans",
       "lastModifiedAt": "2023-12-07T23:39:03.450Z",
       "masterVariant": {
-        "scopedPrice": {
-          "currentValue": {
-            "type": "centPrecision",
-            "currencyCode": "USD",
-            "centAmount": 1500,
-            "fractionDigits": 2
-          },
-          "channel": {
-            "typeId": "channel",
-            "id": "12345"
-          },
-          "country": "US",
+        "price": {
+          "id": "11111",
           "value": {
             "type": "centPrecision",
             "currencyCode": "USD",
-            "centAmount": 1500,
+            "centAmount": 34589,
             "fractionDigits": 2
           },
-          "id": "11111"
+          "country": "US",
+          "channel": {
+            "typeId": "channel",
+            "id": "12345"
+          }
         },
         "availability": {
           "isOnStock": true,
@@ -1016,25 +950,19 @@ export const mockProductProjectionPagedQueryResponseWithoutValidSlug: ProductPro
       },
       "variants": [
         {
-          "scopedPrice": {
-            "currentValue": {
-              "type": "centPrecision",
-              "currencyCode": "USD",
-              "centAmount": 1500,
-              "fractionDigits": 2
-            },
-            "channel": {
-              "typeId": "channel",
-              "id": "12345"
-            },
-            "country": "US",
+          "price": {
+            "id": "11111",
             "value": {
               "type": "centPrecision",
               "currencyCode": "USD",
-              "centAmount": 1500,
+              "centAmount": 34589,
               "fractionDigits": 2
             },
-            "id": "11111"
+            "country": "US",
+            "channel": {
+              "typeId": "channel",
+              "id": "12345"
+            }
           },
           "assets": [],
           "attributes": [

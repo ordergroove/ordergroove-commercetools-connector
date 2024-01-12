@@ -8,7 +8,7 @@ import {
   mockProductCtEventPayload,
   mockProductProjectionPagedQueryResponse,
   mockProductProjectionPagedQueryResponseWithInvalidLanguageCode,
-  mockProductProjectionPagedQueryResponseWithoutScopedPrice,
+  mockProductProjectionPagedQueryResponseWithoutPrice,
   mockProductProjectionPagedQueryResponseVariantWithoutImage,
   mockProductProjectionPagedQueryResponseStockInChannel,
   mockProductProjectionPagedQueryResponseStockForAny,
@@ -19,7 +19,7 @@ jest.mock('@commercetools/platform-sdk')
 jest.mock('../utils/data-utils')
 jest.mock('../services/ct-service', () => {
   return {
-    getProductProjectionBySkuWithScopedPrice: jest.fn()
+    getProductProjectionBySkuWithPriceSelection: jest.fn()
   }
 })
 jest.mock('../../utils/logger.utils', () => ({
@@ -53,8 +53,8 @@ describe('convertProductPublishedPayloadToOrdergrooveProducts', () => {
   });
 
   it('should process an event payload and build a list of products for ordergroove', async () => {
-    const getProductProjectionBySkuWithScopedPriceSpy = jest
-      .spyOn(CtService, 'getProductProjectionBySkuWithScopedPrice')
+    const getProductProjectionBySkuWithPriceSelectionSpy = jest
+      .spyOn(CtService, 'getProductProjectionBySkuWithPriceSelection')
       .mockImplementation(() => Promise.resolve(mockProductProjectionPagedQueryResponse))
       .mockResolvedValue(mockProductProjectionPagedQueryResponse)
 
@@ -64,7 +64,7 @@ describe('convertProductPublishedPayloadToOrdergrooveProducts', () => {
     
     const result: OrdergrooveProduct[] = await convertProductPublishedPayloadToOrdergrooveProducts(mockProductCtEventPayload)
 
-    expect(getProductProjectionBySkuWithScopedPriceSpy).toHaveBeenCalled()
+    expect(getProductProjectionBySkuWithPriceSelectionSpy).toHaveBeenCalled()
     expect(addDecimalPointToCentAmountSpy).toHaveBeenCalled()
     expect(result.length).toBeGreaterThanOrEqual(2)
   })
@@ -88,8 +88,8 @@ describe('convertProductPublishedPayloadToOrdergrooveProducts', () => {
       }
     )
 
-    const getProductProjectionBySkuWithScopedPriceSpy = jest
-      .spyOn(CtService, 'getProductProjectionBySkuWithScopedPrice')
+    const getProductProjectionBySkuWithPriceSelectionSpy = jest
+      .spyOn(CtService, 'getProductProjectionBySkuWithPriceSelection')
       .mockImplementation(() => Promise.resolve(mockProductProjectionPagedQueryResponseVariantWithoutImage))
       .mockResolvedValue(mockProductProjectionPagedQueryResponseVariantWithoutImage)
 
@@ -99,7 +99,7 @@ describe('convertProductPublishedPayloadToOrdergrooveProducts', () => {
 
     const result: OrdergrooveProduct[] = await convertProductPublishedPayloadToOrdergrooveProducts(mockProductCtEventPayload)
 
-    expect(getProductProjectionBySkuWithScopedPriceSpy).toHaveBeenCalled()
+    expect(getProductProjectionBySkuWithPriceSelectionSpy).toHaveBeenCalled()
     expect(addDecimalPointToCentAmountSpy).toHaveBeenCalled()
     expect(result[0].image_url).toBe(result[1].image_url)
   })
@@ -123,8 +123,8 @@ describe('convertProductPublishedPayloadToOrdergrooveProducts', () => {
       }
     )
 
-    const getProductProjectionBySkuWithScopedPriceSpy = jest
-      .spyOn(CtService, 'getProductProjectionBySkuWithScopedPrice')
+    const getProductProjectionBySkuWithPriceSelectionSpy = jest
+      .spyOn(CtService, 'getProductProjectionBySkuWithPriceSelection')
       .mockImplementation(() => Promise.resolve(mockProductProjectionPagedQueryResponseStockInChannel))
       .mockResolvedValue(mockProductProjectionPagedQueryResponseStockInChannel)
 
@@ -134,7 +134,7 @@ describe('convertProductPublishedPayloadToOrdergrooveProducts', () => {
 
     const result: OrdergrooveProduct[] = await convertProductPublishedPayloadToOrdergrooveProducts(mockProductCtEventPayload)
 
-    expect(getProductProjectionBySkuWithScopedPriceSpy).toHaveBeenCalled()
+    expect(getProductProjectionBySkuWithPriceSelectionSpy).toHaveBeenCalled()
     expect(addDecimalPointToCentAmountSpy).toHaveBeenCalled()
     expect(result[0].live).toBe(true)
   })
@@ -158,19 +158,19 @@ describe('convertProductPublishedPayloadToOrdergrooveProducts', () => {
       }
     )
 
-    const getProductProjectionBySkuWithScopedPriceSpy = jest
-      .spyOn(CtService, 'getProductProjectionBySkuWithScopedPrice')
+    const getProductProjectionBySkuWithPriceSelectionSpy = jest
+      .spyOn(CtService, 'getProductProjectionBySkuWithPriceSelection')
       .mockImplementation(() => Promise.resolve(mockProductProjectionPagedQueryResponseWithInvalidLanguageCode))
       .mockResolvedValue(mockProductProjectionPagedQueryResponseWithInvalidLanguageCode)
 
     const result: OrdergrooveProduct[] = await convertProductPublishedPayloadToOrdergrooveProducts(mockProductCtEventPayload)
 
-    expect(getProductProjectionBySkuWithScopedPriceSpy).toHaveBeenCalled()
+    expect(getProductProjectionBySkuWithPriceSelectionSpy).toHaveBeenCalled()
     expect(result.length).toBe(0)
     expect(logger.info).toHaveBeenCalled()
   })
 
-  it('should not return products when there is no scoped price', async () => {
+  it('should not return products when there is no price selection', async () => {
     jest.spyOn(ConfigUtils, 'readConfiguration').mockReturnValue(
       {
         region: 'test-region',
@@ -189,25 +189,25 @@ describe('convertProductPublishedPayloadToOrdergrooveProducts', () => {
       }
     )
 
-    const getProductProjectionBySkuWithScopedPriceSpy = jest
-      .spyOn(CtService, 'getProductProjectionBySkuWithScopedPrice')
-      .mockImplementation(() => Promise.resolve(mockProductProjectionPagedQueryResponseWithoutScopedPrice))
-      .mockResolvedValue(mockProductProjectionPagedQueryResponseWithoutScopedPrice)
+    const getProductProjectionBySkuWithPriceSelectionSpy = jest
+      .spyOn(CtService, 'getProductProjectionBySkuWithPriceSelection')
+      .mockImplementation(() => Promise.resolve(mockProductProjectionPagedQueryResponseWithoutPrice))
+      .mockResolvedValue(mockProductProjectionPagedQueryResponseWithoutPrice)
 
     const result: OrdergrooveProduct[] = await convertProductPublishedPayloadToOrdergrooveProducts(mockProductCtEventPayload)
 
-    expect(getProductProjectionBySkuWithScopedPriceSpy).toHaveBeenCalled()
+    expect(getProductProjectionBySkuWithPriceSelectionSpy).toHaveBeenCalled()
     expect(result.length).toBe(0)
     expect(logger.info).toHaveBeenCalled()
   })
 
-  it('should write a log and return zero products when the getProductProjectionBySkuWithScopedPrice() function fails', async () => {
-    jest.spyOn(CtService, 'getProductProjectionBySkuWithScopedPrice')
+  it('should write a log and return zero products when the getProductProjectionBySkuWithPriceSelection() function fails', async () => {
+    jest.spyOn(CtService, 'getProductProjectionBySkuWithPriceSelection')
       .mockImplementation(() => { throw new Error('connection error')});
 
     const result: OrdergrooveProduct[] = await convertProductPublishedPayloadToOrdergrooveProducts(mockProductCtEventPayload)
 
-    expect(CtService.getProductProjectionBySkuWithScopedPrice).toThrow('connection error');
+    expect(CtService.getProductProjectionBySkuWithPriceSelection).toThrow('connection error');
     expect(result.length).toBe(0)
     expect(logger.error).toHaveBeenCalled()
   })
@@ -231,8 +231,8 @@ describe('convertProductPublishedPayloadToOrdergrooveProducts', () => {
       }
     )
 
-    const getProductProjectionBySkuWithScopedPriceSpy = jest
-      .spyOn(CtService, 'getProductProjectionBySkuWithScopedPrice')
+    const getProductProjectionBySkuWithPriceSelectionSpy = jest
+      .spyOn(CtService, 'getProductProjectionBySkuWithPriceSelection')
       .mockImplementation(() => Promise.resolve(mockProductProjectionPagedQueryResponseStockInChannel))
       .mockResolvedValue(mockProductProjectionPagedQueryResponseStockInChannel)
 
@@ -242,7 +242,7 @@ describe('convertProductPublishedPayloadToOrdergrooveProducts', () => {
 
     const result: OrdergrooveProduct[] = await convertProductPublishedPayloadToOrdergrooveProducts(mockProductCtEventPayload)
 
-    expect(getProductProjectionBySkuWithScopedPriceSpy).toHaveBeenCalled()
+    expect(getProductProjectionBySkuWithPriceSelectionSpy).toHaveBeenCalled()
     expect(addDecimalPointToCentAmountSpy).toHaveBeenCalled()
     expect(result.length).toBeGreaterThanOrEqual(2)
   })
@@ -266,8 +266,8 @@ describe('convertProductPublishedPayloadToOrdergrooveProducts', () => {
       }
     )
 
-    const getProductProjectionBySkuWithScopedPriceSpy = jest
-      .spyOn(CtService, 'getProductProjectionBySkuWithScopedPrice')
+    const getProductProjectionBySkuWithPriceSelectionSpy = jest
+      .spyOn(CtService, 'getProductProjectionBySkuWithPriceSelection')
       .mockImplementation(() => Promise.resolve(mockProductProjectionPagedQueryResponseStockForAny))
       .mockResolvedValue(mockProductProjectionPagedQueryResponseStockForAny)
 
@@ -277,7 +277,7 @@ describe('convertProductPublishedPayloadToOrdergrooveProducts', () => {
 
     const result: OrdergrooveProduct[] = await convertProductPublishedPayloadToOrdergrooveProducts(mockProductCtEventPayload)
 
-    expect(getProductProjectionBySkuWithScopedPriceSpy).toHaveBeenCalled()
+    expect(getProductProjectionBySkuWithPriceSelectionSpy).toHaveBeenCalled()
     expect(addDecimalPointToCentAmountSpy).toHaveBeenCalled()
     expect(result.length).toBeGreaterThanOrEqual(2)
   })
@@ -301,8 +301,8 @@ describe('convertProductPublishedPayloadToOrdergrooveProducts', () => {
       }
     )
 
-    const getProductProjectionBySkuWithScopedPriceSpy = jest
-      .spyOn(CtService, 'getProductProjectionBySkuWithScopedPrice')
+    const getProductProjectionBySkuWithPriceSelectionSpy = jest
+      .spyOn(CtService, 'getProductProjectionBySkuWithPriceSelection')
       .mockImplementation(() => Promise.resolve(mockProductProjectionPagedQueryResponse))
       .mockResolvedValue(mockProductProjectionPagedQueryResponse)
 
@@ -312,7 +312,7 @@ describe('convertProductPublishedPayloadToOrdergrooveProducts', () => {
 
     const result: OrdergrooveProduct[] = await convertProductPublishedPayloadToOrdergrooveProducts(mockProductCtEventPayload)
 
-    expect(getProductProjectionBySkuWithScopedPriceSpy).toHaveBeenCalled()
+    expect(getProductProjectionBySkuWithPriceSelectionSpy).toHaveBeenCalled()
     expect(addDecimalPointToCentAmountSpy).toHaveBeenCalled()
     expect(result.length).toBeGreaterThanOrEqual(2)
   })
@@ -336,8 +336,8 @@ describe('convertProductPublishedPayloadToOrdergrooveProducts', () => {
       }
     )
 
-    const getProductProjectionBySkuWithScopedPriceSpy = jest
-      .spyOn(CtService, 'getProductProjectionBySkuWithScopedPrice')
+    const getProductProjectionBySkuWithPriceSelectionSpy = jest
+      .spyOn(CtService, 'getProductProjectionBySkuWithPriceSelection')
       .mockImplementation(() => Promise.resolve(mockProductProjectionPagedQueryResponseWithoutValidSlug))
       .mockResolvedValue(mockProductProjectionPagedQueryResponseWithoutValidSlug)
 
@@ -347,7 +347,7 @@ describe('convertProductPublishedPayloadToOrdergrooveProducts', () => {
 
     const result: OrdergrooveProduct[] = await convertProductPublishedPayloadToOrdergrooveProducts(mockProductCtEventPayload)
 
-    expect(getProductProjectionBySkuWithScopedPriceSpy).toHaveBeenCalled()
+    expect(getProductProjectionBySkuWithPriceSelectionSpy).toHaveBeenCalled()
     expect(addDecimalPointToCentAmountSpy).toHaveBeenCalled()
     expect(result.length).toBeGreaterThanOrEqual(2)
   })

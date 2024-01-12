@@ -1,7 +1,7 @@
 import * as CtService from './ct-service'
 import * as CtProductsApi from '../client/ct-products-api'
 import * as ConfigUtils from '../../utils/config.utils'
-import { getProductVariantBySku, getProductProjectionBySkuWithScopedPrice } from './ct-service'
+import { getProductVariantBySku, getProductProjectionBySkuWithPriceSelection } from './ct-service'
 import { mockProductProjectionPagedQueryResponse } from '../mocks/mocks'
 
 jest.mock('../../utils/config.utils', () => ({
@@ -34,15 +34,15 @@ describe('getProductVariantBySku', () => {
     const getProductVariantBySkuSpy = jest
       .spyOn(CtService, 'getProductVariantBySku')
 
-    const productProjectionsSearchSpy = jest
-      .spyOn(CtProductsApi, 'productProjectionsSearch')
+    const getProductProjectionsSpy = jest
+      .spyOn(CtProductsApi, 'getProductProjections')
       .mockImplementation(() => Promise.resolve(mockProductProjectionPagedQueryResponse))
       .mockResolvedValue(mockProductProjectionPagedQueryResponse)
 
     const result = await getProductVariantBySku('WFJM')
 
     expect(getProductVariantBySkuSpy).toHaveBeenCalled()
-    expect(productProjectionsSearchSpy).toHaveBeenCalled()
+    expect(getProductProjectionsSpy).toHaveBeenCalled()
     expect(result.sku).toBe('WFJM')
   })
 
@@ -50,20 +50,20 @@ describe('getProductVariantBySku', () => {
     const getProductVariantBySkuSpy = jest
       .spyOn(CtService, 'getProductVariantBySku')
 
-    const productProjectionsSearchSpy = jest
-      .spyOn(CtProductsApi, 'productProjectionsSearch')
+    const getProductProjectionsSpy = jest
+      .spyOn(CtProductsApi, 'getProductProjections')
       .mockImplementation(() => Promise.resolve(mockProductProjectionPagedQueryResponse))
       .mockResolvedValue(mockProductProjectionPagedQueryResponse)
 
     const result = await getProductVariantBySku('WFJS')
 
     expect(getProductVariantBySkuSpy).toHaveBeenCalled()
-    expect(productProjectionsSearchSpy).toHaveBeenCalled()
+    expect(getProductProjectionsSpy).toHaveBeenCalled()
     expect(result.sku).toBe('WFJS')
   })
 
   it('should call the commercetools product projections API and throw an error when the product variant is undefined', async () => {
-    jest.spyOn(CtProductsApi, 'productProjectionsSearch')
+    jest.spyOn(CtProductsApi, 'getProductProjections')
       .mockImplementation(() => Promise.resolve(mockProductProjectionPagedQueryResponse))
       .mockResolvedValue(mockProductProjectionPagedQueryResponse)
 
@@ -73,13 +73,13 @@ describe('getProductVariantBySku', () => {
   })
 })
 
-describe('getProductProjectionBySkuWithScopedPrice', () => {
+describe('getProductProjectionBySkuWithPriceSelection', () => {
   afterEach(() => {
     jest.resetAllMocks()
     jest.restoreAllMocks()
   })
 
-  it('should call the commercetools product projections API and get a product filtered by sku with scoped price: currencyCode', async () => {
+  it('should call the commercetools product projections API and get a product filtered by sku with price selection: currencyCode', async () => {
     jest.spyOn(ConfigUtils, 'readConfiguration').mockReturnValue(
       {
         region: 'test-region',
@@ -98,21 +98,21 @@ describe('getProductProjectionBySkuWithScopedPrice', () => {
       }
     )
 
-    const getProductProjectionBySkuWithScopedPriceSpy = jest
-      .spyOn(CtService, 'getProductProjectionBySkuWithScopedPrice')
+    const getProductProjectionBySkuWithPriceSelectionSpy = jest
+      .spyOn(CtService, 'getProductProjectionBySkuWithPriceSelection')
 
-    const productProjectionsSearchSpy = jest
-      .spyOn(CtProductsApi, 'productProjectionsSearch')
+    const getProductProjectionsSpy = jest
+      .spyOn(CtProductsApi, 'getProductProjections')
       .mockImplementation(() => Promise.resolve(mockProductProjectionPagedQueryResponse))
       .mockResolvedValue(mockProductProjectionPagedQueryResponse)
 
-    await getProductProjectionBySkuWithScopedPrice('WFJM')
+    await getProductProjectionBySkuWithPriceSelection('WFJM')
 
-    expect(getProductProjectionBySkuWithScopedPriceSpy).toHaveBeenCalled()
-    expect(productProjectionsSearchSpy).toHaveBeenCalled()
+    expect(getProductProjectionBySkuWithPriceSelectionSpy).toHaveBeenCalled()
+    expect(getProductProjectionsSpy).toHaveBeenCalled()
   })
 
-  it('should handle an error from ProductProjectionsSearch', async () => {
+  it('should handle an error from ProductProjections', async () => {
     jest.spyOn(ConfigUtils, 'readConfiguration').mockReturnValue(
       {
         region: 'test-region',
@@ -131,11 +131,11 @@ describe('getProductProjectionBySkuWithScopedPrice', () => {
       }
     )
 
-    jest.spyOn(CtProductsApi, 'productProjectionsSearch')
+    jest.spyOn(CtProductsApi, 'getProductProjections')
       .mockRejectedValue(() => Promise.resolve(mockProductProjectionPagedQueryResponse))
 
     expect(async () => {
-      await getProductProjectionBySkuWithScopedPrice('WFJM');
+      await getProductProjectionBySkuWithPriceSelection('WFJM');
     }).rejects.toThrow();
   })
 })

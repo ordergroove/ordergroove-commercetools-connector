@@ -1,21 +1,23 @@
-import { ProductVariant, ProductProjectionPagedQueryResponse, ProductProjection } from '@commercetools/platform-sdk';
+import { ProductVariant, ProductProjectionPagedQueryResponse, ProductProjection, QueryParam } from '@commercetools/platform-sdk';
 
-import { productProjectionsSearch } from '../client/ct-products-api';
+import { getProductProjections } from '../client/ct-products-api';
 import { QueryArgs } from '../../types/index.types';
 import { readConfiguration } from '../../utils/config.utils';
 
 /**
- * Executes a Produc Projection Search by sku.
+ * Executes a Produc Projection Query by sku.
  * @param sku of the product variant
  * @returns The ProductVariant of the sku given.
  */
 export const getProductVariantBySku = async (sku: string): Promise<ProductVariant> => {
   try {
-    let queryArgs: QueryArgs = {};
-    queryArgs.filter = `variants.sku:\"${sku}\"`;
+    let queryArgs: QueryArgs = {
+      'var.skus': sku
+    };
+    queryArgs.where = 'masterVariant(sku in :skus) or variants(sku in :skus)';
 
     const productProjection: ProductProjectionPagedQueryResponse =
-      await productProjectionsSearch(queryArgs);
+      await getProductProjections(queryArgs);
     
     const productVariant = extractVariantFromResults(sku, productProjection.results);
 
@@ -30,23 +32,25 @@ export const getProductVariantBySku = async (sku: string): Promise<ProductVarian
 }
 
 /**
- * Executes a Product Projection Search by sku with scoped price.
- * @param sku of the master variant or any variant of the product to retrieve.
+ * Executes a Product Projection Query by sku with price selection.
+ * @param sku of the product variant
  * @returns ProductProjectionPagedQueryResponse
  */
-export const getProductProjectionBySkuWithScopedPrice = async (sku: string): Promise<ProductProjectionPagedQueryResponse> => {
+export const getProductProjectionBySkuWithPriceSelection = async (sku: string): Promise<ProductProjectionPagedQueryResponse> => {
   try {
-    let queryArgs = getQueryArgsForScopedPrice();
-    queryArgs.filter = `variants.sku:\"${sku}\"`;
+    let queryArgs: QueryArgs = {
+      'var.skus': sku
+    };
+    queryArgs.where = 'masterVariant(sku in :skus) or variants(sku in :skus)';
+    queryArgs = getQueryArgsForPriceSelection(queryArgs);
 
-    return await productProjectionsSearch(queryArgs);
+    return await getProductProjections(queryArgs);
   } catch (error: any) {
-    throw new Error(`Error during the process getProductProjectionBySkuWithScopedPrice(${sku}): ${error.message}`);
+    throw new Error(`Error during the process getProductProjectionBySkuWithPriceSelection(${sku}): ${error.message}`);
   }
 }
 
-function getQueryArgsForScopedPrice(): QueryArgs {
-  let queryArgs: QueryArgs = {};
+function getQueryArgsForPriceSelection(queryArgs: QueryArgs): QueryArgs {
   queryArgs.priceCurrency = readConfiguration().currencyCode;
 
   if (readConfiguration().countryCode !== '') {
