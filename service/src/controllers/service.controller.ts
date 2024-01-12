@@ -22,12 +22,6 @@ export const post = async (request: Request, response: Response) => {
       await uploadProducts(100, 0);
       response.send({ message: 'Product load finished, check the deployment logs for more information.' });
     } else {
-      // Test service app timeout
-      for (let i = 1; i <= 30; i++) {
-        console.log(`----->>>>> Waiting ${i}`);
-        await sleep(60000);
-      }
-
       response
         .send({
           message: 'The query parameter startUpload is not included in the URL or is not set to true; as a result, the process was not executed.'
@@ -39,10 +33,4 @@ export const post = async (request: Request, response: Response) => {
       `Internal Server Error - Error uploading products to ordergroove, check the deployment logs for more information`
     );
   }
-};
-
-const sleep = async (milliseconds: number) => {
-  await new Promise(resolve => {
-    return setTimeout(resolve, milliseconds)
-  });
 };

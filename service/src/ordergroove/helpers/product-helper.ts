@@ -28,7 +28,7 @@ export const convertProductProjectionToOrdergrooveProducts = async (productProje
         break;
       }
 
-      const masterVariantSku = result.masterVariant.sku === undefined ? '' : '9' + result.masterVariant.sku;
+      const masterVariantSku = result.masterVariant.sku === undefined ? '' : result.masterVariant.sku;
       const masterVariantPrice = getScopedPrice(result.masterVariant.scopedPrice);
 
       if (masterVariantPrice === undefined) {
@@ -48,7 +48,7 @@ export const convertProductProjectionToOrdergrooveProducts = async (productProje
 
       const variants: Array<ProductVariant> =  Object.values(result.variants);
       for (let variant of result.variants) {
-        const variantSku = variant.sku === undefined ? '' : '9' + variant.sku;
+        const variantSku = variant.sku === undefined ? '' : variant.sku;
 
         const variantPrice = getScopedPrice(variant.scopedPrice);
 
