@@ -22,7 +22,7 @@ For every product (or variant) modification, the information will be synchronize
 
 When the product stock changes or an order is created on commercetools, this information will be synchronized with Ordergroove.
  - [Inventory entry process detail](https://github.com/gluo-dev/ordergroove-commercetools-connector/blob/main/docs/diagrams/02-inventory-entry-event.md)
-  - [Order created process detail](https://github.com/gluo-dev/ordergroove-commercetools-connector/blob/main/docs/diagrams/03-order-created-event..md)
+  - [Order created process detail](https://github.com/gluo-dev/ordergroove-commercetools-connector/blob/main/docs/diagrams/03-order-created-event.md)
 
 ## Pre-requisites
 
