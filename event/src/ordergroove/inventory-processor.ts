@@ -5,14 +5,13 @@ import { CtEventPayload, OrdergrooveProduct, OrdergrooveApiResponse } from '../t
 import { createUUID } from './utils/data-utils';
 import { retrieveOgProduct, updateProducts } from './client/og-products-api';
 import { getProductVariantBySku } from './services/ct-service';
-import { isProductOnStock } from './helpers/product-helper';
-
+import { isProductOnStock } from './helpers/stock-helper';
 
 export const processInventoryEntryEvent = async (payload: CtEventPayload): Promise<boolean> => {
   const execution_id = createUUID();
 
   try {
-    const sku = payload.resourceUserProvidedIdentifiers?.sku === undefined ? '' : payload.resourceUserProvidedIdentifiers?.sku;
+    const sku = payload.resourceUserProvidedIdentifiers?.sku as string ?? '';
 
     if (sku === '') {
       throw new Error(`Couldn't get the product sku asociated with this event: ${JSON.stringify(payload)}`);

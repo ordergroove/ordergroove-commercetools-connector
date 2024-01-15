@@ -38,6 +38,7 @@ export const post = async (request: Request, response: Response) => {
 
     const type = payload.type;
     const inventoryMode = payload.order?.inventoryMode;
+
     if (type === EventType.ProductPublished) {
       await processProductPublishedEvent(payload);
     } else if (type === EventType.InventoryEntryCreated ||

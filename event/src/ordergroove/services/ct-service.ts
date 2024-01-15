@@ -1,4 +1,4 @@
-import { ProductVariant, ProductProjectionPagedQueryResponse, ProductProjection, QueryParam } from '@commercetools/platform-sdk';
+import { ProductVariant, ProductProjectionPagedQueryResponse, ProductProjection } from '@commercetools/platform-sdk';
 
 import { getProductProjections } from '../client/ct-products-api';
 import { QueryArgs } from '../../types/index.types';
@@ -11,13 +11,8 @@ import { readConfiguration } from '../../utils/config.utils';
  */
 export const getProductVariantBySku = async (sku: string): Promise<ProductVariant> => {
   try {
-    let queryArgs: QueryArgs = {
-      'var.skus': sku
-    };
-    queryArgs.where = 'masterVariant(sku in :skus) or variants(sku in :skus)';
-
     const productProjection: ProductProjectionPagedQueryResponse =
-      await getProductProjections(queryArgs);
+      await getProductProjections(createQueryArgsForSkuSearching(sku));
     
     const productVariant = extractVariantFromResults(sku, productProjection.results);
 
@@ -38,11 +33,8 @@ export const getProductVariantBySku = async (sku: string): Promise<ProductVarian
  */
 export const getProductProjectionBySkuWithPriceSelection = async (sku: string): Promise<ProductProjectionPagedQueryResponse> => {
   try {
-    let queryArgs: QueryArgs = {
-      'var.skus': sku
-    };
-    queryArgs.where = 'masterVariant(sku in :skus) or variants(sku in :skus)';
-    queryArgs = getQueryArgsForPriceSelection(queryArgs);
+    let queryArgs = createQueryArgsForSkuSearching(sku);
+    queryArgs = addQueryArgsForPriceSelection(queryArgs);
 
     return await getProductProjections(queryArgs);
   } catch (error: any) {
@@ -50,7 +42,16 @@ export const getProductProjectionBySkuWithPriceSelection = async (sku: string): 
   }
 }
 
-function getQueryArgsForPriceSelection(queryArgs: QueryArgs): QueryArgs {
+function createQueryArgsForSkuSearching(sku: string): QueryArgs {
+  const queryArgs: QueryArgs = {
+    'var.skus': sku
+  };
+  queryArgs.where = 'masterVariant(sku in :skus) or variants(sku in :skus)';
+
+  return queryArgs;
+}
+
+function addQueryArgsForPriceSelection(queryArgs: QueryArgs): QueryArgs {
   queryArgs.priceCurrency = readConfiguration().currencyCode;
 
   if (readConfiguration().countryCode !== '') {
