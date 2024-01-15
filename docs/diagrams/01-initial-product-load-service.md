@@ -1,4 +1,4 @@
-# Initial product load job
+# Initial product load service
 
 This process is triggered by an HTTP request, as detailed in the [README](https://github.com/gluo-dev/ordergroove-commercetools-connector/blob/main/README.md#installing-the-connector) file.
 
@@ -16,4 +16,4 @@ After receiving the response from commercetools, the application initiates a pro
 
 All valid product variants from the response are added to a list, which is then segmented into batches of 100 products, already formatted for Ordergroove. These batches are then concurrently dispatched in groups of 10 to Ordergroove, in case the initial request attempt fails, a second attempt is made one second later.
 
-<img src="https://github.com/gluo-dev/ordergroove-commercetools-connector/blob/main/docs/diagrams/diagram-initial-product-load-job.jpg" />
+<img src="https://github.com/gluo-dev/ordergroove-commercetools-connector/blob/main/docs/diagrams/diagram-initial-product-load-service.jpg" />

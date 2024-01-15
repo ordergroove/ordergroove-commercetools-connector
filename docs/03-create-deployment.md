@@ -77,7 +77,7 @@ curl --location 'https://connect.us-central1.gcp.commercetools.com/{{ PROJECT-KE
       ]
     },
     {
-      "applicationName": "job",
+      "applicationName": "service",
       "standardConfiguration": [
         {
           "key": "CTP_REGION",
@@ -139,224 +139,308 @@ curl --location 'https://connect.us-central1.gcp.commercetools.com/{{ PROJECT-KE
 }'
 ```
 
-You'll get something like this: TODO update this response
+You'll get something like this:
 
 ```json
 {
-  "id": "834bd4ed-b380-4b42-b9d8-bf8dd0a683aa",
-  "key": "orium-ct-connect-bloomreach-engagement-deployment",
-  "version": 1,
-  "connector": {
-    "id": "df328165-3684-4d22-8dc9-fc8bd466115b",
-    "version": 7,
-    "name": "Bloomreach Engagement connector",
-    "description": "Bloomreach Engagement connector",
-    "creator": {
-      "name": "IT",
-      "title": "Mr",
-      "email": "it@orium.com",
-      "company": "Orium"
-    },
-    "repository": {
-      "url": "git@github.com:composable-com/ct-connect-bloomreach-engagement.git",
-      "tag": "v1.0.0"
-    },
-    "configurations": [
-      {
-        "applicationName": "service",
-        "applicationType": "service",
-        "standardConfiguration": [
-          {
-            "key": "CTP_REGION",
-            "description": "commercetools Composable Commerce API region"
-          }
+    "id": "5aac26db-3b7c-4664-b355-43d91fcaed67",
+    "key": "ordergroove-connector-deploy",
+    "version": 1,
+    "connector": {
+        "id": "6c5d756d-db6c-4cd8-aa1f-831ed9eb5cbc",
+        "version": 391,
+        "name": "ordergroove connector",
+        "description": "Connector to sync products",
+        "creator": {
+            "name": "IT",
+            "title": "Mr",
+            "email": "it@gluo.mx",
+            "company": "Gluo"
+        },
+        "repository": {
+            "url": "https://github.com/gluo-dev/ordergroove-commercetools-connector.git",
+            "tag": "15-01-2024_1"
+        },
+        "configurations": [
+            {
+                "applicationName": "service",
+                "applicationType": "service",
+                "securedConfiguration": [
+                    {
+                        "key": "CTP_PROJECT_KEY",
+                        "description": "commercetools Composable Commerce project key",
+                        "required": true
+                    },
+                    {
+                        "key": "CTP_CLIENT_ID",
+                        "description": "commercetools Composable Commerce client ID",
+                        "required": true
+                    },
+                    {
+                        "key": "CTP_CLIENT_SECRET",
+                        "description": "commercetools Composable Commerce client secret",
+                        "required": true
+                    },
+                    {
+                        "key": "CTP_SCOPE",
+                        "description": "commercetools Composable Commerce client scope",
+                        "required": true
+                    },
+                    {
+                        "key": "OG_API_KEY",
+                        "description": "Ordergroove API key",
+                        "required": true
+                    }
+                ],
+                "standardConfiguration": [
+                    {
+                        "key": "CTP_REGION",
+                        "description": "commercetools Composable Commerce API region",
+                        "required": true
+                    },
+                    {
+                        "key": "CTP_LANGUAGE_CODE",
+                        "description": "commercetools Composable Commerce language code",
+                        "required": true
+                    },
+                    {
+                        "key": "CTP_CURRENCY_CODE",
+                        "description": "commercetools Composable Commerce currency code",
+                        "required": true
+                    },
+                    {
+                        "key": "CTP_COUNTRY_CODE",
+                        "description": "commercetools Composable Commerce country code",
+                        "required": false
+                    },
+                    {
+                        "key": "CTP_DISTRIBUTION_CHANNEL_ID",
+                        "description": "commercetools Composable Commerce product distribution channel ID",
+                        "required": false
+                    },
+                    {
+                        "key": "CTP_INVENTORY_SUPPLY_CHANNEL_ID",
+                        "description": "commercetools Composable Commerce inventory supply channel ID",
+                        "required": false
+                    },
+                    {
+                        "key": "OG_API_URL",
+                        "description": "Ordergroove API URL",
+                        "required": true
+                    },
+                    {
+                        "key": "PRODUCT_STORE_URL",
+                        "description": "Url of the product in the store, with dynamic slug",
+                        "required": false
+                    }
+                ]
+            },
+            {
+                "applicationName": "event",
+                "applicationType": "event",
+                "securedConfiguration": [
+                    {
+                        "key": "CTP_PROJECT_KEY",
+                        "description": "commercetools Composable Commerce project key",
+                        "required": true
+                    },
+                    {
+                        "key": "CTP_CLIENT_ID",
+                        "description": "commercetools Composable Commerce client ID",
+                        "required": true
+                    },
+                    {
+                        "key": "CTP_CLIENT_SECRET",
+                        "description": "commercetools Composable Commerce client secret",
+                        "required": true
+                    },
+                    {
+                        "key": "CTP_SCOPE",
+                        "description": "commercetools Composable Commerce client scope",
+                        "required": true
+                    },
+                    {
+                        "key": "OG_API_KEY",
+                        "description": "Ordergroove API key",
+                        "required": true
+                    }
+                ],
+                "standardConfiguration": [
+                    {
+                        "key": "CTP_REGION",
+                        "description": "commercetools Composable Commerce API region",
+                        "required": true
+                    },
+                    {
+                        "key": "CTP_LANGUAGE_CODE",
+                        "description": "commercetools Composable Commerce language code",
+                        "required": true
+                    },
+                    {
+                        "key": "CTP_CURRENCY_CODE",
+                        "description": "commercetools Composable Commerce currency code",
+                        "required": true
+                    },
+                    {
+                        "key": "CTP_COUNTRY_CODE",
+                        "description": "commercetools Composable Commerce country code",
+                        "required": false
+                    },
+                    {
+                        "key": "CTP_DISTRIBUTION_CHANNEL_ID",
+                        "description": "commercetools Composable Commerce product distribution channel ID",
+                        "required": false
+                    },
+                    {
+                        "key": "CTP_INVENTORY_SUPPLY_CHANNEL_ID",
+                        "description": "commercetools Composable Commerce inventory supply channel ID",
+                        "required": false
+                    },
+                    {
+                        "key": "OG_API_URL",
+                        "description": "Ordergroove API URL",
+                        "required": true
+                    },
+                    {
+                        "key": "PRODUCT_STORE_URL",
+                        "description": "Url of the product in the store, with dynamic slug",
+                        "required": false
+                    }
+                ]
+            }
         ],
-        "securedConfiguration": [
-          {
-            "key": "CTP_PROJECT_KEY",
-            "description": "commercetools Composable Commerce project key"
-          },
-          {
-            "key": "CTP_CLIENT_ID",
-            "description": "commercetools Composable Commerce client ID"
-          },
-          {
-            "key": "CTP_CLIENT_SECRET",
-            "description": "commercetools Composable Commerce client secret"
-          },
-          {
-            "key": "CTP_SCOPE",
-            "description": "commercetools Composable Commerce client scope"
-          },
-          {
-            "key": "BLOOMREACH_ENGAGEMENT_API_KEY",
-            "description": "Bloomreach API key"
-          },
-          {
-            "key": "BLOOMREACH_ENGAGEMENT_API_SECRET",
-            "description": "Bloomreach API secret"
-          },
-          {
-            "key": "BLOOMREACH_ENGAGEMENT_PROJECT_TOKEN",
-            "description": "Bloomreach project token"
-          },
-          {
-            "key": "BLOOMREACH_ENGAGEMENT_CATALOG_LOCALE",
-            "description": "Bloomreach catalog locale"
-          },
-          {
-            "key": "BASIC_AUTH_SECRET",
-            "description": "HTTP basic auth password"
-          }
-        ]
-      },
-      {
-        "applicationName": "event",
-        "applicationType": "event",
-        "standardConfiguration": [
-          {
-            "key": "CTP_REGION",
-            "description": "commercetools Composable Commerce API region"
-          }
+        "supportedRegions": [
+            "us-central1.gcp",
+            "europe-west1.gcp",
+            "australia-southeast1.gcp"
         ],
-        "securedConfiguration": [
-          {
-            "key": "CTP_PROJECT_KEY",
-            "description": "commercetools Composable Commerce project key"
-          },
-          {
-            "key": "CTP_CLIENT_ID",
-            "description": "commercetools Composable Commerce client ID"
-          },
-          {
-            "key": "CTP_CLIENT_SECRET",
-            "description": "commercetools Composable Commerce client secret"
-          },
-          {
-            "key": "CTP_SCOPE",
-            "description": "commercetools Composable Commerce client scope"
-          },
-          {
-            "key": "BLOOMREACH_ENGAGEMENT_API_KEY",
-            "description": "Bloomreach API key"
-          },
-          {
-            "key": "BLOOMREACH_ENGAGEMENT_API_SECRET",
-            "description": "Bloomreach API secret"
-          },
-          {
-            "key": "BLOOMREACH_ENGAGEMENT_PROJECT_TOKEN",
-            "description": "Bloomreach project token"
-          },
-          {
-            "key": "BLOOMREACH_ENGAGEMENT_CATALOG_LOCALE",
-            "description": "Bloomreach catalog locale"
-          },
-          {
-            "key": "BASIC_AUTH_SECRET",
-            "description": "HTTP basic auth password"
-          }
-        ]
-      }
+        "certified": false
+    },
+    "deployedRegion": "europe-west1.gcp",
+    "applications": [
+        {
+            "id": "e001270c-9265-4970-a9f5-586ef5889038",
+            "applicationName": "event",
+            "standardConfiguration": [
+                {
+                    "key": "CTP_REGION",
+                    "value": "europe-west1.gcp"
+                },
+                {
+                    "key": "CTP_LANGUAGE_CODE",
+                    "value": "en"
+                },
+                {
+                    "key": "CTP_CURRENCY_CODE",
+                    "value": "USD"
+                },
+                {
+                    "key": "CTP_COUNTRY_CODE",
+                    "value": "US"
+                },
+                {
+                    "key": "CTP_DISTRIBUTION_CHANNEL_ID",
+                    "value": "2831244b-56bf-42eb-ae9f-04cfa06c8dcd"
+                },
+                {
+                    "key": "CTP_INVENTORY_SUPPLY_CHANNEL_ID",
+                    "value": "2831244b-56bf-42eb-ae9f-04cfa06c8dcd"
+                },
+                {
+                    "key": "OG_API_URL",
+                    "value": "https://staging.restapi.ordergroove.com"
+                },
+                {
+                    "key": "PRODUCT_STORE_URL",
+                    "value": "https://www.store.gluo.com/[SLUG]"
+                }
+            ],
+            "securedConfiguration": [
+                {
+                    "key": "CTP_PROJECT_KEY",
+                    "value": "********************"
+                },
+                {
+                    "key": "CTP_CLIENT_ID",
+                    "value": "************************"
+                },
+                {
+                    "key": "CTP_CLIENT_SECRET",
+                    "value": "********************************"
+                },
+                {
+                    "key": "CTP_SCOPE",
+                    "value": "***********************************"
+                },
+                {
+                    "key": "OG_API_KEY",
+                    "value": "****************************************************************************************"
+                }
+            ]
+        },
+        {
+            "id": "c88aae80-7a98-48d7-adf2-6af21c789916",
+            "applicationName": "service",
+            "standardConfiguration": [
+                {
+                    "key": "CTP_REGION",
+                    "value": "europe-west1.gcp"
+                },
+                {
+                    "key": "CTP_LANGUAGE_CODE",
+                    "value": "en"
+                },
+                {
+                    "key": "CTP_CURRENCY_CODE",
+                    "value": "USD"
+                },
+                {
+                    "key": "CTP_COUNTRY_CODE",
+                    "value": "US"
+                },
+                {
+                    "key": "CTP_DISTRIBUTION_CHANNEL_ID",
+                    "value": "2831244b-56bf-42eb-ae9f-04cfa06c8dcd"
+                },
+                {
+                    "key": "CTP_INVENTORY_SUPPLY_CHANNEL_ID",
+                    "value": "2831244b-56bf-42eb-ae9f-04cfa06c8dcd"
+                },
+                {
+                    "key": "OG_API_URL",
+                    "value": "https://staging.restapi.ordergroove.com"
+                },
+                {
+                    "key": "PRODUCT_STORE_URL",
+                    "value": "https://www.store.gluo.com/[SLUG]"
+                }
+            ],
+            "securedConfiguration": [
+                {
+                    "key": "CTP_PROJECT_KEY",
+                    "value": "********************"
+                },
+                {
+                    "key": "CTP_CLIENT_ID",
+                    "value": "************************"
+                },
+                {
+                    "key": "CTP_CLIENT_SECRET",
+                    "value": "********************************"
+                },
+                {
+                    "key": "CTP_SCOPE",
+                    "value": "***********************************"
+                },
+                {
+                    "key": "OG_API_KEY",
+                    "value": "****************************************************************************************"
+                }
+            ]
+        }
     ],
-    "supportedRegions": ["us-central1.gcp"],
-    "certified": false
-  },
-  "deployedRegion": "us-central1.gcp",
-  "applications": [
-    {
-      "id": "80ca7d5b-78ec-4f58-9aad-7c3fc2975dfa",
-      "applicationName": "event",
-      "standardConfiguration": [
-        { "key": "CTP_REGION", "value": "us-central1.gcp" }
-      ],
-      "securedConfiguration": [
-        {
-          "key": "CTP_CLIENT_ID",
-          "value": "***"
-        },
-        {
-          "key": "CTP_CLIENT_SECRET",
-          "value": "***"
-        },
-        {
-          "key": "CTP_PROJECT_KEY",
-          "value": "***"
-        },
-        {
-          "key": "CTP_SCOPE",
-          "value": "***"
-        },
-        {
-          "key": "BLOOMREACH_ENGAGEMENT_API_KEY",
-          "value": "***"
-        },
-        {
-          "key": "BLOOMREACH_ENGAGEMENT_API_SECRET",
-          "value": "***"
-        },
-        {
-          "key": "BLOOMREACH_ENGAGEMENT_PROJECT_TOKEN",
-          "value": "***"
-        },
-        {
-          "key": "BLOOMREACH_ENGAGEMENT_CATALOG_LOCALE",
-          "value": "*****"
-        },
-        {
-          "key": "BASIC_AUTH_SECRET",
-          "value": "***"
-        }
-      ]
-    },
-    {
-      "id": "773c6714-6081-4976-ab16-f8aff7998f87",
-      "applicationName": "service",
-      "standardConfiguration": [
-        { "key": "CTP_REGION", "value": "us-central1.gcp" }
-      ],
-      "securedConfiguration": [
-        {
-          "key": "CTP_CLIENT_ID",
-          "value": "***"
-        },
-        {
-          "key": "CTP_CLIENT_SECRET",
-          "value": "***"
-        },
-        {
-          "key": "CTP_PROJECT_KEY",
-          "value": "***"
-        },
-        {
-          "key": "CTP_SCOPE",
-          "value": "***"
-        },
-        {
-          "key": "BLOOMREACH_ENGAGEMENT_API_KEY",
-          "value": "***"
-        },
-        {
-          "key": "BLOOMREACH_ENGAGEMENT_API_SECRET",
-          "value": "***"
-        },
-        {
-          "key": "BLOOMREACH_ENGAGEMENT_PROJECT_TOKEN",
-          "value": "***"
-        },
-        {
-          "key": "BLOOMREACH_ENGAGEMENT_CATALOG_LOCALE",
-          "value": "*****"
-        },
-        {
-          "key": "BASIC_AUTH_SECRET",
-          "value": "***"
-        }
-      ]
-    }
-  ],
-  "details": {},
-  "preview": true,
-  "status": "Deploying"
+    "details": {},
+    "preview": true,
+    "status": "Deploying"
 }
 ```

@@ -5,71 +5,71 @@ curl --get https://connect.us-central1.gcp.commercetools.com/connectors/drafts/k
 --header 'Authorization: Bearer {{ token }}' | json_pp
 ```
 
-You'll get something like this: TODO update this response
+You'll get something like this:
 
 ```json
 {
     "id": "6c5d756d-db6c-4cd8-aa1f-831ed9eb5cbc",
     "key": "ordergroove-connector",
-    "version": 361,
+    "version": 392,
     "name": "ordergroove connector",
     "description": "Connector to sync products",
     "creator": {
-        "name": "Lucina Bueno",
-        "email": "lucina@gluo.mx",
+        "name": "IT",
+        "email": "it@gluo.mx",
         "company": "Gluo",
-        "title": "Mrs"
+        "title": "Mr"
     },
     "repository": {
-        "tag": "certification_05-01-2024_1",
+        "tag": "15-01-2024_1",
         "url": "https://github.com/gluo-dev/ordergroove-commercetools-connector.git"
     },
     "configurations": [
         {
-            "applicationName": "job",
-            "applicationType": "job",
+            "applicationName": "service",
+            "applicationType": "service",
             "securedConfiguration": [
                 {
                     "key": "CTP_PROJECT_KEY",
                     "description": "commercetools Composable Commerce project key",
-                    "required": false
+                    "required": true
                 },
                 {
                     "key": "CTP_CLIENT_ID",
                     "description": "commercetools Composable Commerce client ID",
-                    "required": false
+                    "required": true
                 },
                 {
                     "key": "CTP_CLIENT_SECRET",
                     "description": "commercetools Composable Commerce client secret",
-                    "required": false
+                    "required": true
                 },
                 {
                     "key": "CTP_SCOPE",
                     "description": "commercetools Composable Commerce client scope",
-                    "required": false
+                    "required": true
                 },
                 {
                     "key": "OG_API_KEY",
                     "description": "Ordergroove API key",
-                    "required": false
+                    "required": true
                 }
             ],
             "standardConfiguration": [
                 {
                     "key": "CTP_REGION",
                     "description": "commercetools Composable Commerce API region",
-                    "required": false
+                    "required": true
                 },
                 {
                     "key": "CTP_LANGUAGE_CODE",
                     "description": "commercetools Composable Commerce language code",
-                    "required": false
+                    "required": true
                 },
                 {
                     "key": "CTP_CURRENCY_CODE",
                     "description": "commercetools Composable Commerce currency code",
-                    "required": false
+                    "required": true
                 },
                 {
                     "key": "CTP_COUNTRY_CODE",
@@ -89,7 +89,7 @@ You'll get something like this: TODO update this response
                 {
                     "key": "OG_API_URL",
                     "description": "Ordergroove API URL",
-                    "required": false
+                    "required": true
                 },
                 {
                     "key": "PRODUCT_STORE_URL",
@@ -105,44 +105,44 @@ You'll get something like this: TODO update this response
                 {
                     "key": "CTP_PROJECT_KEY",
                     "description": "commercetools Composable Commerce project key",
-                    "required": false
+                    "required": true
                 },
                 {
                     "key": "CTP_CLIENT_ID",
                     "description": "commercetools Composable Commerce client ID",
-                    "required": false
+                    "required": true
                 },
                 {
                     "key": "CTP_CLIENT_SECRET",
                     "description": "commercetools Composable Commerce client secret",
-                    "required": false
+                    "required": true
                 },
                 {
                     "key": "CTP_SCOPE",
                     "description": "commercetools Composable Commerce client scope",
-                    "required": false
+                    "required": true
                 },
                 {
                     "key": "OG_API_KEY",
                     "description": "Ordergroove API key",
-                    "required": false
+                    "required": true
                 }
             ],
             "standardConfiguration": [
                 {
                     "key": "CTP_REGION",
                     "description": "commercetools Composable Commerce API region",
-                    "required": false
+                    "required": true
                 },
                 {
                     "key": "CTP_LANGUAGE_CODE",
                     "description": "commercetools Composable Commerce language code",
-                    "required": false
+                    "required": true
                 },
                 {
                     "key": "CTP_CURRENCY_CODE",
                     "description": "commercetools Composable Commerce currency code",
-                    "required": false
+                    "required": true
                 },
                 {
                     "key": "CTP_COUNTRY_CODE",
@@ -162,7 +162,7 @@ You'll get something like this: TODO update this response
                 {
                     "key": "OG_API_URL",
                     "description": "Ordergroove API URL",
-                    "required": false
+                    "required": true
                 },
                 {
                     "key": "PRODUCT_STORE_URL",
@@ -180,53 +180,24 @@ You'll get something like this: TODO update this response
     ],
     "hasChanges": true,
     "alreadyListed": false,
-    "status": "ReadyForCertification",
-    "publishingReport": {
-        "entries": [
-            {
-                "type": "Error",
-                "title": "Image security analysis check skipped",
-                "createdAt": "2024-01-05T16:51:35.796Z"
-            },
-            {
-                "type": "Error",
-                "title": "SAST and SCA analysis check skipped",
-                "createdAt": "2024-01-05T16:51:35.799Z"
-            },
-            {
-                "type": "Information",
-                "title": "Connector specification file validation check succeeded",
-                "createdAt": "2024-01-05T16:51:35.801Z"
-            },
-            {
-                "type": "Information",
-                "title": "Connector image build check succeeded",
-                "createdAt": "2024-01-05T16:51:35.802Z"
-            },
-            {
-                "type": "Error",
-                "title": "Connector runtime security check skipped",
-                "createdAt": "2024-01-05T16:51:35.804Z"
-            }
-        ]
-    },
+    "status": "Draft",
     "isPreviewable": "true",
     "previewableReport": {
         "entries": [
             {
                 "type": "Information",
                 "title": "Image security analysis check succeeded",
-                "createdAt": "2024-01-05T16:41:40.122Z"
+                "createdAt": "2024-01-15T16:05:38.456Z"
             },
             {
                 "type": "Information",
                 "title": "SAST and SCA analysis check succeeded",
-                "createdAt": "2024-01-05T16:41:40.124Z"
+                "createdAt": "2024-01-15T16:05:38.459Z"
             },
             {
                 "type": "Information",
                 "title": "Connector specification file validation check succeeded",
-                "createdAt": "2024-01-05T16:41:40.125Z"
+                "createdAt": "2024-01-15T16:05:38.460Z"
             }
         ]
     }

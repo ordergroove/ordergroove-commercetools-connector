@@ -13,15 +13,15 @@ curl --location 'https://connect.us-central1.gcp.commercetools.com/connectors/dr
     "name": "Ordergroove connector",
     "description": "Connector to sync products",
     "creator": {
-        "title": "Mrs",
-        "name": "Lucina Bueno",
-        "email": "lucina@gluo.mx",
+        "title": "Mr",
+        "name": "IT",
+        "email": "it@gluo.mx",
         "company": "Gluo",
         "noOfDevelopers": 1
     },
     "repository": {
         "url": "https://github.com/gluo-dev/ordergroove-commercetools-connector.git",
-        "tag": "certification_05-01-2024_1"
+        "tag": "certification_15-01-2024_1"
     },
     "privateProjects": [],
     "supportedRegions": [
