@@ -15,14 +15,14 @@ This connector syncs commercetools products with Ordergroove. The following diag
 <img height="100%" src="https://github.com/gluo-dev/ordergroove-commercetools-connector/blob/main/docs/diagrams/diagram-high-level-overview.png" />
 
 Upon deployment of this connector, your commercetools _products_ can be imported into Ordergroove.
- - [Initial product load process detail](https://github.com/gluo-dev/ordergroove-commercetools-connector/blob/main/docs/diagrams/01-Initial%20product%20load%20job.md)
+ - [Initial product load process detail](https://github.com/gluo-dev/ordergroove-commercetools-connector/blob/main/docs/diagrams/01-initial-product-load-job.md)
 
 For every product (or variant) modification, the information will be synchronized with Ordergroove.
- - [Product published process detail](https://github.com/gluo-dev/ordergroove-commercetools-connector/blob/main/docs/diagrams/04-Product%20Published%20event.md)
+ - [Product published process detail](https://github.com/gluo-dev/ordergroove-commercetools-connector/blob/main/docs/diagrams/04-product-published-event.md)
 
 When the product stock changes or an order is created on commercetools, this information will be synchronized with Ordergroove.
- - [Inventory entry process detail](https://github.com/gluo-dev/ordergroove-commercetools-connector/blob/main/docs/diagrams/02-Inventory%20Entry%20event.md)
-  - [Order created process detail](https://github.com/gluo-dev/ordergroove-commercetools-connector/blob/main/docs/diagrams/03-Order%20Created%20event.md)
+ - [Inventory entry process detail](https://github.com/gluo-dev/ordergroove-commercetools-connector/blob/main/docs/diagrams/02-inventory-entry-event.md)
+  - [Order created process detail](https://github.com/gluo-dev/ordergroove-commercetools-connector/blob/main/docs/diagrams/03-order-created-event.md)
 
 ## Pre-requisites
 
@@ -66,16 +66,13 @@ Setup the required environment variables when you [create the deployment](https:
   - (*Required*) Ordergroove API url endpoint.
 - `OG_API_KEY`
   - (*Required*) Ordergroove API key.
+- `PRODUCT_VARIANTS_LIMIT`
+  -  (*Optional*) Specifies the limit of product variants to send to Ordergroove. If not provided, the application sets a default limit of 500,000.
 
 For more information about deployments, refer to the [commercetools connect deployment documentation](https://docs.commercetools.com/connect/concepts#deployments).
 
-Once the connector is deployed, you should be able to invoke the job to import all the products from commercetools into Ordergroove:
- - Get the job application ID (JOB-APP-ID): Request your commercetools deployments, identify the connector in the response, and within the "applications" attribute, locate the job application, then copy its ID.
- - Construct the URL to invoke the job using the following template:
-   https://job-{JOB-APP-ID}.{region}.commercetools.app/job?startUpload=true
-     - Query Param startUpload: This must be set to 'true' to initiate the product load to Ordergroove.
- - Invoke the URL with a POST request, set the Authorization header with a valid commercetools token.
- - Follow the process outlined in the deployment logs.
+The initial product load is handled by the job application, automatically triggered after the deployment. Upon completion of the product load process, the application creates a custom object in commercetools to update the job status to 'executed.' Consequently, the next time the job is executed, the product load process will be skipped.
+To validate if the custom object was created [get it from commercetools](https://github.com/gluo-dev/ordergroove-commercetools-connector/blob/main/docs/extras/get-custom-object-product-load-status.md).
 
 [Get the deployment logs](https://github.com/gluo-dev/ordergroove-commercetools-connector/blob/main/docs/04-get-deployment-by-key.md)
 
