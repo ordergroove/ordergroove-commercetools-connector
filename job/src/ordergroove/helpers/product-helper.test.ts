@@ -42,9 +42,10 @@ describe('convertProductProjectionToOrdergrooveProducts', () => {
         countryCode: 'US',
         distributionChannelId: '12345',
         inventorySupplyChannelId: '12345',
-        ordergrooveApiUrl: process.env.OG_API_URL as string,
+        ordergrooveApiUrl: 'https://api',
         ordergrooveApiKey: 'ordergrooveApiKey',
-        productStoreUrl: 'https://product/detail/[SLUG]'
+        productStoreUrl: 'https://product/detail/[SLUG]',
+        productVariantsLimit: '500'
       }
     )
 
@@ -71,9 +72,10 @@ describe('convertProductProjectionToOrdergrooveProducts', () => {
         countryCode: 'US',
         distributionChannelId: '12345',
         inventorySupplyChannelId: '12345',
-        ordergrooveApiUrl: process.env.OG_API_URL as string,
+        ordergrooveApiUrl: 'https://api',
         ordergrooveApiKey: 'ordergrooveApiKey',
-        productStoreUrl: 'https://product/detail/[SLUG]'
+        productStoreUrl: 'https://product/detail/[SLUG]',
+        productVariantsLimit: '500'
       }
     )
 
@@ -101,9 +103,10 @@ describe('convertProductProjectionToOrdergrooveProducts', () => {
         countryCode: 'US',
         distributionChannelId: '12345',
         inventorySupplyChannelId: '12345',
-        ordergrooveApiUrl: process.env.OG_API_URL as string,
+        ordergrooveApiUrl: 'https://api',
         ordergrooveApiKey: 'ordergrooveApiKey',
-        productStoreUrl: 'https://product/detail/[SLUG]'
+        productStoreUrl: 'https://product/detail/[SLUG]',
+        productVariantsLimit: '500'
       }
     )
 
@@ -131,9 +134,10 @@ describe('convertProductProjectionToOrdergrooveProducts', () => {
         countryCode: 'US',
         distributionChannelId: '12345',
         inventorySupplyChannelId: '12345',
-        ordergrooveApiUrl: process.env.OG_API_URL as string,
+        ordergrooveApiUrl: 'https://api',
         ordergrooveApiKey: 'ordergrooveApiKey',
-        productStoreUrl: 'https://product/detail/[SLUG]'
+        productStoreUrl: 'https://product/detail/[SLUG]',
+        productVariantsLimit: '500'
       }
     )
 
@@ -157,9 +161,10 @@ describe('convertProductProjectionToOrdergrooveProducts', () => {
         countryCode: 'US',
         distributionChannelId: '12345',
         inventorySupplyChannelId: '12345',
-        ordergrooveApiUrl: process.env.OG_API_URL as string,
+        ordergrooveApiUrl: 'https://api',
         ordergrooveApiKey: 'ordergrooveApiKey',
-        productStoreUrl: 'https://product/detail/[SLUG]'
+        productStoreUrl: 'https://product/detail/[SLUG]',
+        productVariantsLimit: '500'
       }
     )
 
@@ -183,9 +188,10 @@ describe('convertProductProjectionToOrdergrooveProducts', () => {
         countryCode: 'US',
         distributionChannelId: '12345',
         inventorySupplyChannelId: '',
-        ordergrooveApiUrl: process.env.OG_API_URL as string,
+        ordergrooveApiUrl: 'https://api',
         ordergrooveApiKey: 'ordergrooveApiKey',
-        productStoreUrl: 'https://product/detail/[SLUG]'
+        productStoreUrl: 'https://product/detail/[SLUG]',
+        productVariantsLimit: '500'
       }
     )
 
@@ -213,9 +219,10 @@ describe('convertProductProjectionToOrdergrooveProducts', () => {
         countryCode: 'US',
         distributionChannelId: '12345',
         inventorySupplyChannelId: '',
-        ordergrooveApiUrl: process.env.OG_API_URL as string,
+        ordergrooveApiUrl: 'https://api',
         ordergrooveApiKey: 'ordergrooveApiKey',
-        productStoreUrl: 'https://product/detail/[SLUG]'
+        productStoreUrl: 'https://product/detail/[SLUG]',
+        productVariantsLimit: '500'
       }
     )
 
@@ -243,9 +250,10 @@ describe('convertProductProjectionToOrdergrooveProducts', () => {
         countryCode: 'US',
         distributionChannelId: '12345',
         inventorySupplyChannelId: '',
-        ordergrooveApiUrl: process.env.OG_API_URL as string,
+        ordergrooveApiUrl: 'https://api',
         ordergrooveApiKey: 'ordergrooveApiKey',
-        productStoreUrl: ''
+        productStoreUrl: '',
+        productVariantsLimit: '500'
       }
     )
 
@@ -273,9 +281,10 @@ describe('convertProductProjectionToOrdergrooveProducts', () => {
         countryCode: 'US',
         distributionChannelId: '12345',
         inventorySupplyChannelId: '',
-        ordergrooveApiUrl: process.env.OG_API_URL as string,
+        ordergrooveApiUrl: 'https://api',
         ordergrooveApiKey: 'ordergrooveApiKey',
-        productStoreUrl: 'https://product/detail/[SLUG]'
+        productStoreUrl: 'https://product/detail/[SLUG]',
+        productVariantsLimit: '500'
       }
     )
 

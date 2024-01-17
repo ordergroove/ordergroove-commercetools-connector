@@ -6,6 +6,7 @@ import { OrdergrooveProduct } from '../types/custom.types';
 import { createUUID } from './utils/data-utils'
 import { QueryArgs } from '../types/index.types';
 import { readConfiguration } from '../utils/config.utils';
+import { setInitialProductLoadExecuted } from './helpers/custom-objects-helper';
 
 export const uploadProducts = async (limitQuery: number, offsetQuery: number, executeNext?: boolean, totalProductVariants?: number): Promise<boolean> => {
   try {
@@ -29,10 +30,14 @@ export const uploadProducts = async (limitQuery: number, offsetQuery: number, ex
 
       const totalProductsRequested = offset + count;
       logger.info(`Products retrieved from commercetools: ${totalProductsRequested} of a total of ${total}`);
-      if (totalProductsRequested < total) {
+
+      const productVariantsLimit = parseInt(readConfiguration().productVariantsLimit);
+
+      if (totalProductsRequested < total && totalProductVariants < productVariantsLimit) {
         offsetQuery = offsetQuery + 100;
         await uploadProducts(limitQuery, offsetQuery, true, totalProductVariants);
       } else {
+        await updateProductLoadStatus();
         logger.info(`>> The products upload process from commercetools to ordergroove has finished with a total of ${totalProductVariants} valid product variants processed <<`);
       }
     }
@@ -100,4 +105,13 @@ async function setPromiseAllToSendBatches(products: Array<OrdergrooveProduct>, n
       createProducts(batch, createUUID());
     })
   );
+}
+
+async function updateProductLoadStatus() {
+  const response = await setInitialProductLoadExecuted();
+
+  // retry one time
+  if (!response) {
+    await setInitialProductLoadExecuted();
+  }
 }

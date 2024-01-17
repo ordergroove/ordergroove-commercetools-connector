@@ -1,7 +1,9 @@
 deployAs:
-  - name: service
-    applicationType: service
-    endpoint: /service
+  - name: job
+    applicationType: job
+    endpoint: /
+    properties:
+      schedule: "*/40 * * * *"
     configuration:
       standardConfiguration:
         - key: CTP_REGION
@@ -24,6 +26,8 @@ deployAs:
           required: true
         - key: PRODUCT_STORE_URL
           description: Url of the product in the store, with dynamic slug
+        - key: PRODUCT_VARIANTS_LIMIT
+          description: Specifies the limit of product variants.....
       securedConfiguration:
         - key: CTP_PROJECT_KEY
           description: commercetools Composable Commerce project key

@@ -23,6 +23,7 @@ export const readConfiguration = () => {
     ordergrooveApiUrl: process.env.OG_API_URL as string,
     ordergrooveApiKey: process.env.OG_API_KEY as string,
     productStoreUrl: process.env.PRODUCT_STORE_URL as string ?? '',
+    productVariantsLimit: process.env.PRODUCT_VARIANTS_LIMIT ?? '500000',
   };
 
   const validationErrors = getValidateMessages(envValidators, envVars);

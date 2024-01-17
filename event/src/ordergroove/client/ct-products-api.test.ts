@@ -59,9 +59,6 @@ describe('getProductProjections', () => {
   })
 
   it('should call the Commercetools API with the correct parameters', async () => {
-    const createApiRootSpy = jest.spyOn(CreateClient, 'createApiRoot')
-    const createClientSpy = jest.spyOn(BuildClient, 'createClient')
-
     const queryArgs = { limit: 100 } as unknown as QueryArgs
 
     await getProductProjections(queryArgs)
@@ -69,5 +66,5 @@ describe('getProductProjections', () => {
     expect(mockedExecute).toHaveBeenCalledTimes(1)
     expect(mockedExecute).toHaveReturned()
     expect(mockedExecute).toHaveReturnedWith({ "body": mockProductProjectionPagedQueryResponse })
-  }, 15000) // Expand the testing time because of the waiting before getting information from ct
+  })
 })

@@ -15,7 +15,7 @@ jest.mock('../../utils/config.utils', () => ({
     countryCode: 'US',
     distributionChannelId: '12345',
     inventorySupplyChannelId: '12345',
-    ordergrooveApiUrl: process.env.OG_API_URL as string,
+    ordergrooveApiUrl: 'https://api',
     ordergrooveApiKey: 'ordergrooveApiKey',
     productStoreUrl: 'https://product/detail/[SLUG]'
   }),
@@ -40,7 +40,7 @@ describe('retrieveOgProduct', () => {
         countryCode: 'US',
         distributionChannelId: '12345',
         inventorySupplyChannelId: '',
-        ordergrooveApiUrl: process.env.OG_API_URL as string,
+        ordergrooveApiUrl: 'https://api',
         ordergrooveApiKey: 'ordergrooveApiKey',
         productStoreUrl: 'https://product/detail/[SLUG]'
       }
@@ -96,7 +96,7 @@ describe('retrieveOgProduct', () => {
         countryCode: 'US',
         distributionChannelId: '12345',
         inventorySupplyChannelId: '',
-        ordergrooveApiUrl: process.env.OG_API_URL as string,
+        ordergrooveApiUrl: 'https://api',
         ordergrooveApiKey: 'ordergrooveApiKey',
         productStoreUrl: 'https://product/detail/[SLUG]'
       }
@@ -128,7 +128,7 @@ describe('retrieveOgProduct', () => {
         countryCode: 'US',
         distributionChannelId: '12345',
         inventorySupplyChannelId: '',
-        ordergrooveApiUrl: process.env.OG_API_URL as string,
+        ordergrooveApiUrl: 'https://api',
         ordergrooveApiKey: 'ordergrooveApiKey',
         productStoreUrl: 'https://product/detail/[SLUG]'
       }
@@ -163,7 +163,7 @@ describe('createProducts', () => {
         countryCode: 'US',
         distributionChannelId: '12345',
         inventorySupplyChannelId: '',
-        ordergrooveApiUrl: process.env.OG_API_URL as string,
+        ordergrooveApiUrl: 'https://api',
         ordergrooveApiKey: 'ordergrooveApiKey',
         productStoreUrl: 'https://product/detail/[SLUG]'
       }
@@ -209,7 +209,7 @@ describe('createProducts', () => {
         countryCode: 'US',
         distributionChannelId: '12345',
         inventorySupplyChannelId: '',
-        ordergrooveApiUrl: process.env.OG_API_URL as string,
+        ordergrooveApiUrl: 'https://api',
         ordergrooveApiKey: 'ordergrooveApiKey',
         productStoreUrl: 'https://product/detail/[SLUG]'
       }
@@ -241,7 +241,7 @@ describe('createProducts', () => {
         countryCode: 'US',
         distributionChannelId: '12345',
         inventorySupplyChannelId: '',
-        ordergrooveApiUrl: process.env.OG_API_URL as string,
+        ordergrooveApiUrl: 'https://api',
         ordergrooveApiKey: 'ordergrooveApiKey',
         productStoreUrl: 'https://product/detail/[SLUG]'
       }
@@ -276,7 +276,7 @@ describe('updateProducts', () => {
         countryCode: 'US',
         distributionChannelId: '12345',
         inventorySupplyChannelId: '',
-        ordergrooveApiUrl: process.env.OG_API_URL as string,
+        ordergrooveApiUrl: 'https://api',
         ordergrooveApiKey: 'ordergrooveApiKey',
         productStoreUrl: 'https://product/detail/[SLUG]'
       }
@@ -322,7 +322,7 @@ describe('updateProducts', () => {
         countryCode: 'US',
         distributionChannelId: '12345',
         inventorySupplyChannelId: '',
-        ordergrooveApiUrl: process.env.OG_API_URL as string,
+        ordergrooveApiUrl: 'https://api',
         ordergrooveApiKey: 'ordergrooveApiKey',
         productStoreUrl: 'https://product/detail/[SLUG]'
       }
@@ -354,7 +354,7 @@ describe('updateProducts', () => {
         countryCode: 'US',
         distributionChannelId: '12345',
         inventorySupplyChannelId: '',
-        ordergrooveApiUrl: process.env.OG_API_URL as string,
+        ordergrooveApiUrl: 'https://api',
         ordergrooveApiKey: 'ordergrooveApiKey',
         productStoreUrl: 'https://product/detail/[SLUG]'
       }

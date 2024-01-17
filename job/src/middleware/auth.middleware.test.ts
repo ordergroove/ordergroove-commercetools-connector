@@ -12,7 +12,7 @@ const mockConfiguration = {
   countryCode: 'mockCountryCode',
   distributionChannelId: 'mockDistributionChannelId',
   inventorySupplyChannelId: 'mockInventorySupplyChannelId',
-  ordergrooveApiUrl: process.env.OG_API_URL as string,
+  ordergrooveApiUrl: 'https://api',
   ordergrooveApiKey: 'ordergrooveApiKey',
   productStoreUrl: 'https://product/detail/[SLUG]'
 }
@@ -29,7 +29,7 @@ jest.mock('../utils/config.utils', () => ({
     countryCode: 'US',
     distributionChannelId: '',
     inventorySupplyChannelId: '',
-    ordergrooveApiUrl: process.env.OG_API_URL as string,
+    ordergrooveApiUrl: 'https://api',
     ordergrooveApiKey: 'ordergrooveApiKey',
     productStoreUrl: 'https://product/detail/[SLUG]'
   }),
@@ -56,9 +56,10 @@ describe('createAuthMiddlewareOptions configuration', () => {
         countryCode: 'US',
         distributionChannelId: '',
         inventorySupplyChannelId: '',
-        ordergrooveApiUrl: process.env.OG_API_URL as string,
+        ordergrooveApiUrl: 'https://api',
         ordergrooveApiKey: 'ordergrooveApiKey',
-        productStoreUrl: 'https://product/detail/[SLUG]'
+        productStoreUrl: 'https://product/detail/[SLUG]',
+        productVariantsLimit: '500'
       }
     )
 
@@ -90,9 +91,10 @@ describe('createAuthMiddlewareOptions configuration', () => {
         countryCode: 'US',
         distributionChannelId: '',
         inventorySupplyChannelId: '',
-        ordergrooveApiUrl: process.env.OG_API_URL as string,
+        ordergrooveApiUrl: 'https://api',
         ordergrooveApiKey: 'ordergrooveApiKey',
-        productStoreUrl: 'https://product/detail/[SLUG]'
+        productStoreUrl: 'https://product/detail/[SLUG]',
+        productVariantsLimit: '500'
       }
     )
 
