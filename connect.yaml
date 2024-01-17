@@ -1,7 +1,7 @@
 deployAs:
   - name: job
     applicationType: job
-    endpoint: /
+    endpoint: /job
     properties:
       schedule: "*/40 * * * *"
     configuration:
