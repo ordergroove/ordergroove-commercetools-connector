@@ -1,12 +1,13 @@
 import {
-  ProductProjection, ProductVariant, ProductProjectionPagedQueryResponse,
-  ProductVariantAvailability, Image, ScopedPrice, LocalizedString
+  ProductProjection, ProductProjectionPagedQueryResponse,
+  Image, ScopedPrice, LocalizedString
 } from '@commercetools/platform-sdk';
 
 import { logger } from '../../utils/logger.utils';
 import { addDecimalPointToCentAmount } from '../utils/data-utils';
 import { OrdergrooveProduct } from '../../types/custom.types';
 import { readConfiguration } from '../../utils/config.utils';
+import { isProductOnStock } from './stock-helper';
 
 /**
  * Converts a ProductProjectionPagedQueryResponse in a list of products for ordergroove.
@@ -14,13 +15,11 @@ import { readConfiguration } from '../../utils/config.utils';
  * @param productProjectionPagedQueryResponse 
  * @returns List of OrdergrooveProduct
  */
-export const convertProductProjectionToOrdergrooveProducts = async (productProjectionPagedQueryResponse: ProductProjectionPagedQueryResponse): Promise<OrdergrooveProduct[]> => {
+export const convertProductProjectionToOrdergrooveProducts = async (productProjection: ProductProjectionPagedQueryResponse): Promise<OrdergrooveProduct[]> => {
   let variantsResult = new Array<OrdergrooveProduct>;
 
   try {
-    const results: Array<ProductProjection> =  Object.values(productProjectionPagedQueryResponse.results);
-
-    for (let result of results) {
+    for (let result of productProjection.results) {
       const productName = result.name[readConfiguration().languageCode];
 
       if (productName === undefined) {
@@ -28,51 +27,67 @@ export const convertProductProjectionToOrdergrooveProducts = async (productProje
         break;
       }
 
-      const masterVariantSku = result.masterVariant.sku === undefined ? '' : result.masterVariant.sku;
-      const masterVariantPrice = getScopedPrice(result.masterVariant.scopedPrice);
-
-      if (masterVariantPrice === undefined) {
-        logger.info(getInvalidPriceMessage(masterVariantSku));
-      } else {
-        let ogProduct: OrdergrooveProduct = {
-          product_id: masterVariantSku,
-          sku: masterVariantSku,
-          name: productName,
-          price: masterVariantPrice,
-          live: isProductOnStock(result.masterVariant.availability),
-          image_url: getImageUrl(result.masterVariant.images),
-          detail_url: getDetailUrl(result.slug)
-        };
-        variantsResult.push(ogProduct);
+      const ogProductMasterVariant = buildOgProductFromMasterVariant(result, productName);
+      if (ogProductMasterVariant !== undefined) {
+        variantsResult.push(ogProductMasterVariant);
       }
 
-      const variants: Array<ProductVariant> =  Object.values(result.variants);
-      for (let variant of result.variants) {
-        const variantSku = variant.sku === undefined ? '' : variant.sku;
-
-        const variantPrice = getScopedPrice(variant.scopedPrice);
-
-        if (variantPrice === undefined) {
-          logger.info(getInvalidPriceMessage(variantSku));
-        } else {
-          let ogProduct: OrdergrooveProduct = {
-            product_id: variantSku,
-            sku: variantSku,
-            name: productName,
-            price: variantPrice,
-            live: isProductOnStock(variant.availability),
-            image_url: getImageUrl(variant.images, result.masterVariant.images),
-            detail_url: getDetailUrl(result.slug)
-          };
-          variantsResult.push(ogProduct);
-        }
-      }
+      variantsResult.push(...buildOgProductsFromVariants(result, productName));
     }
   } catch (error) {
     logger.error('Error during the process convertProductProjectionToOrdergrooveProducts().', error);
   }
 
   return variantsResult;
+}
+
+function buildOgProductFromMasterVariant(result: ProductProjection, productName: string): OrdergrooveProduct | undefined {
+  let ogProduct = undefined;
+  const masterVariantSku = result.masterVariant.sku as string ?? '';
+  const masterVariantPrice = getScopedPrice(result.masterVariant.scopedPrice);
+
+  if (masterVariantPrice === undefined) {
+    logger.info(getInvalidPriceMessage(masterVariantSku));
+  } else {
+    ogProduct = {
+      product_id: masterVariantSku,
+      sku: masterVariantSku,
+      name: productName,
+      price: masterVariantPrice,
+      live: isProductOnStock(result.masterVariant.availability),
+      image_url: getImageUrl(result.masterVariant.images),
+      detail_url: getDetailUrl(result.slug)
+    } as OrdergrooveProduct;
+  }
+
+  return ogProduct;
+}
+
+function buildOgProductsFromVariants(result: ProductProjection, productName: string): OrdergrooveProduct[] {
+  const ogProducts = new Array<OrdergrooveProduct>;
+
+  for (let variant of result.variants) {
+    const variantSku = variant.sku as string ?? '';
+
+    const variantPrice = getScopedPrice(variant.scopedPrice);
+
+    if (variantPrice === undefined) {
+      logger.info(getInvalidPriceMessage(variantSku));
+    } else {
+      let ogProduct: OrdergrooveProduct = {
+        product_id: variantSku,
+        sku: variantSku,
+        name: productName,
+        price: variantPrice,
+        live: isProductOnStock(variant.availability),
+        image_url: getImageUrl(variant.images, result.masterVariant.images),
+        detail_url: getDetailUrl(result.slug)
+      };
+      ogProducts.push(ogProduct);
+    }
+  }
+
+  return ogProducts;
 }
 
 function getScopedPrice(scopedPrice?: ScopedPrice): number | undefined {
@@ -87,43 +102,6 @@ function getScopedPrice(scopedPrice?: ScopedPrice): number | undefined {
 
 function getInvalidPriceMessage(sku: string) {
   return `The product with SKU ${sku} does not have an embedded price for the given configuration in the connector, so it will not be created in ordergroove.`
-}
-
-export const isProductOnStock = (productAvailability?: ProductVariantAvailability): boolean => {
-  if (productAvailability === undefined) {
-    return true;
-  } else {
-    const channels = productAvailability.channels;
-
-    if (channels === undefined) {
-      return productAvailability.isOnStock === undefined ? true : productAvailability.isOnStock;
-    } else {
-      if (readConfiguration().inventorySupplyChannelId !== '') {
-        if (channels[readConfiguration().inventorySupplyChannelId] !== undefined) {
-          const thisChannelHasStock = channels[readConfiguration().inventorySupplyChannelId].isOnStock;
-          return thisChannelHasStock === undefined ? true : thisChannelHasStock;
-        }
-      }
-
-      let valuesArray = Object.values(channels);
-
-      let atLeastOneChannelHasStock: boolean = false;
-      valuesArray.forEach(value => {
-        if (value.isOnStock === true) {
-          atLeastOneChannelHasStock = true;
-          return;
-        }
-      });
-
-      const isOnStockForAnyChannel = productAvailability.isOnStock;
-
-      if (isOnStockForAnyChannel !== undefined) {
-        return isOnStockForAnyChannel || atLeastOneChannelHasStock;
-      } else {
-        return atLeastOneChannelHasStock;
-      }
-    }
-  }
 }
 
 function getImageUrl(productImages?: Image[], masterProductImages?: Image[]): string {
@@ -142,7 +120,7 @@ function getDetailUrl(slug: LocalizedString): string {
   const productUrl = readConfiguration().productStoreUrl;
 
   if (productUrl !== '') {
-    const localizedSlug = slug[readConfiguration().languageCode] === undefined ? '' : slug[readConfiguration().languageCode];
+    const localizedSlug = slug[readConfiguration().languageCode] ?? '';
     if (localizedSlug !== '') {
       result = productUrl.replace('[SLUG]', localizedSlug);
     }

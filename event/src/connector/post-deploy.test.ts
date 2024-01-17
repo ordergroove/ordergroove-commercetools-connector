@@ -1,4 +1,4 @@
-import { assertError, assertString } from '../utils/assert.utils'
+import { assertError } from '../utils/assert.utils'
 import * as postDeploy from './post-deploy'
 import * as actions from './actions'
 

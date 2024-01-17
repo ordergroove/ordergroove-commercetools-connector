@@ -13,13 +13,13 @@ export const uploadProducts = async (limitQuery: number, offsetQuery: number, ex
     const queryArgs: QueryArgs = getQueryArgs(limitQuery, offsetQuery);
     logger.info(`Get product-projections from commercetools, queryArgs: ${JSON.stringify(queryArgs)}`);
 
-    executeNext = executeNext ? executeNext : true;
-    totalProductVariants = totalProductVariants ? totalProductVariants : 0;
+    executeNext = executeNext as boolean ?? true;
+    totalProductVariants = totalProductVariants as number ?? 0;
 
     if (executeNext) {
       const productProjectionPagedQueryResponse = await productProjectionsSearch(queryArgs);
       const { count, offset } = productProjectionPagedQueryResponse;
-      const total = productProjectionPagedQueryResponse.total === undefined ? 0 : productProjectionPagedQueryResponse.total;
+      const total = productProjectionPagedQueryResponse.total as number ?? 0;
 
       const allProductVariants: OrdergrooveProduct[] =
         await convertProductProjectionToOrdergrooveProducts(productProjectionPagedQueryResponse);

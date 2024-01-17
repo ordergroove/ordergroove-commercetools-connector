@@ -3,8 +3,6 @@ import { jest } from '@jest/globals'
 import { getProductProjections } from './ct-products-api'
 import { QueryArgs } from '../../types/index.types'
 import { mockProductProjectionPagedQueryResponse } from '../mocks/mocks'
-import * as CreateClient from '../../client/create.client'
-import * as BuildClient from '../../client/build.client'
 
 
 const mockedExecute = jest.fn().mockReturnValue({ body: mockProductProjectionPagedQueryResponse })

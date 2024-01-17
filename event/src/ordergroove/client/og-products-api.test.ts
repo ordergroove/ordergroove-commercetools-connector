@@ -1,7 +1,6 @@
 import * as ConfigUtils from '../../utils/config.utils'
 import { retrieveOgProduct, createProducts, updateProducts } from './og-products-api'
-import * as OgProductsApi from './og-products-api'
-import { mockOgProductApiResponse, mockOgProduct, mockOgProducts } from '../mocks/mocks'
+import { mockOgProducts } from '../mocks/mocks'
 
 jest.mock('../../utils/config.utils', () => ({
   readConfiguration: jest.fn().mockReturnValue({

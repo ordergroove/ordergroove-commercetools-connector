@@ -145,6 +145,7 @@ describe('processOrderCreatedEvent', () => {
 
     expect(processOrderCreatedEventSpy).toHaveBeenCalled()
     expect(retrieveOgProductSpy).toHaveBeenCalled()
+    expect(getProductVariantBySkuSpy).toHaveBeenCalled()
     expect(updateProductsSpy).toHaveBeenCalled()
   })
 
@@ -171,6 +172,7 @@ describe('processOrderCreatedEvent', () => {
 
     expect(processOrderCreatedEventSpy).toHaveBeenCalled()
     expect(retrieveOgProductSpy).toHaveBeenCalled()
+    expect(getProductVariantBySkuSpy).toHaveBeenCalled()
     expect(updateProductsSpy).toHaveBeenCalledTimes(0)
   })
 
@@ -244,11 +246,6 @@ describe('processOrderCreatedEvent', () => {
   it('should write a log when there are no line items in the order', async () => {
     const processOrderCreatedEventSpy = jest
       .spyOn(OrderCreatedProcessor, 'processOrderCreatedEvent')
-    
-    const retrieveOgProductSpy = jest
-      .spyOn(OgProductsApi, 'retrieveOgProduct')
-      .mockImplementation(() => Promise.resolve(mockOgProductApiResponse))
-      .mockResolvedValue(mockOgProductApiResponse)
 
     await processOrderCreatedEvent(mockOrderCreatedEventPayloadWithLineItemsEmpty)
 

@@ -17,7 +17,7 @@ export const createProducts = async (products: Array<OrdergrooveProduct>, execut
   };
 
   try {
-    attemptCount = attemptCount === undefined ? 0 : attemptCount;
+    attemptCount = attemptCount ?? 0;
 
     if (attemptCount < maxRetries) {
 

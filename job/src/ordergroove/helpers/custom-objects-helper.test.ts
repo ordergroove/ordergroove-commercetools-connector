@@ -1,4 +1,4 @@
-import { CustomObjectDraft, ClientResponse, CustomObject } from '@commercetools/platform-sdk';
+import { ClientResponse } from '@commercetools/platform-sdk';
 import * as CtCustomObjectsApi from '../client/ct-custom-objects-api';
 import { isInitialProductLoadExecutable, setInitialProductLoadExecuted } from './custom-objects-helper'
 
