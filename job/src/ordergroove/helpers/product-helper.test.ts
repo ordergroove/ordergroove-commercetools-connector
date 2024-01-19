@@ -6,7 +6,7 @@ import { logger } from '../../utils/logger.utils'
 import {
   mockProductProjectionPagedQueryResponse,
   mockProductProjectionPagedQueryResponseWithInvalidLanguageCode,
-  mockProductProjectionPagedQueryResponseWithoutScopedPrice,
+  mockProductProjectionPagedQueryResponseWithoutPriceSelection,
   mockProductProjectionPagedQueryResponseVariantWithoutImage,
   mockProductProjectionPagedQueryResponseStockInChannel,
   mockProductProjectionPagedQueryResponseStockForAny,
@@ -148,7 +148,7 @@ describe('convertProductProjectionToOrdergrooveProducts', () => {
     expect(logger.info).toHaveBeenCalled()
   })
 
-  it('should not return products when there is no scoped price', async () => {
+  it('should not return products when there is no price selection', async () => {
     jest.spyOn(ConfigUtils, 'readConfiguration').mockReturnValue(
       {
         region: 'test-region',
@@ -169,7 +169,7 @@ describe('convertProductProjectionToOrdergrooveProducts', () => {
     )
 
     const result: OrdergrooveProduct[] =
-      await convertProductProjectionToOrdergrooveProducts(mockProductProjectionPagedQueryResponseWithoutScopedPrice)
+      await convertProductProjectionToOrdergrooveProducts(mockProductProjectionPagedQueryResponseWithoutPriceSelection)
 
     expect(result.length).toBe(0)
     expect(logger.info).toHaveBeenCalled()

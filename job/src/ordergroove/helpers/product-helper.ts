@@ -1,6 +1,6 @@
 import {
   ProductProjection, ProductProjectionPagedQueryResponse,
-  Image, ScopedPrice, LocalizedString
+  Image, Price, LocalizedString
 } from '@commercetools/platform-sdk';
 
 import { logger } from '../../utils/logger.utils';
@@ -44,7 +44,7 @@ export const convertProductProjectionToOrdergrooveProducts = async (productProje
 function buildOgProductFromMasterVariant(result: ProductProjection, productName: string): OrdergrooveProduct | undefined {
   let ogProduct = undefined;
   const masterVariantSku = result.masterVariant.sku as string ?? '';
-  const masterVariantPrice = getScopedPrice(result.masterVariant.scopedPrice);
+  const masterVariantPrice = getPrice(result.masterVariant.price);
 
   if (masterVariantPrice === undefined) {
     logger.info(getInvalidPriceMessage(masterVariantSku));
@@ -69,7 +69,7 @@ function buildOgProductsFromVariants(result: ProductProjection, productName: str
   for (let variant of result.variants) {
     const variantSku = variant.sku as string ?? '';
 
-    const variantPrice = getScopedPrice(variant.scopedPrice);
+    const variantPrice = getPrice(variant.price);
 
     if (variantPrice === undefined) {
       logger.info(getInvalidPriceMessage(variantSku));
@@ -90,11 +90,11 @@ function buildOgProductsFromVariants(result: ProductProjection, productName: str
   return ogProducts;
 }
 
-function getScopedPrice(scopedPrice?: ScopedPrice): number | undefined {
+function getPrice(price?: Price): number | undefined {
   let result = undefined;
 
-  if (scopedPrice !== undefined) {
-    result = addDecimalPointToCentAmount(scopedPrice.currentValue.centAmount, scopedPrice.currentValue.fractionDigits);
+  if (price !== undefined) {
+    result = addDecimalPointToCentAmount(price.value.centAmount, price.value.fractionDigits);
   }
 
   return result;

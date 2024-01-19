@@ -44,8 +44,8 @@ describe('uploadProducts', () => {
       status: 200
     }
 
-    const productProjectionsSearchSpy = jest
-      .spyOn(CtProductsApi, 'productProjectionsSearch')
+    const getProductProjectionsSpy= jest
+      .spyOn(CtProductsApi, 'getProductProjections')
       .mockImplementation(() => Promise.resolve(mockProductProjectionPagedQueryResponse))
       .mockResolvedValue(mockProductProjectionPagedQueryResponse)
 
@@ -66,7 +66,7 @@ describe('uploadProducts', () => {
 
     const result = await uploadProducts(1, 0)
 
-    expect(productProjectionsSearchSpy).toHaveBeenCalled()
+    expect(getProductProjectionsSpy).toHaveBeenCalled()
     expect(convertProductProjectionToOrdergrooveProductsSpy).toHaveBeenCalled()
     expect(createProductsSpy).toHaveBeenCalledTimes(1)
     expect(setInitialProductLoadExecutedSpy).toHaveBeenCalled()
@@ -98,8 +98,8 @@ describe('uploadProducts', () => {
       status: 200
     }
 
-    const productProjectionsSearchSpy = jest
-      .spyOn(CtProductsApi, 'productProjectionsSearch')
+    const getProductProjectionsSpy = jest
+      .spyOn(CtProductsApi, 'getProductProjections')
       .mockImplementation(() => Promise.resolve(mockProductProjectionPagedQueryResponseWith2Products))
       .mockResolvedValue(mockProductProjectionPagedQueryResponseWith2Products)
 
@@ -120,7 +120,7 @@ describe('uploadProducts', () => {
 
     const result = await uploadProducts(1, 0)
 
-    expect(productProjectionsSearchSpy).toHaveBeenCalled()
+    expect(getProductProjectionsSpy).toHaveBeenCalled()
     expect(convertProductProjectionToOrdergrooveProductsSpy).toHaveBeenCalled()
     expect(createProductsSpy).toHaveBeenCalledTimes(2)
     expect(setInitialProductLoadExecutedSpy).toHaveBeenCalled()
@@ -152,8 +152,8 @@ describe('uploadProducts', () => {
       status: 200
     }
 
-    const productProjectionsSearchSpy = jest
-      .spyOn(CtProductsApi, 'productProjectionsSearch')
+    const getProductProjectionsSpy = jest
+      .spyOn(CtProductsApi, 'getProductProjections')
       .mockImplementation(() => Promise.resolve(mockProductProjectionPagedQueryResponseWith2Products))
       .mockResolvedValue(mockProductProjectionPagedQueryResponseWith2Products)
 
@@ -174,7 +174,7 @@ describe('uploadProducts', () => {
 
     const result = await uploadProducts(1, 0)
 
-    expect(productProjectionsSearchSpy).toHaveBeenCalled()
+    expect(getProductProjectionsSpy).toHaveBeenCalled()
     expect(convertProductProjectionToOrdergrooveProductsSpy).toHaveBeenCalled()
     expect(createProductsSpy).toHaveBeenCalledTimes(2)
     expect(setInitialProductLoadExecutedSpy).toHaveBeenCalledTimes(2)
@@ -182,12 +182,12 @@ describe('uploadProducts', () => {
   })
 
   it('should handle an error from productProjectionsSearch()', async () => {
-    jest.spyOn(CtProductsApi, 'productProjectionsSearch')
+    jest.spyOn(CtProductsApi, 'getProductProjections')
       .mockImplementation(() => { throw new Error('connection error') });
 
     const result = await uploadProducts(1, 0)
 
-    expect(CtProductsApi.productProjectionsSearch).toThrow('connection error');
+    expect(CtProductsApi.getProductProjections).toThrow('connection error');
     expect(result).toBe(true)
   })
 })
