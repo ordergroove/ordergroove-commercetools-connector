@@ -65,8 +65,7 @@ describe('isProductOnStock', () => {
         inventorySupplyChannelId: '12345',
         ordergrooveApiUrl: process.env.OG_API_URL as string,
         ordergrooveApiKey: 'ordergrooveApiKey',
-        productStoreUrl: 'https://product/detail/[SLUG]',
-        productVariantsLimit: '2'
+        productStoreUrl: 'https://product/detail/[SLUG]'
       }
     )
 
@@ -101,8 +100,7 @@ describe('isProductOnStock', () => {
         inventorySupplyChannelId: '12345',
         ordergrooveApiUrl: process.env.OG_API_URL as string,
         ordergrooveApiKey: 'ordergrooveApiKey',
-        productStoreUrl: 'https://product/detail/[SLUG]',
-        productVariantsLimit: '2'
+        productStoreUrl: 'https://product/detail/[SLUG]'
       }
     )
 
@@ -137,8 +135,7 @@ describe('isProductOnStock', () => {
         inventorySupplyChannelId: '12345',
         ordergrooveApiUrl: process.env.OG_API_URL as string,
         ordergrooveApiKey: 'ordergrooveApiKey',
-        productStoreUrl: 'https://product/detail/[SLUG]',
-        productVariantsLimit: '2'
+        productStoreUrl: 'https://product/detail/[SLUG]'
       }
     )
 

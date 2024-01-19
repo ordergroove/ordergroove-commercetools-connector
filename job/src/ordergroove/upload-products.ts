@@ -31,9 +31,7 @@ export const uploadProducts = async (limitQuery: number, offsetQuery: number, ex
       const totalProductsRequested = offset + count;
       logger.info(`Products retrieved from commercetools: ${totalProductsRequested} of a total of ${total}`);
 
-      const productVariantsLimit = parseInt(readConfiguration().productVariantsLimit);
-
-      if (totalProductsRequested < total && totalProductVariants < productVariantsLimit) {
+      if (totalProductsRequested < total) {
         offsetQuery = offsetQuery + 100;
         await uploadProducts(limitQuery, offsetQuery, true, totalProductVariants);
       } else {

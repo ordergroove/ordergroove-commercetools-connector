@@ -66,8 +66,6 @@ Setup the required environment variables when you [create the deployment](https:
   - (*Required*) Ordergroove API url endpoint.
 - `OG_API_KEY`
   - (*Required*) Ordergroove API key.
-- `PRODUCT_VARIANTS_LIMIT`
-  -  (*Optional*) Specifies the limit of product variants to send to Ordergroove. If not provided, the application sets a default limit of 500,000.
 
 For more information about deployments, refer to the [commercetools connect deployment documentation](https://docs.commercetools.com/connect/concepts#deployments).
 

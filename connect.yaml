@@ -26,8 +26,6 @@ deployAs:
           required: true
         - key: PRODUCT_STORE_URL
           description: Url of the product in the store, with dynamic slug
-        - key: PRODUCT_VARIANTS_LIMIT
-          description: Specifies the limit of product variants to send to Ordergroove
       securedConfiguration:
         - key: CTP_PROJECT_KEY
           description: commercetools Composable Commerce project key

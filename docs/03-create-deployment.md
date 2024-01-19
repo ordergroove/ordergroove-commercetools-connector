@@ -232,11 +232,6 @@ You'll get something like this:
                         "key": "PRODUCT_STORE_URL",
                         "description": "Url of the product in the store, with dynamic slug",
                         "required": false
-                    },
-                    {
-                        "key": "PRODUCT_VARIANTS_LIMIT",
-                        "description": "Specifies the limit of product variants to send to Ordergroove",
-                        "required": false
                     }
                 ]
             },
@@ -418,10 +413,6 @@ You'll get something like this:
                 {
                     "key": "PRODUCT_STORE_URL",
                     "value": "https://www.store.gluo.com/[SLUG]"
-                },
-                {
-                    "key": "PRODUCT_VARIANTS_LIMIT",
-                    "value": "100000"
                 }
             ],
             "securedConfiguration": [

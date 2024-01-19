@@ -44,8 +44,7 @@ describe('convertProductProjectionToOrdergrooveProducts', () => {
         inventorySupplyChannelId: '12345',
         ordergrooveApiUrl: 'https://api',
         ordergrooveApiKey: 'ordergrooveApiKey',
-        productStoreUrl: 'https://product/detail/[SLUG]',
-        productVariantsLimit: '500'
+        productStoreUrl: 'https://product/detail/[SLUG]'
       }
     )
 
@@ -74,8 +73,7 @@ describe('convertProductProjectionToOrdergrooveProducts', () => {
         inventorySupplyChannelId: '12345',
         ordergrooveApiUrl: 'https://api',
         ordergrooveApiKey: 'ordergrooveApiKey',
-        productStoreUrl: 'https://product/detail/[SLUG]',
-        productVariantsLimit: '500'
+        productStoreUrl: 'https://product/detail/[SLUG]'
       }
     )
 
@@ -105,8 +103,7 @@ describe('convertProductProjectionToOrdergrooveProducts', () => {
         inventorySupplyChannelId: '12345',
         ordergrooveApiUrl: 'https://api',
         ordergrooveApiKey: 'ordergrooveApiKey',
-        productStoreUrl: 'https://product/detail/[SLUG]',
-        productVariantsLimit: '500'
+        productStoreUrl: 'https://product/detail/[SLUG]'
       }
     )
 
@@ -136,8 +133,7 @@ describe('convertProductProjectionToOrdergrooveProducts', () => {
         inventorySupplyChannelId: '12345',
         ordergrooveApiUrl: 'https://api',
         ordergrooveApiKey: 'ordergrooveApiKey',
-        productStoreUrl: 'https://product/detail/[SLUG]',
-        productVariantsLimit: '500'
+        productStoreUrl: 'https://product/detail/[SLUG]'
       }
     )
 
@@ -163,8 +159,7 @@ describe('convertProductProjectionToOrdergrooveProducts', () => {
         inventorySupplyChannelId: '12345',
         ordergrooveApiUrl: 'https://api',
         ordergrooveApiKey: 'ordergrooveApiKey',
-        productStoreUrl: 'https://product/detail/[SLUG]',
-        productVariantsLimit: '500'
+        productStoreUrl: 'https://product/detail/[SLUG]'
       }
     )
 
@@ -190,8 +185,7 @@ describe('convertProductProjectionToOrdergrooveProducts', () => {
         inventorySupplyChannelId: '',
         ordergrooveApiUrl: 'https://api',
         ordergrooveApiKey: 'ordergrooveApiKey',
-        productStoreUrl: 'https://product/detail/[SLUG]',
-        productVariantsLimit: '500'
+        productStoreUrl: 'https://product/detail/[SLUG]'
       }
     )
 
@@ -221,8 +215,7 @@ describe('convertProductProjectionToOrdergrooveProducts', () => {
         inventorySupplyChannelId: '',
         ordergrooveApiUrl: 'https://api',
         ordergrooveApiKey: 'ordergrooveApiKey',
-        productStoreUrl: 'https://product/detail/[SLUG]',
-        productVariantsLimit: '500'
+        productStoreUrl: 'https://product/detail/[SLUG]'
       }
     )
 
@@ -252,8 +245,7 @@ describe('convertProductProjectionToOrdergrooveProducts', () => {
         inventorySupplyChannelId: '',
         ordergrooveApiUrl: 'https://api',
         ordergrooveApiKey: 'ordergrooveApiKey',
-        productStoreUrl: '',
-        productVariantsLimit: '500'
+        productStoreUrl: ''
       }
     )
 
@@ -283,8 +275,7 @@ describe('convertProductProjectionToOrdergrooveProducts', () => {
         inventorySupplyChannelId: '',
         ordergrooveApiUrl: 'https://api',
         ordergrooveApiKey: 'ordergrooveApiKey',
-        productStoreUrl: 'https://product/detail/[SLUG]',
-        productVariantsLimit: '500'
+        productStoreUrl: 'https://product/detail/[SLUG]'
       }
     )
 

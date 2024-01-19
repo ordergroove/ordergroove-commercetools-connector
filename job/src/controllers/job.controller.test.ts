@@ -54,8 +54,7 @@ describe('post function', () => {
         inventorySupplyChannelId: '',
         ordergrooveApiUrl: 'https://api',
         ordergrooveApiKey: 'ordergrooveApiKey',
-        productStoreUrl: 'https://product/detail/[SLUG]',
-        productVariantsLimit: '500'
+        productStoreUrl: 'https://product/detail/[SLUG]'
       }
     )
 
@@ -85,8 +84,7 @@ describe('post function', () => {
         inventorySupplyChannelId: '',
         ordergrooveApiUrl: 'https://api',
         ordergrooveApiKey: 'ordergrooveApiKey',
-        productStoreUrl: 'https://product/detail/[SLUG]',
-        productVariantsLimit: '500'
+        productStoreUrl: 'https://product/detail/[SLUG]'
       }
     )
 

@@ -41,8 +41,7 @@ describe('createProducts', () => {
         inventorySupplyChannelId: '',
         ordergrooveApiUrl: 'https://api',
         ordergrooveApiKey: 'ordergrooveApiKey',
-        productStoreUrl: 'https://product/detail/[SLUG]',
-        productVariantsLimit: '500'
+        productStoreUrl: 'https://product/detail/[SLUG]'
       }
     )
     global.fetch = jest.fn(() =>
@@ -90,8 +89,7 @@ describe('createProducts', () => {
         inventorySupplyChannelId: '',
         ordergrooveApiUrl: 'https://api',
         ordergrooveApiKey: 'ordergrooveApiKey',
-        productStoreUrl: 'https://product/detail/[SLUG]',
-        productVariantsLimit: '500'
+        productStoreUrl: 'https://product/detail/[SLUG]'
       }
     )
     global.fetch = jest.fn(() =>
@@ -126,8 +124,7 @@ describe('createProducts', () => {
         inventorySupplyChannelId: '',
         ordergrooveApiUrl: 'https://api',
         ordergrooveApiKey: 'ordergrooveApiKey',
-        productStoreUrl: 'https://product/detail/[SLUG]',
-        productVariantsLimit: '500'
+        productStoreUrl: 'https://product/detail/[SLUG]'
       }
     )
     jest.spyOn(global, 'fetch')

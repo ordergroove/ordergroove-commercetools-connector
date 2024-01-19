@@ -58,8 +58,7 @@ describe('createAuthMiddlewareOptions configuration', () => {
         inventorySupplyChannelId: '',
         ordergrooveApiUrl: 'https://api',
         ordergrooveApiKey: 'ordergrooveApiKey',
-        productStoreUrl: 'https://product/detail/[SLUG]',
-        productVariantsLimit: '500'
+        productStoreUrl: 'https://product/detail/[SLUG]'
       }
     )
 
@@ -93,8 +92,7 @@ describe('createAuthMiddlewareOptions configuration', () => {
         inventorySupplyChannelId: '',
         ordergrooveApiUrl: 'https://api',
         ordergrooveApiKey: 'ordergrooveApiKey',
-        productStoreUrl: 'https://product/detail/[SLUG]',
-        productVariantsLimit: '500'
+        productStoreUrl: 'https://product/detail/[SLUG]'
       }
     )
 
