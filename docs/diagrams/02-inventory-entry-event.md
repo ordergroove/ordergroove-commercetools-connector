@@ -6,7 +6,6 @@ As depicted in the image below, the application receives a message every time an
 
 Business rules:
  - This process will only update products that already exist in Ordergroove.
- - Wait for 10 seconds (strong consistency) before retrieving product information from commercetools.
  - Request an update only if there is a difference in inventory between Ordergroove and commercetools.
  - In case the first update attempt fails, initiate a second attempt.
 
