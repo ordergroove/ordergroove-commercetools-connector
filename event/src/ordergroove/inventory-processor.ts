@@ -22,21 +22,7 @@ export const processInventoryEntryEvent = async (payload: CtEventPayload): Promi
       if (ogProduct === undefined) {
         logger.info(`[${execution_id}] An error occurred processing the ${payload.type} event, the product with sku ${sku} does not exist in ordergroove.`);
       } else {
-        const ctProductVariant: ProductVariant = await getProductVariantBySku(sku);
-        const isCtProductOnStock = isProductOnStock(ctProductVariant.availability);
-
-        if (ogProduct.live !== isCtProductOnStock) {
-          ogProduct.live = isCtProductOnStock;
-          const updProducts = new Array();
-          updProducts.push(ogProduct);
-          const ogUpdateResponse: OrdergrooveApiResponse = await updateProducts(updProducts, execution_id);
-
-          if (!ogUpdateResponse.success && ogUpdateResponse.status === 500) {
-            await updateProducts(updProducts, execution_id);
-          }
-        } else {
-          logger.info(`[${execution_id}] The inventory of the product with sku ${sku} does not need an update in ordergroove.`);
-        }
+        await updateProductOnOrdergroove(sku, ogProduct, execution_id);
       }
     }
   } catch (error) {
@@ -44,4 +30,22 @@ export const processInventoryEntryEvent = async (payload: CtEventPayload): Promi
   }
 
   return true;
+}
+
+async function updateProductOnOrdergroove(sku: string, ogProduct: OrdergrooveProduct, execution_id: string) {
+  const ctProductVariant: ProductVariant = await getProductVariantBySku(sku);
+  const isCtProductOnStock = isProductOnStock(ctProductVariant.availability);
+
+  if (ogProduct.live !== isCtProductOnStock) {
+    ogProduct.live = isCtProductOnStock;
+    const updProducts = new Array();
+    updProducts.push(ogProduct);
+    const ogUpdateResponse: OrdergrooveApiResponse = await updateProducts(updProducts, execution_id);
+
+    if (!ogUpdateResponse.success && ogUpdateResponse.status === 500) {
+      await updateProducts(updProducts, execution_id);
+    }
+  } else {
+    logger.info(`[${execution_id}] The inventory of the product with sku ${sku} does not need an update in ordergroove.`);
+  }
 }

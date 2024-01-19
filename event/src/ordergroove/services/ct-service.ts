@@ -69,13 +69,13 @@ function extractVariantFromResults(sku: string, results: ProductProjection[]): P
   let productVariant: ProductVariant | undefined;
 
   for (let result of results) {
-    let masterVariantSku = result.masterVariant.sku === undefined ? '' : result.masterVariant.sku;
+    let masterVariantSku = result.masterVariant.sku ?? '';
     if (sku === masterVariantSku) {
       productVariant = result.masterVariant;
       break;
     } else {
       for (let variant of result.variants) {
-        let variantSku = variant.sku === undefined ? '' : variant.sku;
+        let variantSku = variant.sku ?? '';
         if (sku === variantSku) {
           productVariant = variant;
           break;
