@@ -69,7 +69,7 @@ Setup the required environment variables when you [create the deployment](https:
 
 For more information about deployments, refer to the [commercetools connect deployment documentation](https://docs.commercetools.com/connect/concepts#deployments).
 
-The initial product load is handled by the job application scheduled to execute every 40 minutes. The first time the job is executed, the application creates a custom object to store the status of the process (ACTIVE or COMPLETED), along with the last offset used in the Product Projection Query endpoint. This data ensures that all products in commercetools are sent to OrderGroove, even if the job reaches a timeout. Therefore, every time the job is executed, the application checks this custom object and stops running the upload process when the status is set to COMPLETED.
+The initial product load is handled by the job application scheduled to execute every 40 minutes. The first time the job is executed, the application creates a custom object to store the status of the process (ACTIVE or COMPLETED), along with the last offset used in the Product Projection Query endpoint. This data ensures that all products in commercetools are sent to Ordergroove, even if the job reaches a timeout. Therefore, every time the job is executed, the application checks this custom object and stops running the upload process when the status is set to COMPLETED.
 
 To check the custom object values [get it from commercetools](https://github.com/gluo-dev/ordergroove-commercetools-connector/blob/main/docs/extras/get-custom-object-product-load-status.md).
 
