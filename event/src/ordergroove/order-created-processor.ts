@@ -10,14 +10,14 @@ import { isProductOnStock } from './helpers/stock-helper';
 export const processOrderCreatedEvent = async (payload: CtEventPayload): Promise<boolean> => {
 
   try {
-    const lineItems = payload.order?.lineItems === undefined ? new Array() : payload.order?.lineItems;
+    const lineItems = payload.order?.lineItems === undefined ? [] : payload.order?.lineItems;
 
     if (lineItems.length === 0) {
       throw new Error(`The order with id ${payload.order?.id} does not have lineItems, therefore it does not have an effect on the inventory in ordergroove.`);
     } else {
       for (const lineItem of lineItems) {
         const execution_id = createUUID();
-        const sku = lineItem.variant.sku;
+        const sku = lineItem.variant.sku ?? '';
 
         const ogProductResponse: OrdergrooveApiResponse = await retrieveOgProduct(sku, execution_id);
         const ogProduct: OrdergrooveProduct | undefined = ogProductResponse.product;
@@ -43,7 +43,7 @@ async function updateProductOnOrdergroove(ogProduct: OrdergrooveProduct, ctProdu
 
   if (ogProduct.live !== isCtProductOnStock) {
     ogProduct.live = isCtProductOnStock;
-    const updProducts = new Array();
+    const updProducts = [];
     updProducts.push(ogProduct);
     const ogUpdateResponse: OrdergrooveApiResponse = await updateProducts(updProducts, execution_id);
 

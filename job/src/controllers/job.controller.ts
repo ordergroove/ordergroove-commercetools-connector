@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import CustomError from '../errors/custom.error';
 import { logger } from '../utils/logger.utils';
 import { uploadProducts } from '../ordergroove/upload-products';
-import { isInitialProductLoadExecutable } from '../ordergroove/helpers/custom-objects-helper';
+import { getJobStatus, setJobStatus, Status } from '../ordergroove/helpers/custom-objects-helper';
 
 /**
  * Exposed job endpoint.
@@ -14,12 +14,25 @@ import { isInitialProductLoadExecutable } from '../ordergroove/helpers/custom-ob
  */
 export const post = async (_request: Request, response: Response) => {
   try {
-    const executeLoad = await isInitialProductLoadExecutable();
+    const jobStatus = await getJobStatus();
+    logger.info('>> Job status: ' + JSON.stringify(jobStatus));
+
+    const executeProductLoad = !jobStatus.thisCustomObjectExists || jobStatus.status === Status.ACTIVE;
 
     let responseMessage = '';
-    if (executeLoad) {
+    
+    if (executeProductLoad) {
       logger.info('>> Starting the initial products load from commercetools to ordergroove <<');
-      await uploadProducts(100, 0);
+
+      let offset = 0;
+      if (!jobStatus.thisCustomObjectExists) {
+        await setJobStatus(offset, Status.ACTIVE);
+      } else {
+        offset = jobStatus.currentOffset ?? 0;
+      }
+
+      await uploadProducts(offset);
+
       responseMessage = 'Product load finished, check the deployment logs for more information.'
     } else {
       responseMessage = 'This product load will not be executed, check the deployment logs for more information.'
@@ -27,7 +40,7 @@ export const post = async (_request: Request, response: Response) => {
 
     response.status(200).send({ message: responseMessage });
   } catch (error) {
-    console.log(error);
+    logger.info(error);
     throw new CustomError(
       500,
       `Internal Server Error - Error uploading products to ordergroove, check the deployment logs for more information`

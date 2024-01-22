@@ -6,36 +6,40 @@ import { OrdergrooveProduct } from '../types/custom.types';
 import { createUUID } from './utils/data-utils'
 import { QueryArgs } from '../types/index.types';
 import { readConfiguration } from '../utils/config.utils';
-import { setInitialProductLoadExecuted } from './helpers/custom-objects-helper';
+import { setJobStatus, Status } from './helpers/custom-objects-helper';
 
-export const uploadProducts = async (limitQuery: number, offsetQuery: number, executeNext?: boolean, totalProductVariants?: number): Promise<boolean> => {
+const limit = 100;
+
+export const uploadProducts =
+    async (offset: number, executeNext?: boolean, totalProductsRequested?: number, totalProductVariants?: number): Promise<boolean> => {
   try {
-    const queryArgs: QueryArgs = getQueryArgs(limitQuery, offsetQuery);
-    logger.info(`Get product-projections from commercetools, queryArgs: ${JSON.stringify(queryArgs)}`);
-
     executeNext = executeNext as boolean ?? true;
+    totalProductsRequested = totalProductsRequested as number ?? 0;
     totalProductVariants = totalProductVariants as number ?? 0;
 
+    const queryArgs: QueryArgs = getQueryArgs(offset);
+    logger.info(`Get product-projections from commercetools, queryArgs: ${JSON.stringify(queryArgs)}`);
+
     if (executeNext) {
-      const productProjectionPagedQueryResponse = await getProductProjections(queryArgs);
-      const { count, offset } = productProjectionPagedQueryResponse;
-      const total = productProjectionPagedQueryResponse.total as number ?? 0;
+      const productProjections = await getProductProjections(queryArgs);
+      const { count } = productProjections;
+
+      totalProductsRequested = totalProductsRequested + productProjections.results.length;
+      logger.info(`Amount of products retrieved from commercetools until this point: ${totalProductsRequested}`);
 
       const allProductVariants: OrdergrooveProduct[] =
-        await convertProductProjectionToOrdergrooveProducts(productProjectionPagedQueryResponse);
+        await convertProductProjectionToOrdergrooveProducts(productProjections);
 
       totalProductVariants = totalProductVariants + allProductVariants.length;
 
       await sendProductsToOrdergroove(allProductVariants);
+      if (limit === count) {
+        offset = offset + 100;
 
-      const totalProductsRequested = offset + count;
-      logger.info(`Products retrieved from commercetools: ${totalProductsRequested} of a total of ${total}`);
-
-      if (totalProductsRequested < total) {
-        offsetQuery = offsetQuery + 100;
-        await uploadProducts(limitQuery, offsetQuery, true, totalProductVariants);
+        await updateJobStatus(offset, Status.ACTIVE);
+        await uploadProducts(offset, true, totalProductsRequested, totalProductVariants);
       } else {
-        await updateProductLoadStatus();
+        await updateJobStatus(offset, Status.COMPLETED);
         logger.info(`>> The products upload process from commercetools to ordergroove has finished with a total of ${totalProductVariants} valid product variants processed <<`);
       }
     }
@@ -46,16 +50,18 @@ export const uploadProducts = async (limitQuery: number, offsetQuery: number, ex
   return true;
 }
 
-function getQueryArgs(limitQuery: number, offsetQuery: number): QueryArgs {
-  let queryArgs: QueryArgs = {};
-  queryArgs.limit = limitQuery;
-  queryArgs.offset = offsetQuery;
-  queryArgs.priceCurrency = readConfiguration().currencyCode;
+function getQueryArgs(offset: number): QueryArgs {
+  const queryArgs: QueryArgs = {};
 
+  queryArgs.withTotal = false;
+  queryArgs.limit = limit;
+  queryArgs.offset = offset;
+  queryArgs.sort = 'createdAt asc';
+
+  queryArgs.priceCurrency = readConfiguration().currencyCode;
   if (readConfiguration().countryCode !== '') {
     queryArgs.priceCountry = readConfiguration().countryCode;
   }
-
   if (readConfiguration().distributionChannelId !== '') {
     queryArgs.priceChannel = readConfiguration().distributionChannelId;
   }
@@ -74,7 +80,7 @@ async function sendProductsToOrdergroove(products: Array<OrdergrooveProduct>) {
     const numberOfPromisesAll = Math.ceil((numberOfBatches / 10));
 
     let startIndex = 0;
-    let numberOfBatchesToSend = 10;
+    const numberOfBatchesToSend = 10;
     let numberOfBatchesLeft = numberOfBatches;
     for (let i = 0; i < numberOfPromisesAll; i++) {
       if (numberOfBatchesLeft > 10) {
@@ -89,7 +95,7 @@ async function sendProductsToOrdergroove(products: Array<OrdergrooveProduct>) {
 }
 
 async function setPromiseAllToSendBatches(products: Array<OrdergrooveProduct>, numberOfBatches: number, startIndex: number) {
-  const batchesList = new Array();
+  const batchesList = [];
   let finishIndex = startIndex + 100;
   for (let x = 0; x < numberOfBatches; x++) {
     batchesList.push(products.slice(startIndex, finishIndex));
@@ -105,11 +111,11 @@ async function setPromiseAllToSendBatches(products: Array<OrdergrooveProduct>, n
   );
 }
 
-async function updateProductLoadStatus() {
-  const response = await setInitialProductLoadExecuted();
+async function updateJobStatus(offset: number, status: string) {
+  const response = await setJobStatus(offset, status);
 
   // retry one time
   if (!response) {
-    await setInitialProductLoadExecuted();
+    await setJobStatus(offset, status);
   }
 }

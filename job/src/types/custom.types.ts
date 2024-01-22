@@ -13,3 +13,9 @@ export interface OrdergrooveApiResponse {
   status: number;
   product?: OrdergrooveProduct;
 }
+
+export interface JobStatus {
+  currentOffset?: number;
+  status?: string;
+  thisCustomObjectExists: boolean;
+}

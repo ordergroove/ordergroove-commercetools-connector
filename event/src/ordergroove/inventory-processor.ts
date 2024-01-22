@@ -38,7 +38,7 @@ async function updateProductOnOrdergroove(sku: string, ogProduct: OrdergroovePro
 
   if (ogProduct.live !== isCtProductOnStock) {
     ogProduct.live = isCtProductOnStock;
-    const updProducts = new Array();
+    const updProducts = [];
     updProducts.push(ogProduct);
     const ogUpdateResponse: OrdergrooveApiResponse = await updateProducts(updProducts, execution_id);
 

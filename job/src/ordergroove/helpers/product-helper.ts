@@ -16,10 +16,10 @@ import { isProductOnStock } from './stock-helper';
  * @returns List of OrdergrooveProduct
  */
 export const convertProductProjectionToOrdergrooveProducts = async (productProjection: ProductProjectionPagedQueryResponse): Promise<OrdergrooveProduct[]> => {
-  let variantsResult = new Array<OrdergrooveProduct>;
+  const variantsResult = new Array<OrdergrooveProduct>;
 
   try {
-    for (let result of productProjection.results) {
+    for (const result of productProjection.results) {
       const productName = result.name[readConfiguration().languageCode];
 
       if (productName === undefined) {
@@ -66,7 +66,7 @@ function buildOgProductFromMasterVariant(result: ProductProjection, productName:
 function buildOgProductsFromVariants(result: ProductProjection, productName: string): OrdergrooveProduct[] {
   const ogProducts = new Array<OrdergrooveProduct>;
 
-  for (let variant of result.variants) {
+  for (const variant of result.variants) {
     const variantSku = variant.sku as string ?? '';
 
     const variantPrice = getPrice(variant.price);
@@ -74,7 +74,7 @@ function buildOgProductsFromVariants(result: ProductProjection, productName: str
     if (variantPrice === undefined) {
       logger.info(getInvalidPriceMessage(variantSku));
     } else {
-      let ogProduct: OrdergrooveProduct = {
+      const ogProduct: OrdergrooveProduct = {
         product_id: variantSku,
         sku: variantSku,
         name: productName,

@@ -6,8 +6,10 @@ import * as ProductHelper from './helpers/product-helper'
 import * as ConfigUtils from '../utils/config.utils'
 import * as CustomObjectsHelper from './helpers/custom-objects-helper'
 import { uploadProducts } from './upload-products'
-import { mockProductProjectionPagedQueryResponse, mockOgProducts } from './mocks/mocks'
-import { OrdergrooveApiResponse } from '../types/custom.types';
+import {
+  mockProductProjectionPagedQueryResponse, mockOgProducts
+} from './mocks/mocks'
+import { OrdergrooveApiResponse } from '../types/custom.types'
 
 jest.mock('./client/ct-products-api')
 jest.mock('./helpers/product-helper')
@@ -58,17 +60,17 @@ describe('uploadProducts', () => {
       .mockImplementation(() => Promise.resolve(ordergrooveApiResponse))
       .mockResolvedValue(ordergrooveApiResponse)
 
-    const setInitialProductLoadExecutedSpy = jest
-      .spyOn(CustomObjectsHelper, 'setInitialProductLoadExecuted')
+    const setJobStatusSpy = jest
+      .spyOn(CustomObjectsHelper, 'setJobStatus')
       .mockImplementation(() => Promise.resolve(true))
       .mockResolvedValue(true)
 
-    const result = await uploadProducts(1, 0)
+    const result = await uploadProducts(0)
 
     expect(getProductProjectionsSpy).toHaveBeenCalled()
     expect(convertProductProjectionToOrdergrooveProductsSpy).toHaveBeenCalled()
     expect(createProductsSpy).toHaveBeenCalledTimes(1)
-    expect(setInitialProductLoadExecutedSpy).toHaveBeenCalled()
+    expect(setJobStatusSpy).toHaveBeenCalledTimes(2)
     expect(result).toBe(true)
   })
 
@@ -111,27 +113,27 @@ describe('uploadProducts', () => {
       .mockImplementation(() => Promise.resolve(ordergrooveApiResponse))
       .mockResolvedValue(ordergrooveApiResponse)
 
-    const setInitialProductLoadExecutedSpy = jest
-      .spyOn(CustomObjectsHelper, 'setInitialProductLoadExecuted')
+    const setJobStatusSpy = jest
+      .spyOn(CustomObjectsHelper, 'setJobStatus')
       .mockImplementation(() => Promise.resolve(true))
       .mockResolvedValue(false)
 
-    const result = await uploadProducts(1, 0)
+    const result = await uploadProducts(0)
 
     expect(getProductProjectionsSpy).toHaveBeenCalled()
     expect(convertProductProjectionToOrdergrooveProductsSpy).toHaveBeenCalled()
     expect(createProductsSpy).toHaveBeenCalledTimes(1)
-    expect(setInitialProductLoadExecutedSpy).toHaveBeenCalledTimes(2)
+    expect(setJobStatusSpy).toHaveBeenCalledTimes(2)
     expect(result).toBe(true)
   })
 
   it('should handle an error from productProjectionsSearch()', async () => {
     jest.spyOn(CtProductsApi, 'getProductProjections')
-      .mockImplementation(() => { throw new Error('connection error') });
+      .mockImplementation(() => { throw new Error('connection error') })
 
-    const result = await uploadProducts(1, 0)
+    const result = await uploadProducts(0)
 
-    expect(CtProductsApi.getProductProjections).toThrow('connection error');
+    expect(CtProductsApi.getProductProjections).toThrow('connection error')
     expect(result).toBe(true)
   })
 })

@@ -2,37 +2,40 @@ import { CustomObjectDraft } from '@commercetools/platform-sdk';
 
 import * as CtCustomObjectsApi from '../client/ct-custom-objects-api';
 import { logger } from '../../utils/logger.utils';
+import { JobStatus } from '../../types/custom.types';
 
-export const OG_CONTAINER = 'Ordergroove';
-export const INITIAL_PRODUCT_LOAD_STATUS_SCHEMA_KEY = 'initialProductLoadStatusSchema';
+const OG_CONTAINER = 'Ordergroove';
+const INITIAL_PRODUCT_LOAD_STATUS_SCHEMA_KEY = 'JobStatusSchema';
 
-export const initialProductLoadStatusSchemaObject: CustomObjectDraft = {
-  container: OG_CONTAINER,
-  key: INITIAL_PRODUCT_LOAD_STATUS_SCHEMA_KEY,
-  value: {
-    "executed": true
-  }
+export const Status = {
+  ACTIVE: "ACTIVE",
+  COMPLETED: "COMPLETED"
 }
 
 /**
- * Retrieve the custom object where the application stores the status of the initial product load and return true only if the object does not exist.
- * @returns boolean Indicates whether the process for the initial product load is executable.
+ * Gets the current Job Status.
+ * @returns JobStatus object
  */
-export const isInitialProductLoadExecutable = async (): Promise<boolean> => {
-  let result = false;
+export const getJobStatus = async (): Promise<JobStatus> => {
+  const result = {} as JobStatus;
 
   try {
-    await CtCustomObjectsApi.getCustomObjectByContainerAndKey(
+    const customObject = await CtCustomObjectsApi.getCustomObjectByContainerAndKey(
       OG_CONTAINER, INITIAL_PRODUCT_LOAD_STATUS_SCHEMA_KEY
     );
+
+    result.currentOffset = customObject.body.value['currentOffset'];
+    result.status = customObject.body.value['status'];
+    result.thisCustomObjectExists = true;
   } catch (error) {
     const errorJson = JSON.parse(JSON.stringify(error));
     const statusCode: number = errorJson['statusCode'] ?? 0;
-    if (statusCode === 0) {
-      logger.error('Error at shouldExecuteInitialProductLoad() function:', error);
+
+    if (statusCode === 404) {
+      result.thisCustomObjectExists = false;
+      logger.info(`Response of getting a custom object, container ${OG_CONTAINER} and key ${INITIAL_PRODUCT_LOAD_STATUS_SCHEMA_KEY}:`, error);
     } else {
-      result = statusCode === 404;
-      logger.info(`Response for getting a custom object, container ${OG_CONTAINER} and key ${INITIAL_PRODUCT_LOAD_STATUS_SCHEMA_KEY}:`, error);
+      throw new Error('Error at getJobStatus() function: ' + errorJson);
     }
   }
 
@@ -40,17 +43,28 @@ export const isInitialProductLoadExecutable = async (): Promise<boolean> => {
 }
 
 /**
- * Creates the custom object that stores the status of the initial product load.
+ * Creates the custom object that stores the status of the initial product load process.
+ * @param status string ACTIVE or COMPLETED
+ * @param currentOffset number specifying the last offset set in the Product Projections Query
  * @returns boolean Indicates if the creation of the custom object was successful.
  */
-export const setInitialProductLoadExecuted = async (): Promise<boolean> => {
+export const setJobStatus = async (currentOffset: number, status: string): Promise<boolean> => {
   let result = false;
 
   try {
-    await CtCustomObjectsApi.createCustomObject(initialProductLoadStatusSchemaObject);
+    const jobStatusSchemaObject: CustomObjectDraft = {
+      container: OG_CONTAINER,
+      key: INITIAL_PRODUCT_LOAD_STATUS_SCHEMA_KEY,
+      value: {
+        "currentOffset": currentOffset,
+        "status": status
+      }
+    }
+
+    await CtCustomObjectsApi.createCustomObject(jobStatusSchemaObject);
     result = true;
   } catch (error) {
-    logger.error('Error at setInitialProductLoadExecuted() function:', error);
+    logger.error('Error at setJobStatus() function:', error);
   }
 
   return result;
