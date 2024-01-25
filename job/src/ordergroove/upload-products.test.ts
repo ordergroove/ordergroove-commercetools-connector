@@ -70,7 +70,7 @@ describe('uploadProducts', () => {
     expect(getProductProjectionsSpy).toHaveBeenCalled()
     expect(convertProductProjectionToOrdergrooveProductsSpy).toHaveBeenCalled()
     expect(createProductsSpy).toHaveBeenCalledTimes(1)
-    expect(setJobStatusSpy).toHaveBeenCalledTimes(2)
+    expect(setJobStatusSpy).toHaveBeenCalledTimes(1)
     expect(result).toBe(true)
   })
 
